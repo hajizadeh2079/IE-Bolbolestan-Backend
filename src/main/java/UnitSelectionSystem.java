@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import org.json.simple.JSONObject;
 
-public class System {
+public class UnitSelectionSystem {
     private ArrayList<Student> students = new ArrayList<Student>();
     private ArrayList<Course> courses = new ArrayList<Course>();
     public void addStudent(JSONObject jo){
