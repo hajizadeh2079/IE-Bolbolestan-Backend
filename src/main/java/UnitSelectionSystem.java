@@ -21,4 +21,10 @@ public class UnitSelectionSystem {
                 return student;
         return null;
     }
+    public Course findCourse(String code){
+        for(Course course: courses)
+            if(course.getCode().equals(code))
+                return course;
+        return null;
+    }
 }
