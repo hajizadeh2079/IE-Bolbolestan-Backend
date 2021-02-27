@@ -11,4 +11,14 @@ public class UnitSelectionSystem {
         Student student = new Student(id, name, enteredAt);
         students.add(student);
     }
+    public void getOffering(JSONObject jo){
+        String studentId = (String)jo.get("studentId");
+        String code = (String)jo.get("code");
+    }
+    public Student findStudent(String id){
+        for(Student student: students)
+            if(student.getId().equals(id))
+                return student;
+        return null;
+    }
 }

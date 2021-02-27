@@ -7,4 +7,7 @@ public class Student {
         name = _name;
         enteredAt = _enteredAt;
     }
+    public String getId(){
+        return id;
+    }
 }
