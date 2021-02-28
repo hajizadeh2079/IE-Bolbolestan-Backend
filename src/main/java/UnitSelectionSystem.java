@@ -25,25 +25,36 @@ public class UnitSelectionSystem {
         Course course;
         try {
             student = findStudent(studentId);
-            try {
+            try { //todo
                 course = findCourse(code);
 
             } catch (Exception offeringNotFound) {
-
+                    printResponse(false, offeringNotFound);
             }
         } catch (Exception studentNotFound) {
-
+                printResponse(false, studentNotFound);
         }
     }
 
-    public Student findStudent(String id)  throws StudentNotFound{
+    public void printResponse(boolean success, Object data) {
+        JSONObject response = new JSONObject();
+        if(success) { //todo
+
+        } else {
+            response.put("success", false);
+            response.put("error", (String)data);
+        }
+        System.out.print(response);
+    }
+
+    public Student findStudent(String id)  throws StudentNotFound {
         for(Student student: students)
             if(student.getId().equals(id))
                 return student;
         throw new StudentNotFound();
     }
 
-    public Course findCourse(String code)  throws OfferingNotFound{
+    public Course findCourse(String code)  throws OfferingNotFound {
         for(Course course: courses)
             if(course.getCode().equals(code))
                 return course;
