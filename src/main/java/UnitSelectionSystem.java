@@ -10,6 +10,10 @@ public class UnitSelectionSystem {
         return students;
     }
 
+    public ArrayList<Course> getCourses() {
+        return courses;
+    }
+
     public void addOffering(JSONObject jo) {
         String code = (String)jo.get("code");
         String name = (String)jo.get("name");

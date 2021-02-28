@@ -12,4 +12,12 @@ public class Student {
     public String getId() {
         return id;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEnteredAt() {
+        return enteredAt;
+    }
 }
