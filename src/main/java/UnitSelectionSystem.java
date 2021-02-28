@@ -14,14 +14,31 @@ public class UnitSelectionSystem {
         return courses;
     }
 
+    public JSONObject doCommand(String command, JSONObject jo) {
+        switch (command) {
+            case "addStudent":
+                addStudent(jo);
+                return null;
+            case "addOffering":
+                addOffering(jo);
+                return null;
+            case "getOfferings":
+                return getOfferings(jo);
+            case "getOffering":
+                return getOffering(jo);
+            default:
+                return null;
+        }
+    }
+
     public void addOffering(JSONObject jo) {
         String code = (String)jo.get("code");
         String name = (String)jo.get("name");
         String instructor = (String)jo.get("instructor");
-        int units = (Integer)jo.get("units");
+        long units = (Long)jo.get("units");
         JSONObject classTime = (JSONObject)jo.get("classTime");
         JSONObject examTime = (JSONObject)jo.get("examTime");
-        int capacity = (Integer)jo.get("capacity");
+        long capacity = (Long) jo.get("capacity");
         JSONArray prerequisites = (JSONArray)jo.get("prerequisites");
         Course course = new Course(code, name, instructor, units, classTime, examTime, capacity, prerequisites);
         int index = 0;
@@ -39,7 +56,7 @@ public class UnitSelectionSystem {
         students.add(student);
     }
 
-    public void getOfferings(JSONObject jo) {
+    public JSONObject getOfferings(JSONObject jo) {
         String studentId = (String)jo.get("studentId");
         Student student;
         try {
@@ -52,30 +69,40 @@ public class UnitSelectionSystem {
                 item.put("instructor", course.getInstructor());
                 data.add(item);
             }
-            printResponse(true, data);
+            return createResponse(true, data);
         } catch (Exception studentNotFound) {
-            printResponse(false, studentNotFound);
+            return createResponse(false, studentNotFound);
         }
     }
 
-    public void getOffering(JSONObject jo) {
+    public JSONObject getOffering(JSONObject jo) {
         String studentId = (String)jo.get("studentId");
         String code = (String)jo.get("code");
         Student student;
         Course course;
         try {
             student = findStudent(studentId);
-            try { //todo
+            try {
                 course = findCourse(code);
+                JSONObject data = new JSONObject();
+                data.put("code", course.getCode());
+                data.put("name", course.getName());
+                data.put("instructor", course.getInstructor());
+                data.put("units", course.getUnits());
+                data.put("classTime", course.getClassTime());
+                data.put("examTime", course.getExamTime());
+                data.put("capacity", course.getCapacity());
+                data.put("prerequisites", course.getPrerequisites());
+                return createResponse(true, data);
             } catch (Exception offeringNotFound) {
-                printResponse(false, offeringNotFound);
+                return createResponse(false, offeringNotFound);
             }
         } catch (Exception studentNotFound) {
-            printResponse(false, studentNotFound);
+            return createResponse(false, studentNotFound);
         }
     }
 
-    public void printResponse(boolean success, Object data) {
+    public JSONObject createResponse(boolean success, Object data) {
         JSONObject response = new JSONObject();
         if(success) {
             response.put("success", false);
@@ -83,12 +110,11 @@ public class UnitSelectionSystem {
                 response.put("data", (JSONObject) data);
             else if (data instanceof JSONArray)
                 response.put("data", (JSONArray) data);
-
         } else {
             response.put("success", false);
             response.put("error", ((Exception)data).getMessage());
         }
-        System.out.print(response);
+        return response;
     }
 
     public Student findStudent(String id)  throws StudentNotFound {

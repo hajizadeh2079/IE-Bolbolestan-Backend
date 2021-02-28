@@ -9,7 +9,7 @@ public class Course {
     private String code;
     private String name;
     private String instructor;
-    private int units;
+    private long units;
     private JSONObject classTime;
     private ArrayList<String> classTimeDays = new ArrayList<String>();
     private LocalTime classTimeStart;
@@ -17,12 +17,12 @@ public class Course {
     private JSONObject examTime;
     private LocalDateTime examTimeStart;
     private LocalDateTime examTimeEnd;
-    private int capacity;
+    private long capacity;
     private JSONArray prerequisites;
     private ArrayList<String> prerequisitesArray = new ArrayList<String>();
 
-    public Course(String _code, String _name, String _instructor, int _unit,
-                  JSONObject _classTime, JSONObject _examTime, int _capacity, JSONArray _prerequisites) {
+    public Course(String _code, String _name, String _instructor, long _unit,
+                  JSONObject _classTime, JSONObject _examTime, long _capacity, JSONArray _prerequisites) {
         int i;
         code = _code;
         name = _name;
@@ -56,7 +56,7 @@ public class Course {
         return instructor;
     }
 
-    public int getUnits() {
+    public long getUnits() {
         return units;
     }
 
@@ -88,7 +88,7 @@ public class Course {
         return examTimeEnd;
     }
 
-    public int getCapacity() {
+    public long getCapacity() {
         return capacity;
     }
 

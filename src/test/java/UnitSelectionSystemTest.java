@@ -1,10 +1,15 @@
 import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.json.simple.JSONObject;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class UnitSelectionSystemTest {
     UnitSelectionSystem unitSelectionSystem;
@@ -12,11 +17,35 @@ public class UnitSelectionSystemTest {
     @BeforeEach
     public void setup() {
         unitSelectionSystem = new UnitSelectionSystem();
+        File file = new File("src/test/resources/prepareForTest.txt");
+        try {
+            Scanner scanner = new Scanner(file);
+            JSONParser parser = new JSONParser();
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line == null)
+                    continue;
+                String command = line.substring(0, line.indexOf(" "));
+                String jsonString = line.substring(line.indexOf(" ") + 1);
+                JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+                JSONObject response = unitSelectionSystem.doCommand(command, jsonObject);
+            }
+        } catch (FileNotFoundException | ParseException exception) { }
     }
 
     @Test
     public void testGetOfferings() {
-
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("studentId", "810197100");
+        JSONObject response = unitSelectionSystem.getOfferings(jsonObject);
+        String expected = "Internet Engineering";
+        String actual = (String) ((JSONObject)(((JSONArray)response.get("data")).get(1))).get("name");
+        assertEquals(expected, actual);
+        jsonObject.put("studentId", "810197999");
+        response = unitSelectionSystem.getOfferings(jsonObject);
+        expected = "StudentNotFound";
+        actual = (String) response.get("error");
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -45,7 +74,7 @@ public class UnitSelectionSystemTest {
         course1.put("prerequisites", prerequisites);
         unitSelectionSystem.addOffering(course1);
         courses = unitSelectionSystem.getCourses();
-        assertEquals("16:00", courses.get(0).getClassTimeStart().toString());
+        assertEquals("16:00", courses.get(courses.size() - 1).getClassTimeStart().toString());
     }
 
     @Test
@@ -57,7 +86,7 @@ public class UnitSelectionSystemTest {
         std1.put("enteredAt", "1397");
         unitSelectionSystem.addStudent(std1);
         students = unitSelectionSystem.getStudents();
-        assertEquals("810197452", students.get(0).getId());
+        assertEquals("810197452", students.get(students.size() - 1).getId());
     }
 
     @Test

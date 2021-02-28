@@ -5,14 +5,12 @@ public class Exceptions  extends Exception {
 }
 
 class StudentNotFound extends Exceptions {
-
     public StudentNotFound() {
         super("StudentNotFound");
     }
 }
 
 class OfferingNotFound extends Exceptions {
-
     public OfferingNotFound() {
         super("OfferingNotFound");
     }
