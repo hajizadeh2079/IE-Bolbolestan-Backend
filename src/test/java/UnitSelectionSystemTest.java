@@ -15,6 +15,11 @@ public class UnitSelectionSystemTest {
     }
 
     @Test
+    public void testGetOfferings() {
+
+    }
+
+    @Test
     public void testAddOffering() {
         ArrayList<Course> courses;
         JSONObject course1 = new JSONObject();
