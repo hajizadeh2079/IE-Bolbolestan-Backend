@@ -7,6 +7,7 @@ public class Course {
     private String examTime;
     private int capacity;
     private String[] prerequisites;
+
     public String getCode(){
         return code;
     }

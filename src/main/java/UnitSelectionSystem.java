@@ -17,7 +17,6 @@ public class UnitSelectionSystem {
         students.add(student);
     }
 
-
     public void getOffering(JSONObject jo) {
         String studentId = (String)jo.get("studentId");
         String code = (String)jo.get("code");
