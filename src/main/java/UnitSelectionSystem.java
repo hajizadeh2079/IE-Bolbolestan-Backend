@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class UnitSelectionSystem {
@@ -7,6 +8,23 @@ public class UnitSelectionSystem {
 
     public ArrayList<Student> getStudents() {
         return students;
+    }
+
+    public void addOffering(JSONObject jo) {
+        String code = (String)jo.get("code");
+        String name = (String)jo.get("name");
+        String instructor = (String)jo.get("instructor");
+        int units = (Integer)jo.get("units");
+        JSONObject classTime = (JSONObject)jo.get("classTime");
+        JSONObject examTime = (JSONObject)jo.get("examTime");
+        int capacity = (Integer)jo.get("capacity");
+        JSONArray prerequisites = (JSONArray)jo.get("prerequisites");
+        Course course = new Course(code, name, instructor, units, classTime, examTime, capacity, prerequisites);
+        int index = 0;
+        for (index = 0; index < courses.size(); index++)
+            if (name.equals(courses.get(index).getName()))
+                break;
+        courses.add(index, course);
     }
 
     public void addStudent(JSONObject jo) {
@@ -41,7 +59,7 @@ public class UnitSelectionSystem {
 
         } else {
             response.put("success", false);
-            response.put("error", (String)data);
+            response.put("error", ((Exception)data).getMessage());
         }
         System.out.print(response);
     }

@@ -3,11 +3,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.json.simple.JSONObject;
-
 import java.util.ArrayList;
 
 public class UnitSelectionSystemTest {
     UnitSelectionSystem unitSelectionSystem;
+
     @BeforeEach
     public void setup() {
         unitSelectionSystem = new UnitSelectionSystem();
