@@ -20,27 +20,43 @@ public class UnitSelectionSystem {
     public void getOffering(JSONObject jo) {
         String studentId = (String)jo.get("studentId");
         String code = (String)jo.get("code");
-        Student student = findStudent(studentId);
-        if(student == null) { //todo
-            return;
-        }
-        Course course = findCourse(code);
-        if(course == null) { //todo
-            return;
+        Student student;
+        Course course;
+        try {
+            student = findStudent(studentId);
+            try { //todo
+                course = findCourse(code);
+
+            } catch (Exception offeringNotFound) {
+                    printResponse(false, offeringNotFound);
+            }
+        } catch (Exception studentNotFound) {
+                printResponse(false, studentNotFound);
         }
     }
 
-    public Student findStudent(String id) {
+    public void printResponse(boolean success, Object data) {
+        JSONObject response = new JSONObject();
+        if(success) { //todo
+
+        } else {
+            response.put("success", false);
+            response.put("error", (String)data);
+        }
+        System.out.print(response);
+    }
+
+    public Student findStudent(String id)  throws StudentNotFound {
         for(Student student: students)
             if(student.getId().equals(id))
                 return student;
-        return null;
+        throw new StudentNotFound();
     }
 
-    public Course findCourse(String code) {
+    public Course findCourse(String code)  throws OfferingNotFound {
         for(Course course: courses)
             if(course.getCode().equals(code))
                 return course;
-        return null;
+        throw new OfferingNotFound();
     }
 }
