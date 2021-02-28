@@ -39,6 +39,25 @@ public class UnitSelectionSystem {
         students.add(student);
     }
 
+    public void getOfferings(JSONObject jo) {
+        String studentId = (String)jo.get("studentId");
+        Student student;
+        try {
+            student = findStudent(studentId);
+            JSONArray data = new JSONArray();
+            for (Course course: courses) {
+                JSONObject item = new JSONObject();
+                item.put("code", course.getCode());
+                item.put("name", course.getName());
+                item.put("instructor", course.getInstructor());
+                data.add(item);
+            }
+            printResponse(true, data);
+        } catch (Exception studentNotFound) {
+            printResponse(false, studentNotFound);
+        }
+    }
+
     public void getOffering(JSONObject jo) {
         String studentId = (String)jo.get("studentId");
         String code = (String)jo.get("code");
@@ -48,18 +67,22 @@ public class UnitSelectionSystem {
             student = findStudent(studentId);
             try { //todo
                 course = findCourse(code);
-
             } catch (Exception offeringNotFound) {
-                    printResponse(false, offeringNotFound);
+                printResponse(false, offeringNotFound);
             }
         } catch (Exception studentNotFound) {
-                printResponse(false, studentNotFound);
+            printResponse(false, studentNotFound);
         }
     }
 
     public void printResponse(boolean success, Object data) {
         JSONObject response = new JSONObject();
-        if(success) { //todo
+        if(success) {
+            response.put("success", false);
+            if (data instanceof JSONObject)
+                response.put("data", (JSONObject) data);
+            else if (data instanceof JSONArray)
+                response.put("data", (JSONArray) data);
 
         } else {
             response.put("success", false);
