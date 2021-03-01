@@ -46,6 +46,14 @@ public class Course {
             prerequisitesArray.add((String)_prerequisites.get(i));
     }
 
+    public void decreasingRemainingCapacity() {
+        remainingCapacity--;
+    }
+
+    public void increasingRemainingCapacity() {
+        remainingCapacity++;
+    }
+
     public long getRemainingCapacity() {
         return remainingCapacity;
     }

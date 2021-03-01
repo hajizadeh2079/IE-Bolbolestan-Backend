@@ -215,7 +215,19 @@ public class UnitSelectionSystemTest {
             actual = unitSelectionSystem.checkForCollisionClassTime(course1, course2);
             assertFalse(actual);
         } catch (Exception e) {}
+    }
 
-
+    @Test
+    public void testCheckForCollisionExamTime() {
+        try {
+            Course course1 = unitSelectionSystem.findCourse("81010010");
+            Course course2 = unitSelectionSystem.findCourse("81010020");
+            boolean actual = unitSelectionSystem.checkForCollisionExamTime(course1, course2);
+            assertTrue(actual);
+            course1 = unitSelectionSystem.findCourse("81010010");
+            course2 = unitSelectionSystem.findCourse("81010040");
+            actual = unitSelectionSystem.checkForCollisionClassTime(course1, course2);
+            assertFalse(actual);
+        } catch (Exception e) {}
     }
 }

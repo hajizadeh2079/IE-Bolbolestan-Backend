@@ -1,6 +1,7 @@
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -43,7 +44,13 @@ public class UnitSelectionSystem {
                     checkForCapacityError(student);
                     try {
                         checkForClassTimeCollisionError(student);
-                        return null;
+                        try {
+                            checkForExamTimeCollisionError(student);
+                            convertNonFinalizedToFinalizedCourses(student);
+                            return createResponse(true, new JSONObject());
+                        } catch (Exception examTimeCollisionError) {
+                            return createResponse(false, examTimeCollisionError);
+                        }
                     } catch (Exception classTimeCollisionError) {
                         return createResponse(false, classTimeCollisionError);
                     }
@@ -56,6 +63,44 @@ public class UnitSelectionSystem {
         } catch (Exception studentNotFound) {
             return createResponse(false, studentNotFound);
         }
+    }
+
+    public void convertNonFinalizedToFinalizedCourses(Student student) {
+        ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
+        ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
+        for (Course course : nonFinalizedCourses)
+            course.decreasingRemainingCapacity();
+        finalizedCourses.addAll(nonFinalizedCourses);
+        student.setFinalizedCourses(finalizedCourses);
+        nonFinalizedCourses.clear();
+        student.setNonFinalizedCourses(nonFinalizedCourses);
+    }
+
+    public void checkForExamTimeCollisionError(Student student) throws ExamTimeCollisionError {
+        ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
+        ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
+        for (Course course1 : nonFinalizedCourses) {
+            for (Course course2 : nonFinalizedCourses) {
+                if (course1.getCode().equals(course2.getCode()))
+                    continue;
+                if (checkForCollisionExamTime(course1, course2))
+                    throw new ExamTimeCollisionError(course1.getCode(), course2.getCode());
+            }
+        }
+        for (Course course1 : nonFinalizedCourses) {
+            for (Course course2 : finalizedCourses) {
+                if (checkForCollisionExamTime(course1, course2))
+                    throw new ExamTimeCollisionError(course1.getCode(), course2.getCode());
+            }
+        }
+    }
+
+    public boolean checkForCollisionExamTime(Course course1, Course course2) {
+        long start1ToSeconds = course1.getExamTimeStart().toEpochSecond(ZoneOffset.UTC);
+        long end1ToSeconds = course1.getExamTimeEnd().toEpochSecond(ZoneOffset.UTC);
+        long start2ToSeconds = course2.getExamTimeStart().toEpochSecond(ZoneOffset.UTC);
+        long end2ToSeconds = course2.getExamTimeEnd().toEpochSecond(ZoneOffset.UTC);
+        return start1ToSeconds < end2ToSeconds && start2ToSeconds < end1ToSeconds;
     }
 
     public void checkForUnitsError(int unitsCount) throws UnitsMinOrMaxError {
@@ -78,13 +123,13 @@ public class UnitSelectionSystem {
             for (Course course2 : nonFinalizedCourses) {
                 if (course1.getCode().equals(course2.getCode()))
                     continue;
-                if(checkForCollisionClassTime(course1, course2))
+                if (checkForCollisionClassTime(course1, course2))
                     throw new ClassTimeCollisionError(course1.getCode(), course2.getCode());
             }
         }
         for (Course course1 : nonFinalizedCourses) {
             for (Course course2 : finalizedCourses) {
-                if(checkForCollisionClassTime(course1, course2))
+                if (checkForCollisionClassTime(course1, course2))
                     throw new ClassTimeCollisionError(course1.getCode(), course2.getCode());
             }
         }
@@ -101,13 +146,11 @@ public class UnitSelectionSystem {
             }
         }
         if (haveSameDay) {
-            try {
-                int start1ToSeconds = course1.getClassTimeStart().toSecondOfDay();
-                int end1ToSeconds = course1.getClassTimeEnd().toSecondOfDay();
-                int start2ToSeconds = course2.getClassTimeStart().toSecondOfDay();
-                int end2ToSeconds = course2.getClassTimeEnd().toSecondOfDay();
-                return start1ToSeconds < end2ToSeconds && start2ToSeconds < end1ToSeconds;
-            } catch (Exception parseException) {}
+            int start1ToSeconds = course1.getClassTimeStart().toSecondOfDay();
+            int end1ToSeconds = course1.getClassTimeEnd().toSecondOfDay();
+            int start2ToSeconds = course2.getClassTimeStart().toSecondOfDay();
+            int end2ToSeconds = course2.getClassTimeEnd().toSecondOfDay();
+            return start1ToSeconds < end2ToSeconds && start2ToSeconds < end1ToSeconds;
         }
         return false;
     }
@@ -184,7 +227,12 @@ public class UnitSelectionSystem {
                     String listToBeSearched = student.isCourseExist(code);
                     if(listToBeSearched.equals("finalized")) {
                         ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
-                        finalizedCourses.removeIf(course -> course.getCode().equals(courseToBeRemoved.getCode()));
+                        for(Course course: finalizedCourses) {
+                            if(course.getCode().equals(courseToBeRemoved.getCode())) {
+                                finalizedCourses.remove(course);
+                                course.increasingRemainingCapacity();
+                            }
+                        }
                         student.setFinalizedCourses(finalizedCourses);
                     }
                     else if(listToBeSearched.equals("notFinalized")) {
