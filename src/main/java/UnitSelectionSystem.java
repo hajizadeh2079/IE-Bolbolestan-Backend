@@ -170,7 +170,7 @@ public class UnitSelectionSystem {
     public JSONObject createResponse(boolean success, Object data) {
         JSONObject response = new JSONObject();
         if(success) {
-            response.put("success", false);
+            response.put("success", true);
             if (data instanceof JSONObject)
                 response.put("data", (JSONObject) data);
             else if (data instanceof JSONArray)

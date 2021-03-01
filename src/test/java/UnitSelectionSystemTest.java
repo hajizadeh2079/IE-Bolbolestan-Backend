@@ -34,6 +34,22 @@ public class UnitSelectionSystemTest {
     }
 
     @Test
+    public void testGetWeeklySchedule() {
+        JSONObject course = new JSONObject();
+        course.put("studentId", "810197100");
+        course.put("code", "81010080");
+        JSONObject response = unitSelectionSystem.addToWeeklySchedule(course);
+        course.put("code", "81010070");
+        response = unitSelectionSystem.addToWeeklySchedule(course);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("studentId", "810197100");
+        response = unitSelectionSystem.getWeeklySchedule(jsonObject);
+        int expected = 2;
+        int actual = ((JSONArray)((JSONObject)response.get("data")).get("weeklySchedule")).size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void testAddToWeeklySchedule() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("studentId", "810197100");
@@ -121,7 +137,7 @@ public class UnitSelectionSystemTest {
         try {
             student = unitSelectionSystem.findStudent("810197452");
             assertEquals("810197452", student.getId());
-        }catch (Exception exception) {}
+        } catch (Exception exception) {}
         Exception exception = assertThrows(StudentNotFound.class, () -> {
             unitSelectionSystem.findStudent("810197462");
         });
