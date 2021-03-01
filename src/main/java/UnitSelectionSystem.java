@@ -26,8 +26,45 @@ public class UnitSelectionSystem {
                 return getOffering(jo);
             case "addToWeeklySchedule":
                 return addToWeeklySchedule(jo);
+            case "getWeeklySchedule":
+                return getWeeklySchedule(jo);
             default:
                 return null;
+        }
+    }
+
+    public JSONObject getWeeklySchedule(JSONObject jo) {
+        String studentId = (String) jo.get("studentId");
+        try {
+            Student student = findStudent(studentId);
+            JSONObject data = new JSONObject();
+            JSONArray items = new JSONArray();
+            ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
+            ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
+            for (Course course: finalizedCourses) {
+                JSONObject item = new JSONObject();
+                item.put("code", course.getCode());
+                item.put("name", course.getName());
+                item.put("instructor", course.getInstructor());
+                item.put("classTime", course.getClassTime());
+                item.put("examTime", course.getExamTime());
+                item.put("status", "finalized");
+                items.add(item);
+            }
+            for (Course course: nonFinalizedCourses) {
+                JSONObject item = new JSONObject();
+                item.put("code", course.getCode());
+                item.put("name", course.getName());
+                item.put("instructor", course.getInstructor());
+                item.put("classTime", course.getClassTime());
+                item.put("examTime", course.getExamTime());
+                item.put("status", "non-finalized");
+                items.add(item);
+            }
+            data.put("weeklySchedule", items);
+            return createResponse(true, data);
+        } catch (Exception studentNotFound) {
+            return createResponse(false, studentNotFound);
         }
     }
 
