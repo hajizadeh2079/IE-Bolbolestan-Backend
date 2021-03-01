@@ -212,7 +212,7 @@ public class UnitSelectionSystemTest {
             course2 = unitSelectionSystem.findCourse("81010080");
             actual = unitSelectionSystem.checkForCollisionClassTime(course1, course2);
             assertFalse(actual);
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
     }
 
     @Test
@@ -226,7 +226,7 @@ public class UnitSelectionSystemTest {
             course2 = unitSelectionSystem.findCourse("81010040");
             actual = unitSelectionSystem.checkForCollisionClassTime(course1, course2);
             assertFalse(actual);
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
     }
 
     @Test
@@ -245,7 +245,7 @@ public class UnitSelectionSystemTest {
             String expected = "finalized";
             String actual = (String) ((JSONObject)((JSONArray)((JSONObject)response.get("data")).get("weeklySchedule")).get(1)).get("status");
             assertEquals(expected, actual);
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
 
         try {
             JSONObject jsonObject = new JSONObject();
@@ -258,7 +258,7 @@ public class UnitSelectionSystemTest {
             String expected = "MinimumUnitsError";
             String actual = (String)response.get("error");
             assertEquals(expected, actual);
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
 
         try {
             JSONObject jsonObject = new JSONObject();
@@ -273,7 +273,7 @@ public class UnitSelectionSystemTest {
             String expected = "ClassTimeCollisionError 81010070 81010080";
             String actual = (String)response.get("error");
             assertEquals(expected, actual);
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
 
         try {
             JSONObject jsonObject = new JSONObject();
@@ -288,7 +288,7 @@ public class UnitSelectionSystemTest {
             String expected = "ExamTimeCollisionError 81010010 81010020";
             String actual = (String)response.get("error");
             assertEquals(expected, actual);
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
 
     }
 }

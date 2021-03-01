@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void Main(String[] args) {
+    public static void main(String[] args) {
         UnitSelectionSystem unitSelectionSystem = new UnitSelectionSystem();
         Scanner scanner = new Scanner(System.in);
         JSONParser parser = new JSONParser();
