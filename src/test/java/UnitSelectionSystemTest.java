@@ -34,6 +34,27 @@ public class UnitSelectionSystemTest {
     }
 
     @Test
+    public void testAddToWeeklySchedule() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("studentId", "810197100");
+        jsonObject.put("code", "81010080");
+        JSONObject response = unitSelectionSystem.addToWeeklySchedule(jsonObject);
+        String expected = "Engineering Mathematics";
+        String actual;
+        try {
+            ArrayList<Course> nonFinalizedCourses = unitSelectionSystem.findStudent("810197100").getNonFinalizedCourses();
+            actual = nonFinalizedCourses.get(nonFinalizedCourses.size() - 1).getName();
+            assertEquals(expected, actual);
+        } catch (StudentNotFound exception) {}
+        jsonObject.put("studentId", "810197100");
+        jsonObject.put("code", "81019999");
+        response = unitSelectionSystem.addToWeeklySchedule(jsonObject);
+        expected = "OfferingNotFound";
+        actual = (String) response.get("error");
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void testGetOfferings() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("studentId", "810197100");
@@ -53,9 +74,9 @@ public class UnitSelectionSystemTest {
         ArrayList<Course> courses;
         JSONObject course1 = new JSONObject();
         course1.put("code", "81013602");
-        course1.put("name", "Internet Engineering");
+        course1.put("name", "Unknown");
         course1.put("instructor", "Ehsan Khamespanah");
-        course1.put("units", 3);
+        course1.put("units", 3L);
         JSONObject classTime = new JSONObject();
         JSONArray classDays = new JSONArray();
         classDays.add("saturday");
@@ -67,12 +88,12 @@ public class UnitSelectionSystemTest {
         examTime.put("start", "2021-09-01T08:00:00");
         examTime.put("end", "2021-09-01T08:00:00");
         course1.put("examTime", examTime);
-        course1.put("capacity", 60);
+        course1.put("capacity", 60L);
         JSONArray prerequisites = new JSONArray();
         prerequisites.add("Advanced Programming");
         prerequisites.add("Operating Systems");
         course1.put("prerequisites", prerequisites);
-        unitSelectionSystem.addOffering(course1);
+        JSONObject response = unitSelectionSystem.addOffering(course1);
         courses = unitSelectionSystem.getCourses();
         assertEquals("16:00", courses.get(courses.size() - 1).getClassTimeStart().toString());
     }
@@ -84,7 +105,7 @@ public class UnitSelectionSystemTest {
         std1.put("studentId", "810197452");
         std1.put("name", "Armin Afsharian");
         std1.put("enteredAt", "1397");
-        unitSelectionSystem.addStudent(std1);
+        JSONObject response = unitSelectionSystem.addStudent(std1);
         students = unitSelectionSystem.getStudents();
         assertEquals("810197452", students.get(students.size() - 1).getId());
     }
@@ -96,7 +117,7 @@ public class UnitSelectionSystemTest {
         std1.put("studentId", "810197452");
         std1.put("name", "Armin Afsharian");
         std1.put("enteredAt", "1397");
-        unitSelectionSystem.addStudent(std1);
+        JSONObject response = unitSelectionSystem.addStudent(std1);
         try {
             student = unitSelectionSystem.findStudent("810197452");
             assertEquals("810197452", student.getId());

@@ -17,11 +17,9 @@ public class UnitSelectionSystem {
     public JSONObject doCommand(String command, JSONObject jo) {
         switch (command) {
             case "addStudent":
-                addStudent(jo);
-                return null;
+                return addStudent(jo);
             case "addOffering":
-                addOffering(jo);
-                return null;
+                return addOffering(jo);
             case "getOfferings":
                 return getOfferings(jo);
             case "getOffering":
@@ -50,7 +48,7 @@ public class UnitSelectionSystem {
                         return null;
                 nonFinalizedCourses.add(newCourse);
                 student.setNonFinalizedCourses(nonFinalizedCourses);
-                return null;
+                return createResponse(true, new JSONObject());
             } catch (Exception offeringNotFound) {
                 return createResponse(false, offeringNotFound);
             }
@@ -59,7 +57,7 @@ public class UnitSelectionSystem {
         }
     }
 
-    public void addOffering(JSONObject jo) {
+    public JSONObject addOffering(JSONObject jo) {
         String code = (String)jo.get("code");
         String name = (String)jo.get("name");
         String instructor = (String)jo.get("instructor");
@@ -74,14 +72,16 @@ public class UnitSelectionSystem {
             if (name.equals(courses.get(index).getName()))
                 break;
         courses.add(index, course);
+        return createResponse(true, new JSONObject());
     }
 
-    public void addStudent(JSONObject jo) {
+    public JSONObject addStudent(JSONObject jo) {
         String id = (String)jo.get("studentId");
         String name = (String)jo.get("name");
         String enteredAt = (String)jo.get("enteredAt");
         Student student = new Student(id, name, enteredAt);
         students.add(student);
+        return createResponse(true, new JSONObject());
     }
 
     public JSONObject getOfferings(JSONObject jo) {
