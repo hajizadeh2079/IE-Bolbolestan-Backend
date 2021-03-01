@@ -84,8 +84,6 @@ public class UnitSelectionSystemTest {
             assertEquals(0, unitSelectionSystem.findStudent("810197200").getNonFinalizedCourses().size());
         } catch (Exception ignored) { }
 
-        //todo "remove from finalized list"
-
         JSONObject response = unitSelectionSystem.removeFromWeeklySchedule(jsonObject);
         String expected = "OfferingNotFound";
         String actual = (String) response.get("error");
@@ -229,5 +227,68 @@ public class UnitSelectionSystemTest {
             actual = unitSelectionSystem.checkForCollisionClassTime(course1, course2);
             assertFalse(actual);
         } catch (Exception e) {}
+    }
+
+    @Test
+    public void testFinalize() {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("studentId", "810197100");
+            jsonObject.put("code", "81010010");
+            unitSelectionSystem.addToWeeklySchedule(jsonObject);
+            jsonObject.put("code", "81010070");
+            unitSelectionSystem.addToWeeklySchedule(jsonObject);
+            jsonObject.put("code", "81010030");
+            unitSelectionSystem.addToWeeklySchedule(jsonObject);
+            unitSelectionSystem.finalize(jsonObject);
+            JSONObject response = unitSelectionSystem.getWeeklySchedule(jsonObject);
+            String expected = "finalized";
+            String actual = (String) ((JSONObject)((JSONArray)((JSONObject)response.get("data")).get("weeklySchedule")).get(1)).get("status");
+            assertEquals(expected, actual);
+        } catch (Exception e) {}
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("studentId", "810197300");
+            jsonObject.put("code", "81010010");
+            unitSelectionSystem.addToWeeklySchedule(jsonObject);
+            jsonObject.put("code", "81010030");
+            unitSelectionSystem.addToWeeklySchedule(jsonObject);
+            JSONObject response  = unitSelectionSystem.finalize(jsonObject);
+            String expected = "MinimumUnitsError";
+            String actual = (String)response.get("error");
+            assertEquals(expected, actual);
+        } catch (Exception e) {}
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("studentId", "810196400");
+            jsonObject.put("code", "81010010");
+            unitSelectionSystem.addToWeeklySchedule(jsonObject);
+            jsonObject.put("code", "81010070");
+            unitSelectionSystem.addToWeeklySchedule(jsonObject);
+            jsonObject.put("code", "81010080");
+            unitSelectionSystem.addToWeeklySchedule(jsonObject);
+            JSONObject response  = unitSelectionSystem.finalize(jsonObject);
+            String expected = "ClassTimeCollisionError 81010070 81010080";
+            String actual = (String)response.get("error");
+            assertEquals(expected, actual);
+        } catch (Exception e) {}
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("studentId", "810197200");
+            jsonObject.put("code", "81010010");
+            unitSelectionSystem.addToWeeklySchedule(jsonObject);
+            jsonObject.put("code", "81010020");
+            unitSelectionSystem.addToWeeklySchedule(jsonObject);
+            jsonObject.put("code", "81010030");
+            unitSelectionSystem.addToWeeklySchedule(jsonObject);
+            JSONObject response  = unitSelectionSystem.finalize(jsonObject);
+            String expected = "ExamTimeCollisionError 81010010 81010020";
+            String actual = (String)response.get("error");
+            assertEquals(expected, actual);
+        } catch (Exception e) {}
+
     }
 }
