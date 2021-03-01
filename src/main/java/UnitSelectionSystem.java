@@ -1,4 +1,9 @@
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -15,24 +20,96 @@ public class UnitSelectionSystem {
     }
 
     public JSONObject doCommand(String command, JSONObject jo) {
-        switch (command) {
-            case "addStudent":
-                return addStudent(jo);
-            case "addOffering":
-                return addOffering(jo);
-            case "getOfferings":
-                return getOfferings(jo);
-            case "getOffering":
-                return getOffering(jo);
-            case "addToWeeklySchedule":
-                return addToWeeklySchedule(jo);
-            case "getWeeklySchedule":
-                return getWeeklySchedule(jo);
-            case "removeFromWeeklySchedule":
-                return removeFromWeeklySchedule(jo);
-            default:
-                return null;
+        return switch (command) {
+            case "addStudent" -> addStudent(jo);
+            case "addOffering" -> addOffering(jo);
+            case "getOfferings" -> getOfferings(jo);
+            case "getOffering" -> getOffering(jo);
+            case "addToWeeklySchedule" -> addToWeeklySchedule(jo);
+            case "getWeeklySchedule" -> getWeeklySchedule(jo);
+            case "removeFromWeeklySchedule" -> removeFromWeeklySchedule(jo);
+            case "finalize" -> finalize(jo);
+            default -> null;
+        };
+    }
+
+    public JSONObject finalize(JSONObject jo) {
+        String studentId = (String) jo.get("studentId");
+        try {
+            Student student = findStudent(studentId);
+            try {
+                checkForUnitsError(student.studentUnitsCount());
+                try {
+                    checkForCapacityError(student);
+                    try {
+                        checkForClassTimeCollisionError(student);
+                        return null;
+                    } catch (Exception classTimeCollisionError) {
+                        return createResponse(false, classTimeCollisionError);
+                    }
+                } catch (Exception capacityError) {
+                    return createResponse(false, capacityError);
+                }
+            } catch (Exception unitsMinOrMaxError) {
+                return createResponse(false, unitsMinOrMaxError);
+            }
+        } catch (Exception studentNotFound) {
+            return createResponse(false, studentNotFound);
         }
+    }
+
+    public void checkForUnitsError(int unitsCount) throws UnitsMinOrMaxError {
+        if (unitsCount < 12)
+            throw new UnitsMinOrMaxError("Minimum");
+        else if (unitsCount > 20)
+            throw new UnitsMinOrMaxError("Maximum");
+    }
+
+    public void checkForCapacityError(Student student) throws CapacityError {
+        for (Course course: student.getNonFinalizedCourses())
+            if (course.getCapacity() == course.getRemainingCapacity())
+                throw new CapacityError(course.getCode());
+    }
+
+    public void checkForClassTimeCollisionError(Student student) throws ClassTimeCollisionError {
+        ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
+        ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
+        for (Course course1 : nonFinalizedCourses) {
+            for (Course course2 : nonFinalizedCourses) {
+                if (course1.getCode().equals(course2.getCode()))
+                    continue;
+                if(checkForCollisionClassTime(course1, course2))
+                    throw new ClassTimeCollisionError(course1.getCode(), course2.getCode());
+            }
+        }
+        for (Course course1 : nonFinalizedCourses) {
+            for (Course course2 : finalizedCourses) {
+                if(checkForCollisionClassTime(course1, course2))
+                    throw new ClassTimeCollisionError(course1.getCode(), course2.getCode());
+            }
+        }
+    }
+
+    public boolean checkForCollisionClassTime(Course course1, Course course2) {
+        boolean haveSameDay = false;
+        for (String classDay1 : course1.getClassTimeDays()) {
+            for (String classDay2: course2.getClassTimeDays()) {
+                if (classDay1.equals(classDay2)) {
+                    haveSameDay = true;
+                    break;
+                }
+            }
+        }
+        if (haveSameDay) {
+            try {
+                int start1ToSeconds = course1.getClassTimeStart().toSecondOfDay();
+                int end1ToSeconds = course1.getClassTimeEnd().toSecondOfDay();
+                int start2ToSeconds = course2.getClassTimeStart().toSecondOfDay();
+                int end2ToSeconds = course2.getClassTimeEnd().toSecondOfDay();
+                return start1ToSeconds < end2ToSeconds && start2ToSeconds < end1ToSeconds;
+            } catch (Exception parseException) {}
+        }
+        return false;
     }
 
     public JSONObject getWeeklySchedule(JSONObject jo) {

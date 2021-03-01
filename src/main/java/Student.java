@@ -50,4 +50,13 @@ public class Student {
                 return "notFinalized";
         throw new OfferingNotFound();
     }
+
+    public int studentUnitsCount() {
+        int units = 0;
+        for (Course course: finalizedCourses)
+            units += course.getUnits();
+        for (Course course: nonFinalizedCourses)
+            units += course.getUnits();
+        return units;
+    }
 }

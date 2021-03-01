@@ -3,13 +3,13 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.json.simple.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UnitSelectionSystemTest {
     UnitSelectionSystem unitSelectionSystem;
@@ -164,11 +164,6 @@ public class UnitSelectionSystemTest {
     @Test
     public void testFindStudent() {
         Student student;
-        JSONObject std1 = new JSONObject();
-        std1.put("studentId", "810197300");
-        std1.put("name", "Javad");
-        std1.put("enteredAt", "1397");
-        JSONObject response = unitSelectionSystem.addStudent(std1);
         try {
             student = unitSelectionSystem.findStudent("810197300");
             assertEquals("Javad", student.getName());
@@ -202,5 +197,25 @@ public class UnitSelectionSystemTest {
         expected = "OfferingNotFound";
         actual = (String) response.get("error");
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testCheckForCollisionClassTime() {
+        try {
+            Course course1 = unitSelectionSystem.findCourse("81010070");
+            Course course2 = unitSelectionSystem.findCourse("81010080");
+            boolean actual = unitSelectionSystem.checkForCollisionClassTime(course1, course2);
+            assertTrue(actual);
+            course1 = unitSelectionSystem.findCourse("81010060");
+            course2 = unitSelectionSystem.findCourse("81010080");
+            actual = unitSelectionSystem.checkForCollisionClassTime(course1, course2);
+            assertFalse(actual);
+            course1 = unitSelectionSystem.findCourse("81010040");
+            course2 = unitSelectionSystem.findCourse("81010080");
+            actual = unitSelectionSystem.checkForCollisionClassTime(course1, course2);
+            assertFalse(actual);
+        } catch (Exception e) {}
+
+
     }
 }
