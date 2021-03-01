@@ -130,13 +130,13 @@ public class UnitSelectionSystemTest {
     public void testFindStudent() {
         Student student;
         JSONObject std1 = new JSONObject();
-        std1.put("studentId", "810197452");
-        std1.put("name", "Armin Afsharian");
+        std1.put("studentId", "810197300");
+        std1.put("name", "Javad");
         std1.put("enteredAt", "1397");
         JSONObject response = unitSelectionSystem.addStudent(std1);
         try {
-            student = unitSelectionSystem.findStudent("810197452");
-            assertEquals("810197452", student.getId());
+            student = unitSelectionSystem.findStudent("810197300");
+            assertEquals("Javad", student.getName());
         } catch (Exception exception) {}
         Exception exception = assertThrows(StudentNotFound.class, () -> {
             unitSelectionSystem.findStudent("810197462");
@@ -144,5 +144,28 @@ public class UnitSelectionSystemTest {
         String expectedMessage = "StudentNotFound";
         String actualMessage = exception.getMessage();
         assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    public void testGetOffering() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("studentId", "810197100");
+        jsonObject.put("code", "81010030");
+        JSONObject response = unitSelectionSystem.getOffering(jsonObject);
+        String expected = "Artificial Intelligence";
+        String actual = (String) (((JSONObject)response.get("data")).get("name"));
+        assertEquals(expected, actual);
+        jsonObject.put("studentId", "810197999");
+        jsonObject.put("code", "81010030");
+        response = unitSelectionSystem.getOffering(jsonObject);
+        expected = "StudentNotFound";
+        actual = (String) response.get("error");
+        assertEquals(expected, actual);
+        jsonObject.put("studentId", "810197100");
+        jsonObject.put("code", "81010130");
+        response = unitSelectionSystem.getOffering(jsonObject);
+        expected = "OfferingNotFound";
+        actual = (String) response.get("error");
+        assertEquals(expected, actual);
     }
 }
