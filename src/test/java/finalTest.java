@@ -22,11 +22,15 @@ public class finalTest {
                 if (line == null)
                     continue;
                 fileOut.write(line);
+                fileOut.write("\n");
                 String command = line.substring(0, line.indexOf(" "));
                 String jsonString = line.substring(line.indexOf(" ") + 1);
                 JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
                 JSONObject response = unitSelectionSystem.doCommand(command, jsonObject);
-                fileOut.write(response.toString());
+                if (response != null) {
+                    fileOut.write(response.toString());
+                    fileOut.write("\n");
+                }
             }
             fileOut.close();
         } catch (ParseException | IOException ignored) { }

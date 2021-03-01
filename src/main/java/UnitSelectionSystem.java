@@ -112,7 +112,7 @@ public class UnitSelectionSystem {
 
     public void checkForCapacityError(Student student) throws CapacityError {
         for (Course course: student.getNonFinalizedCourses())
-            if (course.getCapacity() == course.getRemainingCapacity())
+            if (course.getRemainingCapacity() == 0)
                 throw new CapacityError(course.getCode());
     }
 

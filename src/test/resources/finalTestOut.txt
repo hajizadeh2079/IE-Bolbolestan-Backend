@@ -1,0 +1,114 @@
+addStudent {"studentId": "1", "name": "s1", "enteredAt": "1397"}
+{"data":{},"success":true}
+addStudent {"studentId": "2", "name": "s2", "enteredAt": "1397"}
+{"data":{},"success":true}
+addStudent {"studentId": "3", "name": "s3", "enteredAt": "1397"}
+{"data":{},"success":true}
+addOffering {"code": "1", "name": "c1", "instructor": "t1", "units": 8, "classTime": {"days": ["d0", "d1"], "time": "08:00-10:00"}, "examTime": {"start": "2021-09-01T08:00:00", "end": "2021-09-01T10:00:00"}, "capacity": 2, "prerequisites": ["c9", "c10"]}
+{"data":{},"success":true}
+addOffering {"code": "2", "name": "c2", "instructor": "t2", "units": 8, "classTime": {"days": ["d3", "d4"], "time": "08:00-10:00"}, "examTime": {"start": "2021-09-02T08:00:00", "end": "2021-09-02T10:00:00"}, "capacity": 2, "prerequisites": ["c9", "c10"]}
+{"data":{},"success":true}
+addOffering {"code": "3", "name": "c3", "instructor": "t3", "units": 8, "classTime": {"days": ["d0", "d1"], "time": "07:00-09:00"}, "examTime": {"start": "2021-09-05T08:00:00", "end": "2021-09-05T11:00:00"}, "capacity": 2, "prerequisites": ["c9", "c10"]}
+{"data":{},"success":true}
+addOffering {"code": "4", "name": "c1", "instructor": "t4", "units": 8, "classTime": {"days": ["d0", "d1"], "time": "08:00-10:00"}, "examTime": {"start": "2021-09-04T08:00:00", "end": "2021-09-04T11:00:00"}, "capacity": 2, "prerequisites": ["c9", "c10"]}
+{"data":{},"success":true}
+addOffering {"code": "5", "name": "c4", "instructor": "t5", "units": 8, "classTime": {"days": ["d1", "d2"], "time": "09:00-11:00"}, "examTime": {"start": "2021-09-05T08:00:00", "end": "2021-09-05T11:00:00"}, "capacity": 2, "prerequisites": ["c9", "c10"]}
+{"data":{},"success":true}
+addOffering {"code": "6", "name": "c6", "instructor": "t6", "units": 8, "classTime": {"days": ["d3", "d4"], "time": "08:00-10:00"}, "examTime": {"start": "2021-09-06T08:00:00", "end": "2021-09-06T11:00:00"}, "capacity": 2, "prerequisites": ["c9", "c10"]}
+{"data":{},"success":true}
+addOffering {"code": "7", "name": "c7", "instructor": "t7", "units": 8, "classTime": {"days": ["d3", "d4"], "time": "10:00-12:00"}, "examTime": {"start": "2021-09-07T08:00:00", "end": "2021-09-07T11:00:00"}, "capacity": 2, "prerequisites": ["c9", "c10"]}
+{"data":{},"success":true}
+addToWeeklySchedule {"studentId": "2", "code": "1"}
+{"data":{},"success":true}
+addToWeeklySchedule {"studentId": "2", "code": "2"}
+{"data":{},"success":true}
+finalize {"studentId": "2"}
+{"data":{},"success":true}
+addToWeeklySchedule {"studentId": "3", "code": "1"}
+{"data":{},"success":true}
+addToWeeklySchedule {"studentId": "3", "code": "2"}
+{"data":{},"success":true}
+finalize {"studentId": "3"}
+{"data":{},"success":true}
+getOfferings {"studentId": "5"}
+{"success":false,"error":"StudentNotFound"}
+getOfferings {"studentId": "1"}
+{"data":[{"code":"4","instructor":"t4","name":"c1"},{"code":"1","instructor":"t1","name":"c1"},{"code":"2","instructor":"t2","name":"c2"},{"code":"3","instructor":"t3","name":"c3"},{"code":"5","instructor":"t5","name":"c4"},{"code":"6","instructor":"t6","name":"c6"},{"code":"7","instructor":"t7","name":"c7"}],"success":true}
+getOffering {"studentId": "1", "code": "10"}
+{"success":false,"error":"OfferingNotFound"}
+getOffering {"studentId": "5", "code": "4"}
+{"success":false,"error":"StudentNotFound"}
+getOffering {"studentId": "1", "code": "4"}
+{"data":{"prerequisites":["c9","c10"],"code":"4","instructor":"t4","name":"c1","units":8,"examTime":{"start":"2021-09-04T08:00:00","end":"2021-09-04T11:00:00"},"classTime":{"days":["d0","d1"],"time":"08:00-10:00"},"capacity":2},"success":true}
+addToWeeklySchedule {"studentId": "1", "code": "10"}
+{"success":false,"error":"OfferingNotFound"}
+addToWeeklySchedule {"studentId": "5", "code": "4"}
+{"success":false,"error":"StudentNotFound"}
+addToWeeklySchedule {"studentId": "1", "code": "4"}
+{"data":{},"success":true}
+addToWeeklySchedule {"studentId": "1", "code": "5"}
+{"data":{},"success":true}
+getWeeklySchedule {"studentId": "5"}
+{"success":false,"error":"StudentNotFound"}
+getWeeklySchedule {"studentId": "1"}
+{"data":{"weeklySchedule":[{"code":"4","instructor":"t4","name":"c1","examTime":{"start":"2021-09-04T08:00:00","end":"2021-09-04T11:00:00"},"classTime":{"days":["d0","d1"],"time":"08:00-10:00"},"status":"non-finalized"},{"code":"5","instructor":"t5","name":"c4","examTime":{"start":"2021-09-05T08:00:00","end":"2021-09-05T11:00:00"},"classTime":{"days":["d1","d2"],"time":"09:00-11:00"},"status":"non-finalized"}]},"success":true}
+removeFromWeeklySchedule {"studentId": "1", "code": "10"}
+{"success":false,"error":"OfferingNotFound"}
+removeFromWeeklySchedule {"studentId": "5", "code": "4"}
+{"success":false,"error":"StudentNotFound"}
+removeFromWeeklySchedule {"studentId": "1", "code": "3"}
+{"success":false,"error":"OfferingNotFound"}
+removeFromWeeklySchedule {"studentId": "1", "code": "4"}
+{"data":{},"success":true}
+getWeeklySchedule {"studentId": "1"}
+{"data":{"weeklySchedule":[{"code":"5","instructor":"t5","name":"c4","examTime":{"start":"2021-09-05T08:00:00","end":"2021-09-05T11:00:00"},"classTime":{"days":["d1","d2"],"time":"09:00-11:00"},"status":"non-finalized"}]},"success":true}
+addToWeeklySchedule {"studentId": "1", "code": "4"}
+{"data":{},"success":true}
+getWeeklySchedule {"studentId": "1"}
+{"data":{"weeklySchedule":[{"code":"5","instructor":"t5","name":"c4","examTime":{"start":"2021-09-05T08:00:00","end":"2021-09-05T11:00:00"},"classTime":{"days":["d1","d2"],"time":"09:00-11:00"},"status":"non-finalized"},{"code":"4","instructor":"t4","name":"c1","examTime":{"start":"2021-09-04T08:00:00","end":"2021-09-04T11:00:00"},"classTime":{"days":["d0","d1"],"time":"08:00-10:00"},"status":"non-finalized"}]},"success":true}
+finalize {"studentId": "1"}
+{"success":false,"error":"ClassTimeCollisionError 5 4"}
+removeFromWeeklySchedule {"studentId": "1", "code": "4"}
+{"data":{},"success":true}
+addToWeeklySchedule {"studentId": "1", "code": "3"}
+{"data":{},"success":true}
+getWeeklySchedule {"studentId": "1"}
+{"data":{"weeklySchedule":[{"code":"5","instructor":"t5","name":"c4","examTime":{"start":"2021-09-05T08:00:00","end":"2021-09-05T11:00:00"},"classTime":{"days":["d1","d2"],"time":"09:00-11:00"},"status":"non-finalized"},{"code":"3","instructor":"t3","name":"c3","examTime":{"start":"2021-09-05T08:00:00","end":"2021-09-05T11:00:00"},"classTime":{"days":["d0","d1"],"time":"07:00-09:00"},"status":"non-finalized"}]},"success":true}
+finalize {"studentId": "1"}
+{"success":false,"error":"ExamTimeCollisionError 5 3"}
+removeFromWeeklySchedule {"studentId": "1", "code": "3"}
+{"data":{},"success":true}
+addToWeeklySchedule {"studentId": "1", "code": "2"}
+{"data":{},"success":true}
+getWeeklySchedule {"studentId": "1"}
+{"data":{"weeklySchedule":[{"code":"5","instructor":"t5","name":"c4","examTime":{"start":"2021-09-05T08:00:00","end":"2021-09-05T11:00:00"},"classTime":{"days":["d1","d2"],"time":"09:00-11:00"},"status":"non-finalized"},{"code":"2","instructor":"t2","name":"c2","examTime":{"start":"2021-09-02T08:00:00","end":"2021-09-02T10:00:00"},"classTime":{"days":["d3","d4"],"time":"08:00-10:00"},"status":"non-finalized"}]},"success":true}
+finalize {"studentId": "1"}
+{"success":false,"error":"CapacityError 2"}
+removeFromWeeklySchedule {"studentId": "1", "code": "2"}
+{"data":{},"success":true}
+getWeeklySchedule {"studentId": "1"}
+{"data":{"weeklySchedule":[{"code":"5","instructor":"t5","name":"c4","examTime":{"start":"2021-09-05T08:00:00","end":"2021-09-05T11:00:00"},"classTime":{"days":["d1","d2"],"time":"09:00-11:00"},"status":"non-finalized"}]},"success":true}
+finalize {"studentId": "1"}
+{"success":false,"error":"MinimumUnitsError"}
+addToWeeklySchedule {"studentId": "1", "code": "6"}
+{"data":{},"success":true}
+addToWeeklySchedule {"studentId": "1", "code": "7"}
+{"data":{},"success":true}
+getWeeklySchedule {"studentId": "1"}
+{"data":{"weeklySchedule":[{"code":"5","instructor":"t5","name":"c4","examTime":{"start":"2021-09-05T08:00:00","end":"2021-09-05T11:00:00"},"classTime":{"days":["d1","d2"],"time":"09:00-11:00"},"status":"non-finalized"},{"code":"6","instructor":"t6","name":"c6","examTime":{"start":"2021-09-06T08:00:00","end":"2021-09-06T11:00:00"},"classTime":{"days":["d3","d4"],"time":"08:00-10:00"},"status":"non-finalized"},{"code":"7","instructor":"t7","name":"c7","examTime":{"start":"2021-09-07T08:00:00","end":"2021-09-07T11:00:00"},"classTime":{"days":["d3","d4"],"time":"10:00-12:00"},"status":"non-finalized"}]},"success":true}
+finalize {"studentId": "1"}
+{"success":false,"error":"MaximumUnitsError"}
+removeFromWeeklySchedule {"studentId": "1", "code": "7"}
+{"data":{},"success":true}
+getWeeklySchedule {"studentId": "1"}
+{"data":{"weeklySchedule":[{"code":"5","instructor":"t5","name":"c4","examTime":{"start":"2021-09-05T08:00:00","end":"2021-09-05T11:00:00"},"classTime":{"days":["d1","d2"],"time":"09:00-11:00"},"status":"non-finalized"},{"code":"6","instructor":"t6","name":"c6","examTime":{"start":"2021-09-06T08:00:00","end":"2021-09-06T11:00:00"},"classTime":{"days":["d3","d4"],"time":"08:00-10:00"},"status":"non-finalized"}]},"success":true}
+finalize {"studentId": "1"}
+{"data":{},"success":true}
+getWeeklySchedule {"studentId": "1"}
+{"data":{"weeklySchedule":[{"code":"5","instructor":"t5","name":"c4","examTime":{"start":"2021-09-05T08:00:00","end":"2021-09-05T11:00:00"},"classTime":{"days":["d1","d2"],"time":"09:00-11:00"},"status":"finalized"},{"code":"6","instructor":"t6","name":"c6","examTime":{"start":"2021-09-06T08:00:00","end":"2021-09-06T11:00:00"},"classTime":{"days":["d3","d4"],"time":"08:00-10:00"},"status":"finalized"}]},"success":true}
+addToWeeklySchedule {"studentId": "1", "code": "7"}
+{"data":{},"success":true}
+getWeeklySchedule {"studentId": "1"}
+{"data":{"weeklySchedule":[{"code":"5","instructor":"t5","name":"c4","examTime":{"start":"2021-09-05T08:00:00","end":"2021-09-05T11:00:00"},"classTime":{"days":["d1","d2"],"time":"09:00-11:00"},"status":"finalized"},{"code":"6","instructor":"t6","name":"c6","examTime":{"start":"2021-09-06T08:00:00","end":"2021-09-06T11:00:00"},"classTime":{"days":["d3","d4"],"time":"08:00-10:00"},"status":"finalized"},{"code":"7","instructor":"t7","name":"c7","examTime":{"start":"2021-09-07T08:00:00","end":"2021-09-07T11:00:00"},"classTime":{"days":["d3","d4"],"time":"10:00-12:00"},"status":"non-finalized"}]},"success":true}
+finalize {"studentId": "1"}
+{"success":false,"error":"MaximumUnitsError"}
