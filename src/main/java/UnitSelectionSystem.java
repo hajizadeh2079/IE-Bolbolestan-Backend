@@ -26,8 +26,36 @@ public class UnitSelectionSystem {
                 return getOfferings(jo);
             case "getOffering":
                 return getOffering(jo);
+            case "addToWeeklySchedule":
+                return addToWeeklySchedule(jo);
             default:
                 return null;
+        }
+    }
+
+    public JSONObject addToWeeklySchedule(JSONObject jo) {
+        String studentId = (String)jo.get("studentId");
+        String code = (String)jo.get("code");
+        try {
+            Student student = findStudent(studentId);
+            try {
+                Course newCourse = findCourse(code);
+                ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
+                ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
+                for (Course course: finalizedCourses)
+                    if (course.getCode().equals(newCourse.getCode()))
+                        return null;
+                for (Course course: nonFinalizedCourses)
+                    if (course.getCode().equals(newCourse.getCode()))
+                        return null;
+                nonFinalizedCourses.add(newCourse);
+                student.setNonFinalizedCourses(nonFinalizedCourses);
+                return null;
+            } catch (Exception offeringNotFound) {
+                return createResponse(false, offeringNotFound);
+            }
+        } catch (Exception studentNotFound) {
+            return createResponse(false, studentNotFound);
         }
     }
 

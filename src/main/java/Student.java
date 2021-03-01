@@ -1,7 +1,11 @@
+import java.util.ArrayList;
+
 public class Student {
     private String id;
     private String name;
     private String enteredAt;
+    private ArrayList<Course> finalizedCourses = new ArrayList<Course>();
+    private ArrayList<Course> nonFinalizedCourses = new ArrayList<Course>();
 
     public Student(String _id, String _name, String _enteredAt) {
         id = _id;
@@ -19,5 +23,21 @@ public class Student {
 
     public String getEnteredAt() {
         return enteredAt;
+    }
+
+    public ArrayList<Course> getFinalizedCourses() {
+        return finalizedCourses;
+    }
+
+    public ArrayList<Course> getNonFinalizedCourses() {
+        return nonFinalizedCourses;
+    }
+
+    public void setFinalizedCourses(ArrayList<Course> finalizedCourses) {
+        this.finalizedCourses = finalizedCourses;
+    }
+
+    public void setNonFinalizedCourses(ArrayList<Course> nonFinalizedCourses) {
+        this.nonFinalizedCourses = nonFinalizedCourses;
     }
 }
