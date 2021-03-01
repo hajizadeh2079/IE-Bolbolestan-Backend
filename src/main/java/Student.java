@@ -40,4 +40,14 @@ public class Student {
     public void setNonFinalizedCourses(ArrayList<Course> nonFinalizedCourses) {
         this.nonFinalizedCourses = nonFinalizedCourses;
     }
+
+    public String isCourseExist(String code) throws OfferingNotFound {
+        for (Course course: finalizedCourses)
+            if (course.getCode().equals(code))
+                return "finalized";
+        for (Course course: nonFinalizedCourses)
+            if (course.getCode().equals(code))
+                return "notFinalized";
+        throw new OfferingNotFound();
+    }
 }

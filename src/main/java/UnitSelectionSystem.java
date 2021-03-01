@@ -28,6 +28,8 @@ public class UnitSelectionSystem {
                 return addToWeeklySchedule(jo);
             case "getWeeklySchedule":
                 return getWeeklySchedule(jo);
+            case "removeFromWeeklySchedule":
+                return removeFromWeeklySchedule(jo);
             default:
                 return null;
         }
@@ -86,6 +88,38 @@ public class UnitSelectionSystem {
                 nonFinalizedCourses.add(newCourse);
                 student.setNonFinalizedCourses(nonFinalizedCourses);
                 return createResponse(true, new JSONObject());
+            } catch (Exception offeringNotFound) {
+                return createResponse(false, offeringNotFound);
+            }
+        } catch (Exception studentNotFound) {
+            return createResponse(false, studentNotFound);
+        }
+    }
+
+    public JSONObject removeFromWeeklySchedule(JSONObject jo) {
+        String studentId = (String)jo.get("studentId");
+        String code = (String)jo.get("code");
+        try {
+            Student student = findStudent(studentId);
+            try {
+                Course courseToBeRemoved = findCourse(code);
+                try {
+                    String listToBeSearched = student.isCourseExist(code);
+                    if(listToBeSearched.equals("finalized")) {
+                        ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
+                        finalizedCourses.removeIf(course -> course.getCode().equals(courseToBeRemoved.getCode()));
+                        student.setFinalizedCourses(finalizedCourses);
+                    }
+                    else if(listToBeSearched.equals("notFinalized")) {
+                        ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
+                        nonFinalizedCourses.removeIf(course -> course.getCode().equals(courseToBeRemoved.getCode()));
+                        student.setNonFinalizedCourses(nonFinalizedCourses);
+                    }
+                    return createResponse(true, new JSONObject());
+
+                } catch (Exception offeringNotFound) {
+                    return createResponse(false, offeringNotFound);
+                }
             } catch (Exception offeringNotFound) {
                 return createResponse(false, offeringNotFound);
             }

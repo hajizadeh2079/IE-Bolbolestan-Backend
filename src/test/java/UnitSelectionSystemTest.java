@@ -71,6 +71,41 @@ public class UnitSelectionSystemTest {
     }
 
     @Test
+    public void testRemoveFromWeeklySchedule() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("studentId", "810197100");
+        jsonObject.put("code", "81010080");
+        unitSelectionSystem.addToWeeklySchedule(jsonObject);
+        jsonObject.put("studentId", "810197200");
+        jsonObject.put("code", "81010050");
+        unitSelectionSystem.addToWeeklySchedule(jsonObject);
+        unitSelectionSystem.removeFromWeeklySchedule(jsonObject);
+        try {
+            assertEquals(0, unitSelectionSystem.findStudent("810197200").getNonFinalizedCourses().size());
+        } catch (Exception e) {}
+
+        //todo "remove from finalized list"
+
+        JSONObject response = unitSelectionSystem.removeFromWeeklySchedule(jsonObject);
+        String expected = "OfferingNotFound";
+        String actual = (String) response.get("error");
+        assertEquals(expected, actual);
+
+        jsonObject.put("code", "81010051");
+        response = unitSelectionSystem.removeFromWeeklySchedule(jsonObject);
+        expected = "OfferingNotFound";
+        actual = (String) response.get("error");
+        assertEquals(expected, actual);
+
+        jsonObject.put("studentId", "810197101");
+        jsonObject.put("code", "81010080");
+        response = unitSelectionSystem.removeFromWeeklySchedule(jsonObject);
+        expected = "StudentNotFound";
+        actual = (String) response.get("error");
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void testGetOfferings() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("studentId", "810197100");
