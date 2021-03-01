@@ -15,24 +15,16 @@ public class UnitSelectionSystem {
     }
 
     public JSONObject doCommand(String command, JSONObject jo) {
-        switch (command) {
-            case "addStudent":
-                return addStudent(jo);
-            case "addOffering":
-                return addOffering(jo);
-            case "getOfferings":
-                return getOfferings(jo);
-            case "getOffering":
-                return getOffering(jo);
-            case "addToWeeklySchedule":
-                return addToWeeklySchedule(jo);
-            case "getWeeklySchedule":
-                return getWeeklySchedule(jo);
-            case "removeFromWeeklySchedule":
-                return removeFromWeeklySchedule(jo);
-            default:
-                return null;
-        }
+        return switch (command) {
+            case "addStudent" -> addStudent(jo);
+            case "addOffering" -> addOffering(jo);
+            case "getOfferings" -> getOfferings(jo);
+            case "getOffering" -> getOffering(jo);
+            case "addToWeeklySchedule" -> addToWeeklySchedule(jo);
+            case "getWeeklySchedule" -> getWeeklySchedule(jo);
+            case "removeFromWeeklySchedule" -> removeFromWeeklySchedule(jo);
+            default -> null;
+        };
     }
 
     public JSONObject getWeeklySchedule(JSONObject jo) {

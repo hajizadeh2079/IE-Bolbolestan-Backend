@@ -30,7 +30,7 @@ public class UnitSelectionSystemTest {
                 JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
                 JSONObject response = unitSelectionSystem.doCommand(command, jsonObject);
             }
-        } catch (FileNotFoundException | ParseException exception) { }
+        } catch (FileNotFoundException | ParseException ignored) { }
     }
 
     @Test
@@ -82,7 +82,7 @@ public class UnitSelectionSystemTest {
         unitSelectionSystem.removeFromWeeklySchedule(jsonObject);
         try {
             assertEquals(0, unitSelectionSystem.findStudent("810197200").getNonFinalizedCourses().size());
-        } catch (Exception e) {}
+        } catch (Exception ignored) { }
 
         //todo "remove from finalized list"
 
@@ -172,7 +172,7 @@ public class UnitSelectionSystemTest {
         try {
             student = unitSelectionSystem.findStudent("810197300");
             assertEquals("Javad", student.getName());
-        } catch (Exception exception) {}
+        } catch (Exception ignored) { }
         Exception exception = assertThrows(StudentNotFound.class, () -> {
             unitSelectionSystem.findStudent("810197462");
         });
