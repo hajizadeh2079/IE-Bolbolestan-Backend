@@ -10,6 +10,12 @@ import java.util.Scanner;
 
 public class HandleIO {
 
+    private HtmlPages htmlPages;
+
+    public HandleIO(HtmlPages htmlPages) {
+        this.htmlPages = htmlPages;
+    }
+
     public JSONArray getCoursesData(String _url) {
         try {
             URL url = new URL(_url);
@@ -40,9 +46,18 @@ public class HandleIO {
                 inline.append(sc.nextLine());
             }
             JSONParser parser = new JSONParser();
-            JSONArray courses = (JSONArray)parser.parse(String.valueOf(inline));
+            JSONArray students = (JSONArray)parser.parse(String.valueOf(inline));
             sc.close();
-            return courses;
+            return students;
         } catch (IOException | ParseException ignored) {return null;}
+    }
+
+    public String htmlPageHandler(String page, Object data) {
+        switch (page) {
+            case "courses":
+                return htmlPages.coursesPage(data);
+            default:
+                return null;
+        }
     }
 }

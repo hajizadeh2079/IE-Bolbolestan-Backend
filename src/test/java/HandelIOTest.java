@@ -7,10 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class HandelIOTest {
     HandleIO handleIO;
     UnitSelectionSystem unitSelectionSystem;
+    HtmlPages htmlPages;
 
     @BeforeEach
     public void setup() {
-        handleIO = new HandleIO();
+        htmlPages = new HtmlPages();
+        handleIO = new HandleIO(htmlPages);
         unitSelectionSystem = new UnitSelectionSystem();
     }
 
