@@ -33,6 +33,6 @@ public class finalTest {
                 }
             }
             fileOut.close();
-        } catch (ParseException | IOException ignored) { }
+        } catch (Exception ignored) { }
     }
 }

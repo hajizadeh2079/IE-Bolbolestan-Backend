@@ -20,6 +20,5 @@ public class Main {
         Server server = new Server(app, handleIO);
         server.start(8000);
         server.addPaths();
-
     }
 }

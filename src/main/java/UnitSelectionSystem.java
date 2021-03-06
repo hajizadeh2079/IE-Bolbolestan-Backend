@@ -174,24 +174,20 @@ public class UnitSelectionSystem {
         String code = (String)jo.get("code");
         try {
             Student student = findStudent(studentId);
-            try {
-                Course newCourse = findCourse(code);
-                ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
-                ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
-                for (Course course: finalizedCourses)
-                    if (course.getCode().equals(newCourse.getCode()))
-                        return null;
-                for (Course course: nonFinalizedCourses)
-                    if (course.getCode().equals(newCourse.getCode()))
-                        return null;
-                nonFinalizedCourses.add(newCourse);
-                student.setNonFinalizedCourses(nonFinalizedCourses);
-                return createResponse(true, new JSONObject());
-            } catch (Exception offeringNotFound) {
-                return createResponse(false, offeringNotFound);
-            }
-        } catch (Exception studentNotFound) {
-            return createResponse(false, studentNotFound);
+            Course newCourse = findCourse(code);
+            ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
+            ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
+            for (Course course: finalizedCourses)
+                if (course.getCode().equals(newCourse.getCode()))
+                    return null;
+            for (Course course: nonFinalizedCourses)
+                if (course.getCode().equals(newCourse.getCode()))
+                    return null;
+            nonFinalizedCourses.add(newCourse);
+            student.setNonFinalizedCourses(nonFinalizedCourses);
+            return createResponse(true, new JSONObject());
+        } catch (Exception exception) {
+            return createResponse(false, exception);
         }
     }
 
@@ -291,23 +287,19 @@ public class UnitSelectionSystem {
         Course course;
         try {
             student = findStudent(studentId);
-            try {
-                course = findCourse(code);
-                JSONObject data = new JSONObject();
-                data.put("code", course.getCode());
-                data.put("name", course.getName());
-                data.put("instructor", course.getInstructor());
-                data.put("units", course.getUnits());
-                data.put("classTime", course.getClassTime());
-                data.put("examTime", course.getExamTime());
-                data.put("capacity", course.getCapacity());
-                data.put("prerequisites", course.getPrerequisites());
-                return createResponse(true, data);
-            } catch (Exception offeringNotFound) {
-                return createResponse(false, offeringNotFound);
-            }
-        } catch (Exception studentNotFound) {
-            return createResponse(false, studentNotFound);
+            course = findCourse(code);
+            JSONObject data = new JSONObject();
+            data.put("code", course.getCode());
+            data.put("name", course.getName());
+            data.put("instructor", course.getInstructor());
+            data.put("units", course.getUnits());
+            data.put("classTime", course.getClassTime());
+            data.put("examTime", course.getExamTime());
+            data.put("capacity", course.getCapacity());
+            data.put("prerequisites", course.getPrerequisites());
+            return createResponse(true, data);
+        } catch (Exception exception) {
+            return createResponse(false, exception);
         }
     }
 

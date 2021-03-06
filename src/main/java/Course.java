@@ -125,4 +125,8 @@ public class Course {
     public ArrayList<String> getPrerequisitesArray() {
         return prerequisitesArray;
     }
+
+    public String getType() {
+        return type;
+    }
 }

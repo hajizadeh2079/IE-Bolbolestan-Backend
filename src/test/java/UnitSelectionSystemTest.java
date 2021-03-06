@@ -30,7 +30,7 @@ public class UnitSelectionSystemTest {
                 JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
                 JSONObject response = unitSelectionSystem.doCommand(command, jsonObject);
             }
-        } catch (FileNotFoundException | ParseException ignored) { }
+        } catch (Exception ignored) { }
     }
 
     @Test
@@ -61,7 +61,7 @@ public class UnitSelectionSystemTest {
             ArrayList<Course> nonFinalizedCourses = unitSelectionSystem.findStudent("810197100").getNonFinalizedCourses();
             actual = nonFinalizedCourses.get(nonFinalizedCourses.size() - 1).getName();
             assertEquals(expected, actual);
-        } catch (StudentNotFound exception) {}
+        } catch (StudentNotFound ignored) { }
         jsonObject.put("studentId", "810197100");
         jsonObject.put("code", "81019999");
         response = unitSelectionSystem.addToWeeklySchedule(jsonObject);
@@ -245,23 +245,19 @@ public class UnitSelectionSystemTest {
             String expected = "finalized";
             String actual = (String) ((JSONObject)((JSONArray)((JSONObject)response.get("data")).get("weeklySchedule")).get(1)).get("status");
             assertEquals(expected, actual);
-        } catch (Exception ignored) {}
 
-        try {
-            JSONObject jsonObject = new JSONObject();
+            jsonObject = new JSONObject();
             jsonObject.put("studentId", "810197300");
             jsonObject.put("code", "81010010");
             unitSelectionSystem.addToWeeklySchedule(jsonObject);
             jsonObject.put("code", "81010030");
             unitSelectionSystem.addToWeeklySchedule(jsonObject);
-            JSONObject response  = unitSelectionSystem.finalize(jsonObject);
-            String expected = "MinimumUnitsError";
-            String actual = (String)response.get("error");
+            response  = unitSelectionSystem.finalize(jsonObject);
+            expected = "MinimumUnitsError";
+            actual = (String)response.get("error");
             assertEquals(expected, actual);
-        } catch (Exception ignored) {}
 
-        try {
-            JSONObject jsonObject = new JSONObject();
+            jsonObject = new JSONObject();
             jsonObject.put("studentId", "810196400");
             jsonObject.put("code", "81010010");
             unitSelectionSystem.addToWeeklySchedule(jsonObject);
@@ -269,14 +265,12 @@ public class UnitSelectionSystemTest {
             unitSelectionSystem.addToWeeklySchedule(jsonObject);
             jsonObject.put("code", "81010080");
             unitSelectionSystem.addToWeeklySchedule(jsonObject);
-            JSONObject response  = unitSelectionSystem.finalize(jsonObject);
-            String expected = "ClassTimeCollisionError 81010070 81010080";
-            String actual = (String)response.get("error");
+            response  = unitSelectionSystem.finalize(jsonObject);
+            expected = "ClassTimeCollisionError 81010070 81010080";
+            actual = (String)response.get("error");
             assertEquals(expected, actual);
-        } catch (Exception ignored) {}
 
-        try {
-            JSONObject jsonObject = new JSONObject();
+            jsonObject = new JSONObject();
             jsonObject.put("studentId", "810197200");
             jsonObject.put("code", "81010010");
             unitSelectionSystem.addToWeeklySchedule(jsonObject);
@@ -284,11 +278,10 @@ public class UnitSelectionSystemTest {
             unitSelectionSystem.addToWeeklySchedule(jsonObject);
             jsonObject.put("code", "81010030");
             unitSelectionSystem.addToWeeklySchedule(jsonObject);
-            JSONObject response  = unitSelectionSystem.finalize(jsonObject);
-            String expected = "ExamTimeCollisionError 81010010 81010020";
-            String actual = (String)response.get("error");
+            response  = unitSelectionSystem.finalize(jsonObject);
+            expected = "ExamTimeCollisionError 81010010 81010020";
+            actual = (String)response.get("error");
             assertEquals(expected, actual);
-        } catch (Exception ignored) {}
-
+        } catch (Exception ignored) { }
     }
 }
