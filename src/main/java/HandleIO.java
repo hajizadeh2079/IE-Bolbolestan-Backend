@@ -27,4 +27,22 @@ public class HandleIO {
             return courses;
         } catch (IOException | ParseException ignored) {return null;}
     }
+
+    public JSONArray getStudentsData(String _url) {
+        try {
+            URL url = new URL(_url);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.connect();
+            StringBuilder inline = new StringBuilder();
+            Scanner sc = new Scanner(url.openStream());
+            while(sc.hasNext()) {
+                inline.append(sc.nextLine());
+            }
+            JSONParser parser = new JSONParser();
+            JSONArray courses = (JSONArray)parser.parse(String.valueOf(inline));
+            sc.close();
+            return courses;
+        } catch (IOException | ParseException ignored) {return null;}
+    }
 }

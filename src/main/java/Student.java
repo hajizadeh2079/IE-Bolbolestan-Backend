@@ -3,14 +3,16 @@ import java.util.ArrayList;
 public class Student {
     private String id;
     private String name;
-    private String enteredAt;
+    private String secondName;
+    private String birthDate;
     private ArrayList<Course> finalizedCourses = new ArrayList<Course>();
     private ArrayList<Course> nonFinalizedCourses = new ArrayList<Course>();
 
-    public Student(String _id, String _name, String _enteredAt) {
+    public Student(String _id, String _name, String _secondName, String _birthDate) {
         id = _id;
         name = _name;
-        enteredAt = _enteredAt;
+        secondName = _secondName;
+        birthDate = _birthDate;
     }
 
     public String getId() {
@@ -21,8 +23,12 @@ public class Student {
         return name;
     }
 
-    public String getEnteredAt() {
-        return enteredAt;
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
     }
 
     public ArrayList<Course> getFinalizedCourses() {

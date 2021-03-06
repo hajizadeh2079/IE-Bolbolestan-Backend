@@ -274,11 +274,18 @@ public class UnitSelectionSystem {
         return createResponse(true, new JSONObject());
     }
 
+    public void addStudents(JSONArray jsonArray) {
+        for (Object o : jsonArray) {
+            addStudent((JSONObject) o);
+        }
+    }
+
     public JSONObject addStudent(JSONObject jo) {
         String id = (String)jo.get("studentId");
         String name = (String)jo.get("name");
-        String enteredAt = (String)jo.get("enteredAt");
-        Student student = new Student(id, name, enteredAt);
+        String enteredAt = (String)jo.get("secondName");
+        String birthDate = (String)jo.get("birthDate");
+        Student student = new Student(id, name, enteredAt, birthDate);
         students.add(student);
         return createResponse(true, new JSONObject());
     }

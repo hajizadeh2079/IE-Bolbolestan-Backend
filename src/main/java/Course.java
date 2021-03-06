@@ -38,8 +38,12 @@ public class Course {
         for (i = 0; i < jsonArray.size(); i++)
             classTimeDays.add((String)jsonArray.get(i));
         String time = (String)_classTime.get("time");
-        classTimeStart = LocalTime.parse(time.substring(0, time.indexOf("-")), DateTimeFormatter.ISO_LOCAL_TIME);
-        classTimeEnd = LocalTime.parse(time.substring(time.indexOf("-") + 1), DateTimeFormatter.ISO_LOCAL_TIME);
+        String temp = time.substring(0, time.indexOf("-"));
+        temp = (temp.length() < 5) ? "0" + temp : temp;
+        classTimeStart = LocalTime.parse(temp, DateTimeFormatter.ISO_LOCAL_TIME);
+        temp = time.substring(time.indexOf("-") + 1);
+        temp = (temp.length() < 5) ? "0" + temp : temp;
+        classTimeEnd = LocalTime.parse(temp, DateTimeFormatter.ISO_LOCAL_TIME);
         examTime = _examTime;
         examTimeStart = LocalDateTime.parse((String)_examTime.get("start"), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         examTimeEnd = LocalDateTime.parse((String)_examTime.get("end"), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
@@ -112,6 +116,10 @@ public class Course {
 
     public JSONArray getPrerequisites() {
         return prerequisites;
+    }
+
+    public String getClassCode() {
+        return classCode;
     }
 
     public ArrayList<String> getPrerequisitesArray() {
