@@ -33,30 +33,14 @@ public class UnitSelectionSystem {
         String studentId = (String) jo.get("studentId");
         try {
             Student student = findStudent(studentId);
-            try {
-                checkForUnitsError(student.studentUnitsCount());
-                try {
-                    checkForCapacityError(student);
-                    try {
-                        checkForClassTimeCollisionError(student);
-                        try {
-                            checkForExamTimeCollisionError(student);
-                            convertNonFinalizedToFinalizedCourses(student);
-                            return createResponse(true, new JSONObject());
-                        } catch (Exception examTimeCollisionError) {
-                            return createResponse(false, examTimeCollisionError);
-                        }
-                    } catch (Exception classTimeCollisionError) {
-                        return createResponse(false, classTimeCollisionError);
-                    }
-                } catch (Exception capacityError) {
-                    return createResponse(false, capacityError);
-                }
-            } catch (Exception unitsMinOrMaxError) {
-                return createResponse(false, unitsMinOrMaxError);
-            }
-        } catch (Exception studentNotFound) {
-            return createResponse(false, studentNotFound);
+            checkForUnitsError(student.studentUnitsCount());
+            checkForCapacityError(student);
+            checkForClassTimeCollisionError(student);
+            checkForExamTimeCollisionError(student);
+            convertNonFinalizedToFinalizedCourses(student);
+            return createResponse(true, new JSONObject());
+        } catch (Exception error) {
+            return createResponse(false, error);
         }
     }
 
@@ -216,35 +200,26 @@ public class UnitSelectionSystem {
         String code = (String)jo.get("code");
         try {
             Student student = findStudent(studentId);
-            try {
-                Course courseToBeRemoved = findCourse(code);
-                try {
-                    String listToBeSearched = student.isCourseExist(code);
-                    if(listToBeSearched.equals("finalized")) {
-                        ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
-                        for(Course course: finalizedCourses) {
-                            if(course.getCode().equals(courseToBeRemoved.getCode())) {
-                                finalizedCourses.remove(course);
-                                course.increasingRemainingCapacity();
-                            }
-                        }
-                        student.setFinalizedCourses(finalizedCourses);
+            Course courseToBeRemoved = findCourse(code);
+            String listToBeSearched = student.isCourseExist(code);
+            if(listToBeSearched.equals("finalized")) {
+                ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
+                for(Course course: finalizedCourses) {
+                    if(course.getCode().equals(courseToBeRemoved.getCode())) {
+                        finalizedCourses.remove(course);
+                        course.increasingRemainingCapacity();
                     }
-                    else if(listToBeSearched.equals("notFinalized")) {
-                        ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
-                        nonFinalizedCourses.removeIf(course -> course.getCode().equals(courseToBeRemoved.getCode()));
-                        student.setNonFinalizedCourses(nonFinalizedCourses);
-                    }
-                    return createResponse(true, new JSONObject());
-
-                } catch (Exception offeringNotFound) {
-                    return createResponse(false, offeringNotFound);
                 }
-            } catch (Exception offeringNotFound) {
-                return createResponse(false, offeringNotFound);
+                student.setFinalizedCourses(finalizedCourses);
             }
-        } catch (Exception studentNotFound) {
-            return createResponse(false, studentNotFound);
+            else if(listToBeSearched.equals("notFinalized")) {
+                ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
+                nonFinalizedCourses.removeIf(course -> course.getCode().equals(courseToBeRemoved.getCode()));
+                student.setNonFinalizedCourses(nonFinalizedCourses);
+            }
+            return createResponse(true, new JSONObject());
+        } catch (Exception error) {
+            return createResponse(false, error);
         }
     }
 
