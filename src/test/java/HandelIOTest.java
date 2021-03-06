@@ -33,7 +33,7 @@ public class HandelIOTest {
     @Test
     public void testGetStudentsData() {
         JSONArray jsonArray;
-        jsonArray = handleIO.getCoursesData("http://138.197.181.131:5000/api/students");
+        jsonArray = handleIO.getStudentsData("http://138.197.181.131:5000/api/students");
         unitSelectionSystem.addStudents(jsonArray);
         try {
             Student student = unitSelectionSystem.findStudent("810196668");

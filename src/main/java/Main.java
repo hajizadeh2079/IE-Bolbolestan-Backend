@@ -13,7 +13,7 @@ public class Main {
         JSONArray jsonArray;
         jsonArray = handleIO.getCoursesData("http://138.197.181.131:5000/api/courses");
         unitSelectionSystem.addOfferings(jsonArray);
-        jsonArray = handleIO.getCoursesData("http://138.197.181.131:5000/api/students");
+        jsonArray = handleIO.getStudentsData("http://138.197.181.131:5000/api/students");
         unitSelectionSystem.addStudents(jsonArray);
         //Javalin app = Javalin.create();
         //Server server = new Server(app);
