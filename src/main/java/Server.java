@@ -1,9 +1,8 @@
 import io.javalin.Javalin;
 
-import java.lang.reflect.Method;
 
 public class Server {
-    Javalin app;
+    private Javalin app;
 
     public Server(Javalin app) {
         this.app = app;

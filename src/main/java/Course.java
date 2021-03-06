@@ -7,9 +7,11 @@ import java.util.ArrayList;
 
 public class Course {
     private String code;
+    private String classCode;
     private String name;
     private String instructor;
     private long units;
+    private String type;
     private JSONObject classTime;
     private ArrayList<String> classTimeDays = new ArrayList<String>();
     private LocalTime classTimeStart;
@@ -22,12 +24,14 @@ public class Course {
     private ArrayList<String> prerequisitesArray = new ArrayList<String>();
     private long remainingCapacity;
 
-    public Course(String _code, String _name, String _instructor, long _unit,
+    public Course(String _code, String _classCode, String _name, String _instructor, String _type, long _unit,
                   JSONObject _classTime, JSONObject _examTime, long _capacity, JSONArray _prerequisites) {
         int i;
         code = _code;
+        classCode = _classCode;
         name = _name;
         instructor = _instructor;
+        type = _type;
         units = _unit;
         classTime = _classTime;
         JSONArray jsonArray = (JSONArray)_classTime.get("days");

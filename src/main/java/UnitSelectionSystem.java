@@ -248,6 +248,12 @@ public class UnitSelectionSystem {
         }
     }
 
+    public void addOfferings(JSONArray jsonArray) {
+        for (Object o : jsonArray) {
+            addOffering((JSONObject) o);
+        }
+    }
+
     public JSONObject addOffering(JSONObject jo) {
         String code = (String)jo.get("code");
         String name = (String)jo.get("name");
@@ -257,7 +263,9 @@ public class UnitSelectionSystem {
         JSONObject examTime = (JSONObject)jo.get("examTime");
         long capacity = (Long) jo.get("capacity");
         JSONArray prerequisites = (JSONArray)jo.get("prerequisites");
-        Course course = new Course(code, name, instructor, units, classTime, examTime, capacity, prerequisites);
+        String classCode = (String)jo.get("classCode");
+        String type = (String)jo.get("type");
+        Course course = new Course(code, classCode, name, instructor, type, units, classTime, examTime, capacity, prerequisites);
         int index = 0;
         for (index = 0; index < courses.size(); index++)
             if (name.equals(courses.get(index).getName()))
