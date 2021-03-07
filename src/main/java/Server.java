@@ -33,5 +33,9 @@ public class Server {
                 ctx -> ctx.html(ioHandler.htmlPageHandler("course",
                         unitSelectionSystem.findCourse(ctx.pathParam("course_id"), ctx.pathParam("class_code"))))
         );
+        app.exception(OfferingNotFound.class, (e, ctx) -> {
+            ctx.result("Course not found!");
+            ctx.status(404);
+        });
     }
 }
