@@ -1,6 +1,9 @@
 import io.javalin.Javalin;
 import org.json.simple.JSONArray;
 
+import static io.javalin.apibuilder.ApiBuilder.path;
+import static io.javalin.apibuilder.ApiBuilder.*;
+
 public class Server {
     private Javalin app;
     private IOHandler ioHandler;
@@ -25,14 +28,20 @@ public class Server {
     }
 
     public void addPaths() {
-        app.get("/", ctx -> ctx.result("Unit Selection System!"));
-        app.get("/courses",
-                ctx -> ctx.html(ioHandler.htmlPageHandler("courses", unitSelectionSystem.getCourses()))
-        );
-        app.get("/course/:course_id/:class_code",
-                ctx -> ctx.html(ioHandler.htmlPageHandler("course",
-                        unitSelectionSystem.findCourse(ctx.pathParam("course_id"), ctx.pathParam("class_code"))))
-        );
+        app.routes(() -> {
+            path("", () -> {
+                get(ctx -> ctx.result("Unit Selection System!"));
+            });
+            path("courses", () -> {
+                get(ctx -> ctx.html(ioHandler.htmlPageHandler("courses", unitSelectionSystem.getCourses())));
+            });
+            path("course", () -> {
+                path(":course_id/:class_code", () -> {
+                    get(ctx -> ctx.html(ioHandler.htmlPageHandler("course",
+                            unitSelectionSystem.findCourse(ctx.pathParam("course_id"), ctx.pathParam("class_code")))));
+                });
+            });
+        });
         app.exception(OfferingNotFound.class, (e, ctx) -> {
             ctx.result("Course not found!");
             ctx.status(404);
