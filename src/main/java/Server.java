@@ -27,7 +27,7 @@ public class Server {
     public void addPaths() {
         app.get("/", ctx -> ctx.result("Unit Selection System!"));
         app.get("/courses",
-                ctx -> ctx.html(ioHandler.htmlPageHandler("courses", null))
+                ctx -> ctx.html(ioHandler.htmlPageHandler("courses", unitSelectionSystem.getCourses()))
         );
     }
 }
