@@ -20,10 +20,10 @@ public class UnitSelectionSystem {
             case "addStudent" -> addStudent(jo);
             case "addOffering" -> addOffering(jo);
             case "getOfferings" -> getOfferings(jo);
-            case "getOffering" -> getOffering(jo);
-            case "addToWeeklySchedule" -> addToWeeklySchedule(jo);
+            //case "getOffering" -> getOffering(jo);
+            //case "addToWeeklySchedule" -> addToWeeklySchedule(jo);
             case "getWeeklySchedule" -> getWeeklySchedule(jo);
-            case "removeFromWeeklySchedule" -> removeFromWeeklySchedule(jo);
+            //case "removeFromWeeklySchedule" -> removeFromWeeklySchedule(jo);
             case "finalize" -> finalize(jo);
             default -> null;
         };
@@ -169,7 +169,7 @@ public class UnitSelectionSystem {
         }
     }
 
-    public JSONObject addToWeeklySchedule(JSONObject jo) {
+    /*public JSONObject addToWeeklySchedule(JSONObject jo) {
         String studentId = (String)jo.get("studentId");
         String code = (String)jo.get("code");
         try {
@@ -217,7 +217,7 @@ public class UnitSelectionSystem {
         } catch (Exception error) {
             return createResponse(false, error);
         }
-    }
+    }*/
 
     public void addOfferings(JSONArray jsonArray) {
         for (Object o : jsonArray) {
@@ -280,7 +280,7 @@ public class UnitSelectionSystem {
         }
     }
 
-    public JSONObject getOffering(JSONObject jo) {
+    /*public JSONObject getOffering(JSONObject jo) {
         String studentId = (String)jo.get("studentId");
         String code = (String)jo.get("code");
         Student student;
@@ -301,7 +301,7 @@ public class UnitSelectionSystem {
         } catch (Exception exception) {
             return createResponse(false, exception);
         }
-    }
+    }*/
 
     public JSONObject createResponse(boolean success, Object data) {
         JSONObject response = new JSONObject();
@@ -325,9 +325,9 @@ public class UnitSelectionSystem {
         throw new StudentNotFound();
     }
 
-    public Course findCourse(String code)  throws OfferingNotFound {
+    public Course findCourse(String code, String classCode)  throws OfferingNotFound {
         for(Course course: courses)
-            if(course.getCode().equals(code))
+            if(course.getCode().equals(code) && course.getClassCode().equals(classCode))
                 return course;
         throw new OfferingNotFound();
     }

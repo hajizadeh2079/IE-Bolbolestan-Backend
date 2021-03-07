@@ -33,11 +33,10 @@ public class IOHandler {
     }
 
     public String htmlPageHandler(String page, Object data) {
-        switch (page) {
-            case "courses":
-                return htmlPages.coursesPage(data);
-            default:
-                return null;
-        }
+        return switch (page) {
+            case "courses" -> htmlPages.coursesPage(data);
+            case "course" -> htmlPages.coursePage(data);
+            default -> null;
+        };
     }
 }

@@ -29,5 +29,9 @@ public class Server {
         app.get("/courses",
                 ctx -> ctx.html(ioHandler.htmlPageHandler("courses", unitSelectionSystem.getCourses()))
         );
+        app.get("/course/:course_id/:class_code",
+                ctx -> ctx.html(ioHandler.htmlPageHandler("course",
+                        unitSelectionSystem.findCourse(ctx.pathParam("course_id"), ctx.pathParam("class_code"))))
+        );
     }
 }

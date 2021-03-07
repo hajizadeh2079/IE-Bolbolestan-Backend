@@ -39,8 +39,30 @@ public class HtmlPages {
                     temp.append(course.getPrerequisitesArray().get(i));
             }
             tableRow.append("<td>" + temp + "</td>");
-            tableRow.append("<td>" + "<a href=\"/course/8101001/01\">Link</a>" + "</td>");
+            String link = "<a href=\"/course/" + course.getCode() + "/" + course.getClassCode() + "\">Link</a>";
+            tableRow.append("<td>" + link + "</td>");
         }
+        html = doc.toString();
+        return html;
+    }
+
+    public String coursePage(Object data) {
+        Course course = (Course) data;
+        String html = "<html lang=\"en\"><head><title>Course</title>" +
+                "</head><style>li{ padding: 5px;}</style></head>" +
+                "<body><ul><li id=\"code\">Code: </li><li id=\"class_code\">Class Code: </li>" +
+                "<li id=\"units\">Units: </li><li id=\"days\">Days: </li><li id=\"time\">Time: </li>" +
+                "<form action=\"\" method=\"POST\" ><label>Student ID:</label>" +
+                "<input type=\"text\" name=\"std_id\" value=\"\"/><button type=\"submit\">Add</button>" +
+                "</form></ul></body></html>";
+        Document doc = Jsoup.parse(html);
+        doc.getElementById("code").append(course.getCode());
+        doc.getElementById("class_code").append(course.getClassCode());
+        doc.getElementById("units").append(Long.toString(course.getUnits()));
+        String temp = ((course.getClassTimeDays().size() == 1) ? course.getClassTimeDays().get(0) :
+                course.getClassTimeDays().get(0) + ", " + course.getClassTimeDays().get(1));
+        doc.getElementById("days").append(temp);
+        doc.getElementById("time").append(course.getClassTimeStart().toString() + "-" +  course.getClassTimeEnd().toString());
         html = doc.toString();
         return html;
     }

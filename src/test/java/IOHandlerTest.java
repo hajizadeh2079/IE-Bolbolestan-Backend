@@ -21,7 +21,7 @@ public class IOHandlerTest {
         jsonArray = handleIO.getData("http://138.197.181.131:5000/api/students");
         unitSelectionSystem.addStudents(jsonArray);
         try {
-            Course course = unitSelectionSystem.findCourse("8101002");
+            Course course = unitSelectionSystem.findCourse("8101002", "01");
             String expected = "Algorithm Design 1";
             String actual = course.getName();
             assertEquals(expected, actual);
