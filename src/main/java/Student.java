@@ -39,12 +39,12 @@ public class Student {
         return nonFinalizedCourses;
     }
 
-    public void setFinalizedCourses(ArrayList<Course> finalizedCourses) {
-        this.finalizedCourses = finalizedCourses;
+    public void setFinalizedCourses(ArrayList<Course> _finalizedCourses) {
+        finalizedCourses = _finalizedCourses;
     }
 
-    public void setNonFinalizedCourses(ArrayList<Course> nonFinalizedCourses) {
-        this.nonFinalizedCourses = nonFinalizedCourses;
+    public void setNonFinalizedCourses(ArrayList<Course> _nonFinalizedCourses) {
+        nonFinalizedCourses = _nonFinalizedCourses;
     }
 
     public String isCourseExist(String code) throws OfferingNotFound {

@@ -1,4 +1,5 @@
 public class HtmlPages {
+
     public String coursesPage(Object data) {
         String html = "<html lang=\"en\"><head><title>Courses</title>" +
                 "</head><style>table{ width: 100%; text-align: center;}</style></head>"

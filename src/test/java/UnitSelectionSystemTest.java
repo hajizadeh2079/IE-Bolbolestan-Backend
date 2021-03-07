@@ -1,14 +1,11 @@
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.json.simple.JSONObject;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UnitSelectionSystemTest {
