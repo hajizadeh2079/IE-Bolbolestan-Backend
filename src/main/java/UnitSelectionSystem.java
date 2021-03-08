@@ -21,15 +21,13 @@ public class UnitSelectionSystem {
         return codesUnits;
     }
 
-    public void checkForExamTimeCollisionError(Student student) throws ExamTimeCollisionError {
+    public void checkForExamTimeCollisionError(Student student, Course newCourse) throws ExamTimeCollisionError {
         ArrayList<Course> courses = student.getWeeklySchedule().getCourses();
-        for (Course course1 : courses) {
-            for (Course course2 : courses) {
-                if (course1.getCode().equals(course2.getCode()))
-                    continue;
-                if (checkForCollisionExamTime(course1, course2))
-                    throw new ExamTimeCollisionError(course1.getCode(), course2.getCode());
-            }
+        for (Course course : courses) {
+            if (course.getCode().equals(newCourse.getCode()))
+                continue;
+            if (checkForCollisionExamTime(course, newCourse))
+                throw new ExamTimeCollisionError(course.getCode(), newCourse.getCode());
         }
     }
 
@@ -48,15 +46,13 @@ public class UnitSelectionSystem {
             throw new UnitsMinOrMaxError("Maximum");
     }
 
-    public void checkForClassTimeCollisionError(Student student) throws ClassTimeCollisionError {
+    public void checkForClassTimeCollisionError(Student student, Course newCourse) throws ClassTimeCollisionError {
         ArrayList<Course> courses = student.getWeeklySchedule().getCourses();
-        for (Course course1 : courses) {
-            for (Course course2 : courses) {
-                if (course1.getCode().equals(course2.getCode()))
-                    continue;
-                if (checkForCollisionClassTime(course1, course2))
-                    throw new ClassTimeCollisionError(course1.getCode(), course2.getCode());
-            }
+        for (Course course : courses) {
+            if (course.getCode().equals(newCourse.getCode()))
+                continue;
+            if (checkForCollisionClassTime(course, newCourse))
+                throw new ClassTimeCollisionError(course.getCode(), newCourse.getCode());
         }
     }
 
@@ -86,11 +82,12 @@ public class UnitSelectionSystem {
         student.removeFromWeeklySchedule(course);
     }
 
+    // Most be completed: check prerequisites
     public void addToWeeklySchedule(String studentId, String code, String classCode) throws Exception {
         Student student = findStudent(studentId);
         Course newCourse = findCourse(code, classCode);
-        checkForClassTimeCollisionError(student);
-        checkForExamTimeCollisionError(student);
+        checkForClassTimeCollisionError(student, newCourse);
+        checkForExamTimeCollisionError(student, newCourse);
         for (Course course: student.getWeeklySchedule().getCourses())
             if (course.getCode().equals(newCourse.getCode()))
                 return;
