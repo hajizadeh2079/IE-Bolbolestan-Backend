@@ -55,8 +55,8 @@ public class Server {
                     get(ctx -> ctx.html(ioHandler.htmlPageHandler("change_plan",
                             unitSelectionSystem.findStudent(ctx.pathParam("student_id")))));
                     post(ctx -> {
-                        unitSelectionSystem.removeFromWeeklySchedule(ctx.formParam("std_id"),
-                                ctx.pathParam("course_id"), ctx.pathParam("class_code"));
+                        unitSelectionSystem.removeFromWeeklySchedule(ctx.pathParam("student_id"),
+                                ctx.formParam("course_code"), ctx.formParam(("class_code")));
                         ctx.result("Course removed successfully!");
                     });
                 });

@@ -3,13 +3,29 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import java.util.ArrayList;
 import java.util.Map;
-
 public class HtmlPages {
 
     public String changePlanPage(Object data) {
+        Student student = (Student) data;
         String html = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\">" +
-                "<title>Courses</title><style>table{text-align: center;}</style></head><body><table>" +
+                "<title>Change Plan</title><style>table{text-align: center;}</style></head><body><table>" +
                 "<tr><th>Code</th><th>Class Code</th><th>Name</th><th>Units</th><th></th></tr></table></body></html>";
+        Document doc = Jsoup.parse(html);
+        Element table = doc.select("table").first();
+        for (Course course: student.getWeeklySchedule().getCourses()) {
+            table.append("<tr></tr>");
+            Element tableRow = doc.select("tr").last();
+            tableRow.append("<td>" + course.getCode() + "</td>");
+            tableRow.append("<td>" + course.getClassCode() + "</td>");
+            tableRow.append("<td>" + course.getName() + "</td>");
+            tableRow.append("<td>" + course.getUnits() + "</td>");
+            String form = "<form action=\"\" method=\"POST\" ><input id=\"form_course_code\" type=\"hidden\"" +
+                    "name=\"course_code\"value=" + course.getCode() + "><input id=\"form_class_code\"" +
+                    "type=\"hidden\"name=\"class_code\" value=" + course.getClassCode() +
+                    "><button type=\"submit\">Remove</button></form>";
+            tableRow.append("<td>" + form + "</td>");
+        }
+        html = doc.toString();
         return html;
     }
 
