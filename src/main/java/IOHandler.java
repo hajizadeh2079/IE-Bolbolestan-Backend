@@ -36,6 +36,7 @@ public class IOHandler {
         return switch (page) {
             case "courses" -> htmlPages.coursesPage(data);
             case "course" -> htmlPages.coursePage(data);
+            case "plan" -> htmlPages.planPage(data);
             default -> null;
         };
     }

@@ -47,6 +47,12 @@ public class Server {
                     });
                 });
             });
+            path("plan", () -> {
+                path(":student_id", () -> {
+                    get(ctx -> ctx.html(ioHandler.htmlPageHandler("plan",
+                            unitSelectionSystem.findStudent(ctx.pathParam("student_id")))));
+                });
+            });
         });
         app.exception(OfferingNotFound.class, (e, ctx) -> {
             ctx.result("Course not found!");
