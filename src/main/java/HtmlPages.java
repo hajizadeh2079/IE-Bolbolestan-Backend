@@ -76,4 +76,24 @@ public class HtmlPages {
                 "<tr><td>Tuesday</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Wednesday</td><td></td><td></td><td></td><td></td><td></td></tr>";
         return html;
     }
+
+    public String profilePage(Object data, JSONArray grades) {
+        Student student = (Student) data;
+        String html = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Profile</title>" +
+                "<style> li {padding: 5px} table{width: 10%; text-align: center;} </style>" +
+                "</head><body><ul> <li id=\"std_id\">Student Id: </li> <li id=\"first_name\">First Name: </li>" +
+                "<li id=\"last_name\">Last Name: </li> <li id=\"birthdate\">Birthdate: </li>" +
+                "<li id=\"gpa\">GPA: </li><li id=\"tpu\">Total Passed Units: </li></ul>" +
+                "<table><tr><th>Code</th><th>Grade</th></tr></table></body></html>";
+        Document doc = Jsoup.parse(html);
+        doc.getElementById("std_id").append(student.getId());
+        doc.getElementById("first_name").append(student.getName());
+        doc.getElementById("last_name").append(student.getSecondName());
+        doc.getElementById("birthdate").append(student.getBirthDate());
+        Element table = doc.select("table").first();
+        doc.getElementById("gpa").append(student.getId());
+        doc.getElementById("tpu").append(student.getId());
+        html = doc.toString();
+        return html;
+    }
 }

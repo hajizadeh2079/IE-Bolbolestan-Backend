@@ -53,6 +53,12 @@ public class Server {
                             unitSelectionSystem.findStudent(ctx.pathParam("student_id")))));
                 });
             });
+            path("profile", () -> {
+                path(":student_id", () -> {
+                    get(ctx -> ctx.html(ioHandler.htmlPageHandler("profile",
+                            unitSelectionSystem.findStudent(ctx.pathParam("student_id")))));
+                });
+            });
         });
         app.exception(OfferingNotFound.class, (e, ctx) -> {
             ctx.result("Course not found!");
