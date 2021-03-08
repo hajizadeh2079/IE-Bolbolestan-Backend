@@ -6,6 +6,13 @@ import java.util.Map;
 
 public class HtmlPages {
 
+    public String changePlanPage(Object data) {
+        String html = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\">" +
+                "<title>Courses</title><style>table{text-align: center;}</style></head><body><table>" +
+                "<tr><th>Code</th><th>Class Code</th><th>Name</th><th>Units</th><th></th></tr></table></body></html>";
+        return html;
+    }
+
     public String coursesPage(Object data) {
         ArrayList<Course> courses = (ArrayList<Course>) data;
         String html = "<html lang=\"en\"><head><title>Courses</title>" +

@@ -38,6 +38,7 @@ public class IOHandler {
             case "course" -> htmlPages.coursePage(data);
             case "plan" -> htmlPages.planPage(data);
             case "profile" -> htmlPages.profilePage(data);
+            case "change_plan" -> htmlPages.changePlanPage(data);
             default -> null;
         };
     }

@@ -80,6 +80,12 @@ public class UnitSelectionSystem {
         return false;
     }
 
+    public void removeFromWeeklySchedule(String studentId, String code, String classCode) throws Exception {
+        Student student = findStudent(studentId);
+        Course course = findCourse(code, classCode);
+        student.removeFromWeeklySchedule(course);
+    }
+
     public void addToWeeklySchedule(String studentId, String code, String classCode) throws Exception {
         Student student = findStudent(studentId);
         Course newCourse = findCourse(code, classCode);

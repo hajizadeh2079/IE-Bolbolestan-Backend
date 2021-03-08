@@ -46,7 +46,18 @@ public class Server {
                     post(ctx -> {
                         unitSelectionSystem.addToWeeklySchedule(ctx.formParam("std_id"),
                                 ctx.pathParam("course_id"), ctx.pathParam("class_code"));
-                        ctx.result("Student added successfully!");
+                        ctx.result("Course added successfully!");
+                    });
+                });
+            });
+            path("change_plan", () -> {
+                path(":student_id", () -> {
+                    get(ctx -> ctx.html(ioHandler.htmlPageHandler("change_plan",
+                            unitSelectionSystem.findStudent(ctx.pathParam("student_id")))));
+                    post(ctx -> {
+                        unitSelectionSystem.removeFromWeeklySchedule(ctx.formParam("std_id"),
+                                ctx.pathParam("course_id"), ctx.pathParam("class_code"));
+                        ctx.result("Course removed successfully!");
                     });
                 });
             });
