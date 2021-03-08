@@ -1,7 +1,6 @@
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -22,59 +21,12 @@ public class UnitSelectionSystem {
         return codesUnits;
     }
 
-    public JSONObject doCommand(String command, JSONObject jo) {
-        return switch (command) {
-            case "addStudent" -> addStudent(jo);
-            case "addOffering" -> addOffering(jo);
-            case "getOfferings" -> getOfferings(jo);
-            //case "getOffering" -> getOffering(jo);
-            //case "addToWeeklySchedule" -> addToWeeklySchedule(jo);
-            case "getWeeklySchedule" -> getWeeklySchedule(jo);
-            //case "removeFromWeeklySchedule" -> removeFromWeeklySchedule(jo);
-            case "finalize" -> finalize(jo);
-            default -> null;
-        };
-    }
-
-    public JSONObject finalize(JSONObject jo) {
-        String studentId = (String) jo.get("studentId");
-        try {
-            Student student = findStudent(studentId);
-            checkForUnitsError(student.studentUnitsCount());
-            checkForCapacityError(student);
-            checkForClassTimeCollisionError(student);
-            checkForExamTimeCollisionError(student);
-            convertNonFinalizedToFinalizedCourses(student);
-            return createResponse(true, new JSONObject());
-        } catch (Exception error) {
-            return createResponse(false, error);
-        }
-    }
-
-    public void convertNonFinalizedToFinalizedCourses(Student student) {
-        ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
-        ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
-        for (Course course : nonFinalizedCourses)
-            course.decreasingRemainingCapacity();
-        finalizedCourses.addAll(nonFinalizedCourses);
-        student.setFinalizedCourses(finalizedCourses);
-        nonFinalizedCourses.clear();
-        student.setNonFinalizedCourses(nonFinalizedCourses);
-    }
-
     public void checkForExamTimeCollisionError(Student student) throws ExamTimeCollisionError {
-        ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
-        ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
-        for (Course course1 : nonFinalizedCourses) {
-            for (Course course2 : nonFinalizedCourses) {
+        ArrayList<Course> courses = student.getWeeklySchedule().getCourses();
+        for (Course course1 : courses) {
+            for (Course course2 : courses) {
                 if (course1.getCode().equals(course2.getCode()))
                     continue;
-                if (checkForCollisionExamTime(course1, course2))
-                    throw new ExamTimeCollisionError(course1.getCode(), course2.getCode());
-            }
-        }
-        for (Course course1 : nonFinalizedCourses) {
-            for (Course course2 : finalizedCourses) {
                 if (checkForCollisionExamTime(course1, course2))
                     throw new ExamTimeCollisionError(course1.getCode(), course2.getCode());
             }
@@ -96,25 +48,12 @@ public class UnitSelectionSystem {
             throw new UnitsMinOrMaxError("Maximum");
     }
 
-    public void checkForCapacityError(Student student) throws CapacityError {
-        for (Course course: student.getNonFinalizedCourses())
-            if (course.getRemainingCapacity() == 0)
-                throw new CapacityError(course.getCode());
-    }
-
     public void checkForClassTimeCollisionError(Student student) throws ClassTimeCollisionError {
-        ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
-        ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
-        for (Course course1 : nonFinalizedCourses) {
-            for (Course course2 : nonFinalizedCourses) {
+        ArrayList<Course> courses = student.getWeeklySchedule().getCourses();
+        for (Course course1 : courses) {
+            for (Course course2 : courses) {
                 if (course1.getCode().equals(course2.getCode()))
                     continue;
-                if (checkForCollisionClassTime(course1, course2))
-                    throw new ClassTimeCollisionError(course1.getCode(), course2.getCode());
-            }
-        }
-        for (Course course1 : nonFinalizedCourses) {
-            for (Course course2 : finalizedCourses) {
                 if (checkForCollisionClassTime(course1, course2))
                     throw new ClassTimeCollisionError(course1.getCode(), course2.getCode());
             }
@@ -141,90 +80,16 @@ public class UnitSelectionSystem {
         return false;
     }
 
-    public JSONObject getWeeklySchedule(JSONObject jo) {
-        String studentId = (String) jo.get("studentId");
-        try {
-            Student student = findStudent(studentId);
-            JSONObject data = new JSONObject();
-            JSONArray items = new JSONArray();
-            ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
-            ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
-            for (Course course: finalizedCourses) {
-                JSONObject item = new JSONObject();
-                item.put("code", course.getCode());
-                item.put("name", course.getName());
-                item.put("instructor", course.getInstructor());
-                item.put("classTime", course.getClassTime());
-                item.put("examTime", course.getExamTime());
-                item.put("status", "finalized");
-                items.add(item);
-            }
-            for (Course course: nonFinalizedCourses) {
-                JSONObject item = new JSONObject();
-                item.put("code", course.getCode());
-                item.put("name", course.getName());
-                item.put("instructor", course.getInstructor());
-                item.put("classTime", course.getClassTime());
-                item.put("examTime", course.getExamTime());
-                item.put("status", "non-finalized");
-                items.add(item);
-            }
-            data.put("weeklySchedule", items);
-            return createResponse(true, data);
-        } catch (Exception studentNotFound) {
-            return createResponse(false, studentNotFound);
-        }
+    public void addToWeeklySchedule(String studentId, String code, String classCode) throws Exception {
+        Student student = findStudent(studentId);
+        Course newCourse = findCourse(code, classCode);
+        checkForClassTimeCollisionError(student);
+        checkForExamTimeCollisionError(student);
+        for (Course course: student.getWeeklySchedule().getCourses())
+            if (course.getCode().equals(newCourse.getCode()))
+                return;
+        student.addToWeeklySchedule(newCourse);
     }
-
-    public JSONObject addToWeeklySchedule(String studentId, String code, String classCode) {
-        try {
-            Student student = findStudent(studentId);
-            Course newCourse = findCourse(code, classCode);
-            checkForClassTimeCollisionError(student);
-            checkForExamTimeCollisionError(student);
-            ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
-            ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
-            for (Course course: finalizedCourses)
-                if (course.getCode().equals(newCourse.getCode()))
-                    return null;
-            for (Course course: nonFinalizedCourses)
-                if (course.getCode().equals(newCourse.getCode()))
-                    return null;
-            nonFinalizedCourses.add(newCourse);
-            student.setNonFinalizedCourses(nonFinalizedCourses);
-            return createResponse(true, new JSONObject());
-        } catch (Exception exception) {
-            return createResponse(false, exception);
-        }
-    }
-
-    /*public JSONObject removeFromWeeklySchedule(JSONObject jo) {
-        String studentId = (String)jo.get("studentId");
-        String code = (String)jo.get("code");
-        try {
-            Student student = findStudent(studentId);
-            Course courseToBeRemoved = findCourse(code);
-            String listToBeSearched = student.isCourseExist(code);
-            if(listToBeSearched.equals("finalized")) {
-                ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
-                for(Course course: finalizedCourses) {
-                    if(course.getCode().equals(courseToBeRemoved.getCode())) {
-                        finalizedCourses.remove(course);
-                        course.increasingRemainingCapacity();
-                    }
-                }
-                student.setFinalizedCourses(finalizedCourses);
-            }
-            else if(listToBeSearched.equals("notFinalized")) {
-                ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
-                nonFinalizedCourses.removeIf(course -> course.getCode().equals(courseToBeRemoved.getCode()));
-                student.setNonFinalizedCourses(nonFinalizedCourses);
-            }
-            return createResponse(true, new JSONObject());
-        } catch (Exception error) {
-            return createResponse(false, error);
-        }
-    }*/
 
     public void addOfferings(JSONArray jsonArray) {
         for (Object o : jsonArray) {
@@ -232,7 +97,7 @@ public class UnitSelectionSystem {
         }
     }
 
-    public JSONObject addOffering(JSONObject jo) {
+    public void addOffering(JSONObject jo) {
         String code = (String)jo.get("code");
         String name = (String)jo.get("name");
         String instructor = (String)jo.get("instructor");
@@ -250,7 +115,6 @@ public class UnitSelectionSystem {
                 break;
         courses.add(index, course);
         codesUnits.put(code, units);
-        return createResponse(true, new JSONObject());
     }
 
     public void addStudents(JSONArray jsonArray) {
@@ -259,71 +123,13 @@ public class UnitSelectionSystem {
         }
     }
 
-    public JSONObject addStudent(JSONObject jo) {
+    public void addStudent(JSONObject jo) {
         String id = (String)jo.get("id");
         String name = (String)jo.get("name");
         String enteredAt = (String)jo.get("secondName");
         String birthDate = (String)jo.get("birthDate");
         Student student = new Student(id, name, enteredAt, birthDate);
         students.add(student);
-        return createResponse(true, new JSONObject());
-    }
-
-    public JSONObject getOfferings(JSONObject jo) {
-        String studentId = (String)jo.get("studentId");
-        Student student;
-        try {
-            student = findStudent(studentId);
-            JSONArray data = new JSONArray();
-            for (Course course: courses) {
-                JSONObject item = new JSONObject();
-                item.put("code", course.getCode());
-                item.put("name", course.getName());
-                item.put("instructor", course.getInstructor());
-                data.add(item);
-            }
-            return createResponse(true, data);
-        } catch (Exception studentNotFound) {
-            return createResponse(false, studentNotFound);
-        }
-    }
-
-    /*public JSONObject getOffering(JSONObject jo) {
-        String studentId = (String)jo.get("studentId");
-        String code = (String)jo.get("code");
-        Student student;
-        Course course;
-        try {
-            student = findStudent(studentId);
-            course = findCourse(code);
-            JSONObject data = new JSONObject();
-            data.put("code", course.getCode());
-            data.put("name", course.getName());
-            data.put("instructor", course.getInstructor());
-            data.put("units", course.getUnits());
-            data.put("classTime", course.getClassTime());
-            data.put("examTime", course.getExamTime());
-            data.put("capacity", course.getCapacity());
-            data.put("prerequisites", course.getPrerequisites());
-            return createResponse(true, data);
-        } catch (Exception exception) {
-            return createResponse(false, exception);
-        }
-    }*/
-
-    public JSONObject createResponse(boolean success, Object data) {
-        JSONObject response = new JSONObject();
-        if(success) {
-            response.put("success", true);
-            if (data instanceof JSONObject)
-                response.put("data", (JSONObject) data);
-            else if (data instanceof JSONArray)
-                response.put("data", (JSONArray) data);
-        } else {
-            response.put("success", false);
-            response.put("error", ((Exception)data).getMessage());
-        }
-        return response;
     }
 
     public Student findStudent(String id)  throws StudentNotFound {
