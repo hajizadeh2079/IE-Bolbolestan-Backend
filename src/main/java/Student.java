@@ -14,7 +14,6 @@ public class Student {
         name = _name;
         secondName = _secondName;
         birthDate = _birthDate;
-        reportCard = null;
     }
 
     public String getId() {

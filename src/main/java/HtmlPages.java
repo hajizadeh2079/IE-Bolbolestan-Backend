@@ -1,9 +1,8 @@
-import org.json.simple.JSONArray;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-
 import java.util.ArrayList;
+import java.util.Map;
 
 public class HtmlPages {
 
@@ -77,7 +76,7 @@ public class HtmlPages {
         return html;
     }
 
-    public String profilePage(Object data, JSONArray grades) {
+    public String profilePage(Object data) {
         Student student = (Student) data;
         String html = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Profile</title>" +
                 "<style> li {padding: 5px} table{width: 10%; text-align: center;} </style>" +
@@ -90,9 +89,18 @@ public class HtmlPages {
         doc.getElementById("first_name").append(student.getName());
         doc.getElementById("last_name").append(student.getSecondName());
         doc.getElementById("birthdate").append(student.getBirthDate());
+        ReportCard reportCard = student.getReportCard();
+        String gpa = String.valueOf(reportCard.calcGPA()).substring(0, 5);
+        doc.getElementById("gpa").append(gpa);
+        String tpu = String.valueOf(reportCard.calcTPU());
+        doc.getElementById("tpu").append(tpu);
         Element table = doc.select("table").first();
-        doc.getElementById("gpa").append(student.getId());
-        doc.getElementById("tpu").append(student.getId());
+        for (Map.Entry<String, Long> entry : reportCard.getGrades().entrySet()) {
+            table.append("<tr></tr>");
+            Element tableRow = doc.select("tr").last();
+            tableRow.append("<td>" + entry.getKey() + "</td>");
+            tableRow.append("<td>" + entry.getValue() + "</td>");
+        }
         html = doc.toString();
         return html;
     }

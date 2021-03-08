@@ -1,11 +1,14 @@
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class UnitSelectionSystem {
     private ArrayList<Student> students = new ArrayList<Student>();
     private ArrayList<Course> courses = new ArrayList<Course>();
+    private HashMap<String, Long> codesUnits = new HashMap<>();
 
     public ArrayList<Student> getStudents() {
         return students;
@@ -13,6 +16,10 @@ public class UnitSelectionSystem {
 
     public ArrayList<Course> getCourses() {
         return courses;
+    }
+
+    public HashMap<String, Long> getCodesUnits() {
+        return codesUnits;
     }
 
     public JSONObject doCommand(String command, JSONObject jo) {
@@ -242,6 +249,7 @@ public class UnitSelectionSystem {
             if (name.equals(courses.get(index).getName()))
                 break;
         courses.add(index, course);
+        codesUnits.put(code, units);
         return createResponse(true, new JSONObject());
     }
 

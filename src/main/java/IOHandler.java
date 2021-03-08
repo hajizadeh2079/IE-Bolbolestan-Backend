@@ -37,8 +37,7 @@ public class IOHandler {
             case "courses" -> htmlPages.coursesPage(data);
             case "course" -> htmlPages.coursePage(data);
             case "plan" -> htmlPages.planPage(data);
-            case "profile" -> htmlPages.profilePage(data,
-                    getData("138.197.181.131:5000/api/grades/" + ((Student) data).getId()));
+            case "profile" -> htmlPages.profilePage(data);
             default -> null;
         };
     }
