@@ -1,5 +1,6 @@
 import io.javalin.Javalin;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import static io.javalin.apibuilder.ApiBuilder.path;
 import static io.javalin.apibuilder.ApiBuilder.*;
@@ -39,12 +40,32 @@ public class Server {
                 path(":course_id/:class_code", () -> {
                     get(ctx -> ctx.html(ioHandler.htmlPageHandler("course",
                             unitSelectionSystem.findCourse(ctx.pathParam("course_id"), ctx.pathParam("class_code")))));
+                    post(ctx -> {
+                        unitSelectionSystem.addToWeeklySchedule(ctx.formParam("std_id"),
+                                ctx.pathParam("course_id"), ctx.pathParam("class_code"));
+                        ctx.result("Student added successfully!");
+                    });
                 });
             });
         });
         app.exception(OfferingNotFound.class, (e, ctx) -> {
             ctx.result("Course not found!");
             ctx.status(404);
+        });
+
+        app.exception(StudentNotFound.class, (e, ctx) -> {
+            ctx.result("Student not found!");
+            ctx.status(404);
+        });
+
+        app.exception(ExamTimeCollisionError.class, (e, ctx) -> {
+            ctx.result("Exam time collision error!");
+            ctx.status(200);
+        });
+
+        app.exception(ClassTimeCollisionError.class, (e, ctx) -> {
+            ctx.result("Class time collision error!");
+            ctx.status(200);
         });
     }
 }

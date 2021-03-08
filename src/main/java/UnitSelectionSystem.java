@@ -169,12 +169,12 @@ public class UnitSelectionSystem {
         }
     }
 
-    /*public JSONObject addToWeeklySchedule(JSONObject jo) {
-        String studentId = (String)jo.get("studentId");
-        String code = (String)jo.get("code");
+    public JSONObject addToWeeklySchedule(String studentId, String code, String classCode) {
         try {
             Student student = findStudent(studentId);
-            Course newCourse = findCourse(code);
+            Course newCourse = findCourse(code, classCode);
+            checkForClassTimeCollisionError(student);
+            checkForExamTimeCollisionError(student);
             ArrayList<Course> finalizedCourses = student.getFinalizedCourses();
             ArrayList<Course> nonFinalizedCourses = student.getNonFinalizedCourses();
             for (Course course: finalizedCourses)
@@ -191,7 +191,7 @@ public class UnitSelectionSystem {
         }
     }
 
-    public JSONObject removeFromWeeklySchedule(JSONObject jo) {
+    /*public JSONObject removeFromWeeklySchedule(JSONObject jo) {
         String studentId = (String)jo.get("studentId");
         String code = (String)jo.get("code");
         try {
@@ -252,7 +252,7 @@ public class UnitSelectionSystem {
     }
 
     public JSONObject addStudent(JSONObject jo) {
-        String id = (String)jo.get("studentId");
+        String id = (String)jo.get("id");
         String name = (String)jo.get("name");
         String enteredAt = (String)jo.get("secondName");
         String birthDate = (String)jo.get("birthDate");
