@@ -3,6 +3,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UnitSelectionSystemTest {
     IOHandler ioHandler;
@@ -29,5 +30,19 @@ public class UnitSelectionSystemTest {
         String expected = "Calculus 2";
         String actual = course.getName();
         assertEquals(expected, actual);
+        assertThrows(OfferingNotFound.class, () -> {
+            unitSelectionSystem.findCourse("8101005", "02");
+        });
+    }
+
+    @Test
+    public void findStudentTest() throws Exception{
+        Student student = unitSelectionSystem.findStudent("810197227");
+        String expected = "Karimi";
+        String actual = student.getSecondName();
+        assertEquals(expected, actual);
+        assertThrows(StudentNotFound.class, () -> {
+            unitSelectionSystem.findStudent("810197452");
+        });
     }
 }
