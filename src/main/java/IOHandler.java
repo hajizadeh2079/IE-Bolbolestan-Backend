@@ -39,6 +39,7 @@ public class IOHandler {
             case "plan" -> htmlPages.planPage(data);
             case "profile" -> htmlPages.profilePage(data);
             case "change_plan" -> htmlPages.changePlanPage(data);
+            case "submit" -> htmlPages.submitPage(data);
             default -> null;
         };
     }

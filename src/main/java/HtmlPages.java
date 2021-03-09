@@ -3,7 +3,21 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import java.util.ArrayList;
 import java.util.Map;
+
 public class HtmlPages {
+
+    public String submitPage(Object data) {
+        Student student = (Student) data;
+        String html = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Submit</title>" +
+                "<style> li {padding: 5px}</style></head><body><ul><li id=\"code\">Student Id: </li>" +
+                "<li id=\"units\">Total Units: </li><form action=\"\" method=\"POST\" >" +
+                "<button type=\"submit\">submit</button></form></ul></body></html>";
+        Document doc = Jsoup.parse(html);
+        doc.getElementById("code").append(student.getId());
+        doc.getElementById("units").append(String.valueOf(student.getWeeklySchedule().sumOfUnits()));
+        html = doc.toString();
+        return html;
+    }
 
     public String changePlanPage(Object data) {
         Student student = (Student) data;

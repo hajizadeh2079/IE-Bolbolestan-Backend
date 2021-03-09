@@ -12,6 +12,13 @@ public class WeeklySchedule {
         courses.remove(course);
     }
 
+    public int sumOfUnits() {
+        int sum = 0;
+        for (Course course: courses)
+            sum += course.getUnits();
+        return sum;
+    }
+
     public void finalizeSchedule() {
         finalized = true;
     }

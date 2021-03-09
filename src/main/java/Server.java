@@ -1,6 +1,5 @@
 import io.javalin.Javalin;
 import org.json.simple.JSONArray;
-
 import static io.javalin.apibuilder.ApiBuilder.path;
 import static io.javalin.apibuilder.ApiBuilder.*;
 
@@ -59,6 +58,12 @@ public class Server {
                                 ctx.formParam("course_code"), ctx.formParam(("class_code")));
                         ctx.result("Course removed successfully!");
                     });
+                });
+            });
+            path("submit", () -> {
+                path(":student_id", () -> {
+                    get(ctx -> ctx.html(ioHandler.htmlPageHandler("submit",
+                            unitSelectionSystem.findStudent(ctx.pathParam("student_id")))));
                 });
             });
             path("plan", () -> {
