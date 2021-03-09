@@ -21,6 +21,16 @@ public class UnitSelectionSystem {
         return codesUnits;
     }
 
+    public boolean finalize(String studentId) throws StudentNotFound {
+        Student student = findStudent(studentId);
+        int sumOfUnits = student.getWeeklySchedule().sumOfUnits();
+        if (sumOfUnits <= 20 && sumOfUnits >= 12) {
+            student.getWeeklySchedule().finalizeSchedule();
+            return true;
+        }
+        return false;
+    }
+
     public void checkForExamTimeCollisionError(Student student, Course newCourse) throws ExamTimeCollisionError {
         ArrayList<Course> courses = student.getWeeklySchedule().getCourses();
         for (Course course : courses) {

@@ -6,6 +6,16 @@ import java.util.Map;
 
 public class HtmlPages {
 
+    public String submitOkPage(Object data) {
+        return "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Submit OK</title>" +
+                "</head><body>Your request submitted successfully</body></html>";
+    }
+
+    public String submitFailedPage(Object data) {
+        return "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Submit Failed</title>" +
+                "</head><body>Your request failed</body></html>";
+    }
+
     public String submitPage(Object data) {
         Student student = (Student) data;
         String html = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Submit</title>" +

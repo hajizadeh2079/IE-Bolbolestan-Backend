@@ -64,7 +64,19 @@ public class Server {
                 path(":student_id", () -> {
                     get(ctx -> ctx.html(ioHandler.htmlPageHandler("submit",
                             unitSelectionSystem.findStudent(ctx.pathParam("student_id")))));
+                    post(ctx -> {
+                        if (unitSelectionSystem.finalize(ctx.pathParam("student_id")))
+                            ctx.redirect("/submit_ok");
+                        else
+                            ctx.redirect("/submit_failed");
+                    });
                 });
+            });
+            path("submit_ok", () -> {
+                get(ctx -> ctx.html(ioHandler.htmlPageHandler("submit_ok", null)));
+            });
+            path("submit_failed", () -> {
+                get(ctx -> ctx.html(ioHandler.htmlPageHandler("submit_failed", null)));
             });
             path("plan", () -> {
                 path(":student_id", () -> {
