@@ -92,22 +92,27 @@ public class Server {
             });
         });
         app.exception(OfferingNotFound.class, (e, ctx) -> {
-            ctx.result("Course not found!");
+            ctx.result(e.getMessage());
             ctx.status(404);
         });
 
         app.exception(StudentNotFound.class, (e, ctx) -> {
-            ctx.result("Student not found!");
+            ctx.result(e.getMessage());
             ctx.status(404);
         });
 
         app.exception(ExamTimeCollisionError.class, (e, ctx) -> {
-            ctx.result("Exam time collision error!");
+            ctx.result(e.getMessage());
             ctx.status(200);
         });
 
         app.exception(ClassTimeCollisionError.class, (e, ctx) -> {
-            ctx.result("Class time collision error!");
+            ctx.result(e.getMessage());
+            ctx.status(200);
+        });
+
+        app.exception(PrerequisitesError.class, (e, ctx) -> {
+            ctx.result(e.getMessage());
             ctx.status(200);
         });
     }

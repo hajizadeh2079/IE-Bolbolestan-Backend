@@ -92,16 +92,22 @@ public class UnitSelectionSystem {
         student.removeFromWeeklySchedule(course);
     }
 
-    // Most be completed: check prerequisites
     public void addToWeeklySchedule(String studentId, String code, String classCode) throws Exception {
         Student student = findStudent(studentId);
         Course newCourse = findCourse(code, classCode);
+        checkForPrerequisitesError(student, newCourse);
         checkForClassTimeCollisionError(student, newCourse);
         checkForExamTimeCollisionError(student, newCourse);
         for (Course course: student.getWeeklySchedule().getCourses())
             if (course.getCode().equals(newCourse.getCode()))
                 return;
         student.addToWeeklySchedule(newCourse);
+    }
+
+    public void checkForPrerequisitesError(Student student, Course newCourse) throws PrerequisitesError{
+        for(String prerequisite : newCourse.getPrerequisitesArray())
+            if(!student.getReportCard().doesPassCourse(prerequisite))
+                throw new PrerequisitesError(prerequisite);
     }
 
     public void addOfferings(JSONArray jsonArray) {
