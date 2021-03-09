@@ -41,7 +41,6 @@ class ExamTimeCollisionError extends Exceptions {
 }
 
 class PrerequisitesError extends Exceptions {
-
     public PrerequisitesError(String code) {
         super("prerequisites error for course : " + code);
     }

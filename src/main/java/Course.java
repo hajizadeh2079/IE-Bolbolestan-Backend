@@ -12,15 +12,12 @@ public class Course {
     private String instructor;
     private long units;
     private String type;
-    private JSONObject classTime;
     private ArrayList<String> classTimeDays = new ArrayList<String>();
     private LocalTime classTimeStart;
     private LocalTime classTimeEnd;
-    private JSONObject examTime;
     private LocalDateTime examTimeStart;
     private LocalDateTime examTimeEnd;
     private long capacity;
-    private JSONArray prerequisites;
     private ArrayList<String> prerequisitesArray = new ArrayList<String>();
     private long remainingCapacity;
 
@@ -33,7 +30,6 @@ public class Course {
         instructor = _instructor;
         type = _type;
         units = _unit;
-        classTime = _classTime;
         JSONArray jsonArray = (JSONArray)_classTime.get("days");
         for (i = 0; i < jsonArray.size(); i++)
             classTimeDays.add((String)jsonArray.get(i));
@@ -44,12 +40,10 @@ public class Course {
         temp = time.substring(time.indexOf("-") + 1);
         temp = (temp.length() < 5) ? "0" + temp : temp;
         classTimeEnd = LocalTime.parse(temp, DateTimeFormatter.ISO_LOCAL_TIME);
-        examTime = _examTime;
         examTimeStart = LocalDateTime.parse((String)_examTime.get("start"), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         examTimeEnd = LocalDateTime.parse((String)_examTime.get("end"), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         capacity = _capacity;
         remainingCapacity =  _capacity;
-        prerequisites = _prerequisites;
         for (i = 0; i < _prerequisites.size(); i++)
             prerequisitesArray.add((String)_prerequisites.get(i));
     }
@@ -82,10 +76,6 @@ public class Course {
         return units;
     }
 
-    public JSONObject getClassTime() {
-        return classTime;
-    }
-
     public ArrayList<String> getClassTimeDays() {
         return classTimeDays;
     }
@@ -98,10 +88,6 @@ public class Course {
         return classTimeEnd;
     }
 
-    public JSONObject getExamTime() {
-        return examTime;
-    }
-
     public LocalDateTime getExamTimeStart() {
         return examTimeStart;
     }
@@ -112,10 +98,6 @@ public class Course {
 
     public long getCapacity() {
         return capacity;
-    }
-
-    public JSONArray getPrerequisites() {
-        return prerequisites;
     }
 
     public String getClassCode() {

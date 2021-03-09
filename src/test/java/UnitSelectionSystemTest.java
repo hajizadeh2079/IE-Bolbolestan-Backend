@@ -1,7 +1,6 @@
 import org.json.simple.JSONArray;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -92,7 +91,6 @@ public class UnitSelectionSystemTest {
         unitSelectionSystem.addToWeeklySchedule("810196285", "8101010", "01");
         Student student = unitSelectionSystem.findStudent("810196285");
         WeeklySchedule weeklySchedule = student.getWeeklySchedule();
-        ArrayList<Course> courses = weeklySchedule.getCourses();
         String expected = "Discrete Mathematics";
         String actual = weeklySchedule.getCourses().get(0).getName();
         assertEquals(expected, actual);

@@ -49,13 +49,6 @@ public class UnitSelectionSystem {
         return start1ToSeconds < end2ToSeconds && start2ToSeconds < end1ToSeconds;
     }
 
-    public void checkForUnitsError(int unitsCount) throws UnitsMinOrMaxError {
-        if (unitsCount < 12)
-            throw new UnitsMinOrMaxError("Minimum");
-        else if (unitsCount > 20)
-            throw new UnitsMinOrMaxError("Maximum");
-    }
-
     public void checkForClassTimeCollisionError(Student student, Course newCourse) throws ClassTimeCollisionError {
         ArrayList<Course> courses = student.getWeeklySchedule().getCourses();
         for (Course course : courses) {

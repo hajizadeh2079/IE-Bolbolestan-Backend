@@ -125,7 +125,6 @@ public class HtmlPages {
                 "<tr id=\"Tuesday\"><td>Tuesday</td><td id=\"07:30\"></td><td id=\"09:00\"></td><td id=\"10:30\"></td><td id=\"14:00\"></td><td id=\"16:00\"></td></tr>" +
                 "<tr id=\"Wednesday\"><td>Wednesday</td><td id=\"07:30\"></td><td id=\"09:00\"></td><td id=\"10:30\"></td><td id=\"14:00\"></td><td id=\"16:00\"></td></tr>" +
                 "</table></body></html>";
-
         Document doc = Jsoup.parse(html);
         for(Course course: student.getWeeklySchedule().getCourses()) {
             for (String day: course.getClassTimeDays()) {
@@ -168,8 +167,7 @@ public class HtmlPages {
     }
 
     public String NotFoundPage(Object data) {
-        String html = "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>404 Error</title></head>" +
+        return "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>404 Error</title></head>" +
                 "<body><h1>404<br>Page Not Found</h1></body></html>";
-        return html;
     }
 }
