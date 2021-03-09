@@ -47,4 +47,20 @@ public class UnitSelectionSystemTest {
                 student.getWeeklySchedule().getCourses().get(0).getClassCode();
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void submitTest() throws Exception {
+        Student student = unitSelectionSystem.findStudent("810196285");
+        student.addToWeeklySchedule(unitSelectionSystem.findCourse("8101001", "01"));
+        student.addToWeeklySchedule(unitSelectionSystem.findCourse("8101002", "01"));
+        assertFalse(unitSelectionSystem.finalize(student.getId()));
+        student.addToWeeklySchedule(unitSelectionSystem.findCourse("8101003", "01"));
+        student.addToWeeklySchedule(unitSelectionSystem.findCourse("8101004", "01"));
+        student.addToWeeklySchedule(unitSelectionSystem.findCourse("8101010", "01"));
+        student.addToWeeklySchedule(unitSelectionSystem.findCourse("8101013", "01"));
+        student.addToWeeklySchedule(unitSelectionSystem.findCourse("8101030", "01"));
+        assertFalse(unitSelectionSystem.finalize(student.getId()));
+        student.removeFromWeeklySchedule(unitSelectionSystem.findCourse("8101030", "01"));
+        assertTrue(unitSelectionSystem.finalize(student.getId()));
+    }
 }
