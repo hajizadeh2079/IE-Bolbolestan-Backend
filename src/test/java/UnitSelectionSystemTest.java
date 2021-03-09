@@ -1,5 +1,8 @@
 import org.json.simple.JSONArray;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UnitSelectionSystemTest {
     IOHandler ioHandler;
@@ -7,6 +10,8 @@ public class UnitSelectionSystemTest {
 
     @BeforeEach
     public void setup() {
+        ioHandler = new IOHandler(new HtmlPages());
+        unitSelectionSystem = new UnitSelectionSystem();
         JSONArray jsonArray;
         jsonArray = ioHandler.getData("http://138.197.181.131:5000/api/courses");
         unitSelectionSystem.addOfferings(jsonArray);
@@ -16,5 +21,13 @@ public class UnitSelectionSystemTest {
             jsonArray = ioHandler.getData("http://138.197.181.131:5000/api/grades/" + student.getId());
             student.setReportCard(new ReportCard(jsonArray, unitSelectionSystem.getCodesUnits()));
         }
+    }
+
+    @Test
+    public void findCourseTest() throws Exception{
+        Course course = unitSelectionSystem.findCourse("8101005", "01");
+        String expected = "Calculus 2";
+        String actual = course.getName();
+        assertEquals(expected, actual);
     }
 }
