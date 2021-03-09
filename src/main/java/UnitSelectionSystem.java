@@ -37,7 +37,7 @@ public class UnitSelectionSystem {
             if (course.getCode().equals(newCourse.getCode()))
                 continue;
             if (checkForCollisionExamTime(course, newCourse))
-                throw new ExamTimeCollisionError(course.getCode(), newCourse.getCode());
+                throw new ExamTimeCollisionError(course.getCode(), course.getClassCode(), newCourse.getCode(), newCourse.getClassCode());
         }
     }
 
@@ -62,7 +62,7 @@ public class UnitSelectionSystem {
             if (course.getCode().equals(newCourse.getCode()))
                 continue;
             if (checkForCollisionClassTime(course, newCourse))
-                throw new ClassTimeCollisionError(course.getCode(), newCourse.getCode());
+                throw new ClassTimeCollisionError(course.getCode(), course.getClassCode(), newCourse.getCode(), newCourse.getClassCode());
         }
     }
 

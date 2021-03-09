@@ -29,14 +29,14 @@ class CapacityError extends Exceptions {
 }
 
 class ClassTimeCollisionError extends Exceptions {
-    public ClassTimeCollisionError(String code1, String code2) {
-        super("ClassTimeCollisionError " + code1 + " " + code2);
+    public ClassTimeCollisionError(String code1, String classCode1, String code2, String classCode2) {
+        super("ClassTimeCollisionError " + code1 + "-" + classCode1 + " " + code2 + "-" + classCode2);
     }
 }
 
 class ExamTimeCollisionError extends Exceptions {
-    public ExamTimeCollisionError(String code1, String code2) {
-        super("ExamTimeCollisionError " + code1 + " " + code2);
+    public ExamTimeCollisionError(String code1, String classCode1, String code2, String classCode2) {
+        super("ExamTimeCollisionError " + code1 + "-" + classCode1 + " " + code2 + "-" + classCode2);
     }
 }
 
