@@ -166,4 +166,10 @@ public class HtmlPages {
         html = doc.toString();
         return html;
     }
+
+    public String NotFoundPage(Object data) {
+        String html = "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title>404 Error</title></head>" +
+                "<body><h1>404<br>Page Not Found</h1></body></html>";
+        return html;
+    }
 }

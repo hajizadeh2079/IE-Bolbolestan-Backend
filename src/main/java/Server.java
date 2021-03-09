@@ -92,12 +92,12 @@ public class Server {
             });
         });
         app.exception(OfferingNotFound.class, (e, ctx) -> {
-            ctx.result(e.getMessage());
+            ctx.html(ioHandler.htmlPageHandler("404", null));
             ctx.status(404);
         });
 
         app.exception(StudentNotFound.class, (e, ctx) -> {
-            ctx.result(e.getMessage());
+            ctx.html(ioHandler.htmlPageHandler("404", null));
             ctx.status(404);
         });
 

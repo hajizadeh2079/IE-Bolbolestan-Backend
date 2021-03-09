@@ -42,6 +42,7 @@ public class IOHandler {
             case "submit" -> htmlPages.submitPage(data);
             case "submit_ok" -> htmlPages.submitOkPage(data);
             case "submit_failed" -> htmlPages.submitFailedPage(data);
+            case "404" -> htmlPages.NotFoundPage(null);
             default -> null;
         };
     }
