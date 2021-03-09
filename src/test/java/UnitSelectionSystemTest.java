@@ -3,6 +3,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UnitSelectionSystemTest {
     IOHandler ioHandler;
@@ -32,5 +34,17 @@ public class UnitSelectionSystemTest {
         double expected_gpu = 681.0 / 52;
         double actual_gpu = student.getReportCard().calcGPA();
         assertEquals(expected_gpu, actual_gpu);
+    }
+
+    @Test
+    public void changePlanTest() throws Exception {
+        Student student = unitSelectionSystem.findStudent("810196285");
+        student.addToWeeklySchedule(unitSelectionSystem.findCourse("8101001", "01"));
+        student.addToWeeklySchedule(unitSelectionSystem.findCourse("8101002", "01"));
+        student.removeFromWeeklySchedule(unitSelectionSystem.findCourse("8101001", "01"));
+        String expected = "8101002_01";
+        String actual = student.getWeeklySchedule().getCourses().get(0).getCode() + "_" +
+                student.getWeeklySchedule().getCourses().get(0).getClassCode();
+        assertEquals(expected, actual);
     }
 }
