@@ -10,55 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e89e0697-2634-4231-b3c2-1df23c9392a4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/ie_war.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/ie_war_exploded.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_servlet_javax_servlet_api_4_0_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apiguardian_apiguardian_api_1_1_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_api_5_7_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_engine_5_7_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_junit_platform_junit_platform_commons_1_7_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_junit_platform_junit_platform_engine_1_7_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_opentest4j_opentest4j_1_2_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ie.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Course.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Exceptions.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/HtmlPages.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/IOHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ReportCard.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Server.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Student.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/UnitSelectionSystem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/WeeklySchedule.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/IOHandlerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/UnitSelectionSystemTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/CapacityError.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ClassTimeCollisionError.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Course.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ExamTimeCollisionError.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Exceptions.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/HtmlPages.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/IOHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/OfferingNotFound.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/PrerequisitesError.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ReportCard.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Server.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Student.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/StudentNotFound.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/UnitSelectionSystem.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/UnitsMinOrMaxError.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/WeeklySchedule.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/IOHandlerTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/UnitSelectionSystemTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/contorller/HelloServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/contorller/HelloServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/ie/HelloServlet.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/ie-1.0-SNAPSHOT/WEB-INF/classes/com/example/ie/HelloServlet.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +23,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Jsp File" />
         <option value="Class" />
       </list>
     </option>
@@ -195,7 +151,7 @@
       <option name="presentableId" value="Default" />
       <updated>1615649693163</updated>
       <workItem from="1615649695315" duration="419000" />
-      <workItem from="1615659423898" duration="646000" />
+      <workItem from="1615659423898" duration="3582000" />
     </task>
     <servers />
   </component>
