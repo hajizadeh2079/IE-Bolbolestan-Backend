@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ie:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>ie</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="ie-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="ie:war exploded" />
+    </root>
+  </artifact>
+</component>
