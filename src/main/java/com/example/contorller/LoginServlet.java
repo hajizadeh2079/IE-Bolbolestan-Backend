@@ -1,6 +1,10 @@
 package com.example.contorller;
 
+import com.example.model.UnitSelectionSystem;
+
 import java.io.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -15,6 +19,16 @@ public class LoginServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        id = request.getParameter("std_id");
+        String temp;
+        temp = request.getParameter("std_id");
+        try {
+            UnitSelectionSystem.getInstance().findStudent(temp);
+            id = temp;
+            ServletContext sc = getServletContext();
+            RequestDispatcher rd = sc.getRequestDispatcher("/");
+            rd.forward(request, response);
+        } catch (Exception e) {
+            System.out.println("error!");
+        }
     }
 }

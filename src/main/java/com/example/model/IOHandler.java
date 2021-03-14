@@ -7,11 +7,6 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class IOHandler {
-    //private HtmlPages htmlPages;
-
-    //public IOHandler(HtmlPages htmlPages) {
-        //this.htmlPages = htmlPages;
-   // }
 
     public JSONArray getData(String _url) {
         try {
@@ -33,19 +28,4 @@ public class IOHandler {
             return null;
         }
     }
-
-    /*public String htmlPageHandler(String page, Object data) {
-        return switch (page) {
-            case "courses" -> htmlPages.coursesPage(data);
-            case "course" -> htmlPages.coursePage(data);
-            case "plan" -> htmlPages.planPage(data);
-            case "profile" -> htmlPages.profilePage(data);
-            case "change_plan" -> htmlPages.changePlanPage(data);
-            case "submit" -> htmlPages.submitPage(data);
-            case "submit_ok" -> htmlPages.submitOkPage(data);
-            case "submit_failed" -> htmlPages.submitFailedPage(data);
-            case "404" -> htmlPages.NotFoundPage(null);
-            default -> null;
-        };
-    }*/
 }

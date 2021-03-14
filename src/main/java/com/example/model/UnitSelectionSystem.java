@@ -10,6 +10,8 @@ public class UnitSelectionSystem {
     private ArrayList<Student> students = new ArrayList<Student>();
     private ArrayList<Course> courses = new ArrayList<Course>();
     private HashMap<String, Long> codesUnits = new HashMap<>();
+    private static UnitSelectionSystem instance;
+    private IOHandler ioHandler;
 
     public ArrayList<Student> getStudents() {
         return students;
@@ -21,6 +23,27 @@ public class UnitSelectionSystem {
 
     public HashMap<String, Long> getCodesUnits() {
         return codesUnits;
+    }
+
+    public static UnitSelectionSystem getInstance() {
+        if (instance == null) {
+            instance = new UnitSelectionSystem();
+            instance.ioHandler = new IOHandler();
+            instance.prepareData();
+        }
+        return instance;
+    }
+
+    public void prepareData() {
+        JSONArray jsonArray;
+        jsonArray = ioHandler.getData("http://138.197.181.131:5000/api/courses");
+        instance.addOfferings(jsonArray);
+        jsonArray = ioHandler.getData("http://138.197.181.131:5000/api/students");
+        instance.addStudents(jsonArray);
+        for (Student student: instance.getStudents()) {
+            jsonArray = ioHandler.getData("http://138.197.181.131:5000/api/grades/" + student.getId());
+            student.setReportCard(new ReportCard(jsonArray, instance.getCodesUnits()));
+        }
     }
 
     public boolean finalize(String studentId) throws StudentNotFound {
