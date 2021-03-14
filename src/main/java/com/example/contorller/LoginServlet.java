@@ -14,6 +14,10 @@ public class LoginServlet extends HttpServlet {
 
     private String id;
 
+    public void init() {
+        id = null;
+    }
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.getRequestDispatcher("/login.jsp").forward(request, response);
     }
@@ -24,9 +28,8 @@ public class LoginServlet extends HttpServlet {
         try {
             UnitSelectionSystem.getInstance().findStudent(temp);
             id = temp;
-            ServletContext sc = getServletContext();
-            RequestDispatcher rd = sc.getRequestDispatcher("/");
-            rd.forward(request, response);
+            request.setAttribute("std_id", id);
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         } catch (Exception e) {
             System.out.println("error!");
         }

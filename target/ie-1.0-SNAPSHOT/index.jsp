@@ -4,14 +4,17 @@
 <head>
     <title>Home</title>
 </head>
+<%
+    String std_id = request.getParameter("std_id");
+%>
 <body>
 <ul>
-    <li id="std_id">Student Id: 810196000</li>
+    <li id="std_id">Student Id: <%= std_id%> </li>
     <li>
         <a href="/courses">Select Courses</a>
     </li>
     <li>
-        <a href="/plan">Submited plan</a>
+        <a href="/plan">Submitted plan</a>
     </li>
     <li>
         <a href="/profile">Profile</a>
