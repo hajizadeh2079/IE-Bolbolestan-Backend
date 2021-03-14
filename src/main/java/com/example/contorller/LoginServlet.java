@@ -22,16 +22,22 @@ public class LoginServlet extends HttpServlet {
         request.getRequestDispatcher("/login.jsp").forward(request, response);
     }
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String temp;
         temp = request.getParameter("std_id");
+        if(temp.equals("")) {
+            request.setAttribute("bad_id", "true");
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+        }
         try {
             UnitSelectionSystem.getInstance().findStudent(temp);
+            request.setAttribute("bad_id", "false");
             id = temp;
             request.setAttribute("std_id", id);
             request.getRequestDispatcher("/index.jsp").forward(request, response);
         } catch (Exception e) {
-            System.out.println("error!");
+            request.setAttribute("bad_id", "true");
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
     }
 }
