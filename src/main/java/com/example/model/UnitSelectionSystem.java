@@ -12,6 +12,7 @@ public class UnitSelectionSystem {
     private HashMap<String, Long> codesUnits = new HashMap<>();
     private static UnitSelectionSystem instance;
     private IOHandler ioHandler;
+    private String loggedInStudent;
 
     public ArrayList<Student> getStudents() {
         return students;
@@ -30,8 +31,21 @@ public class UnitSelectionSystem {
             instance = new UnitSelectionSystem();
             instance.ioHandler = new IOHandler();
             instance.prepareData();
+            instance.loggedInStudent = null;
         }
         return instance;
+    }
+
+    public String getLoggedInStudent() {
+        return loggedInStudent;
+    }
+
+    public void setLoggedInStudent(String id) {
+        loggedInStudent = id;
+    }
+
+    public void logoutStudent() {
+        loggedInStudent = null;
     }
 
     public void prepareData() {

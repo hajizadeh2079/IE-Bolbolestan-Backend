@@ -12,32 +12,10 @@ import javax.servlet.annotation.*;
 @WebServlet(name = "login", value = "/login")
 public class LoginServlet extends HttpServlet {
 
-    private String id;
-
-    public void init() {
-        id = null;
-    }
-
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.getRequestDispatcher("/login.jsp").forward(request, response);
-    }
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String temp;
-        temp = request.getParameter("std_id");
-        if(temp.equals("")) {
-            request.setAttribute("bad_id", "true");
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
-        }
-        try {
-            UnitSelectionSystem.getInstance().findStudent(temp);
-            request.setAttribute("bad_id", "false");
-            id = temp;
-            request.setAttribute("std_id", id);
+        if(UnitSelectionSystem.getInstance().getLoggedInStudent() != null)
             request.getRequestDispatcher("/index.jsp").forward(request, response);
-        } catch (Exception e) {
-            request.setAttribute("bad_id", "true");
+        else
             request.getRequestDispatcher("/login.jsp").forward(request, response);
-        }
     }
 }
