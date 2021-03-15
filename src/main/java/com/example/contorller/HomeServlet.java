@@ -15,7 +15,6 @@ public class HomeServlet extends HttpServlet {
         if (id == null)
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         else {
-            System.out.println(id);
             request.setAttribute("std_id", id);
             request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
