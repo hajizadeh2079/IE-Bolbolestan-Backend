@@ -12,16 +12,16 @@
 <ul>
     <li id="std_id">Student Id: <%= std_id%> </li>
     <li>
-        <a href="/courses">Select Courses</a>
+        <a href="courses">Select Courses</a>
     </li>
     <li>
-        <a href="/plan">Submitted plan</a>
+        <a href="plan">Submitted plan</a>
     </li>
     <li>
-        <a href="/profile">Profile</a>
+        <a href="profile">Profile</a>
     </li>
     <li>
-        <a href="/logout">Log Out</a>
+        <a href="logout">Log Out</a>
     </li>
 </ul>
 </body>
