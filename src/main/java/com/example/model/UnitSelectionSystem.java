@@ -13,6 +13,7 @@ public class UnitSelectionSystem {
     private static UnitSelectionSystem instance;
     private IOHandler ioHandler;
     private String loggedInStudent;
+    private String searchFilter;
 
     public ArrayList<Student> getStudents() {
         return students;
@@ -26,12 +27,31 @@ public class UnitSelectionSystem {
         return codesUnits;
     }
 
+    public void setSearchFilter(String searchFilter) {
+        this.searchFilter = searchFilter;
+    }
+
+    public String getSearchFilter() {
+        return searchFilter;
+    }
+
+    public ArrayList<Course> getFilteredCourses() {
+        if (searchFilter == null)
+            return courses;
+        ArrayList<Course> filteredCourses = new ArrayList<Course>();
+        for (Course course: courses)
+            if (course.getName().contains(searchFilter))
+                filteredCourses.add(course);
+        return filteredCourses;
+    }
+
     public static UnitSelectionSystem getInstance() {
         if (instance == null) {
             instance = new UnitSelectionSystem();
             instance.ioHandler = new IOHandler();
             instance.prepareData();
             instance.loggedInStudent = null;
+            instance.searchFilter = null;
         }
         return instance;
     }

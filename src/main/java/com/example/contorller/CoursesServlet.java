@@ -21,6 +21,7 @@ public class CoursesServlet extends HttpServlet {
             response.sendRedirect("/login");
         else {
             request.setAttribute("std_id", id);
+            request.setAttribute("filtered_courses", UnitSelectionSystem.getInstance().getFilteredCourses());
             request.getRequestDispatcher("/courses.jsp").forward(request, response);
         }
     }

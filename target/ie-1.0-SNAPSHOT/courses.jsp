@@ -1,7 +1,9 @@
-<%@ page import="com.example.model.UnitSelectionSystem" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="com.example.model.Course" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String std_id = (String) request.getAttribute("std_id");
+    ArrayList<Course> filteredCourses = (ArrayList<Course>) request.getAttribute("filtered_courses");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -99,50 +101,48 @@
         <th>Prerequisites</th>
         <th></th>
     </tr>
+    <%
+        for (Course course: filteredCourses) {
+    %>
     <tr>
-        <td>8101001</td>
-        <td>01</td>
-        <td>Advanced Programming</td>
-        <td>3</td>
-        <td>0</td>
-        <td>45</td>
-        <td>Asli</td>
-        <td>Sunday|Tuesday</td>
-        <td>10:30-12:00</td>
-        <td>2021-06-21T14:00:00</td>
-        <td>2021-06-21T17:00:00</td>
-        <td>8101013|8101002</td>
+        <td><%=course.getCode()%></td>
+        <td><%=course.getClassCode()%></td>
+        <td><%=course.getName()%></td>
+        <td><%=course.getUnits()%></td>
+        <td><%=course.getSignedUp()%></td>
+        <td><%=course.getCapacity()%></td>
+        <td><%=course.getType()%></td>
+        <%
+            StringBuilder temp = new StringBuilder((course.getClassTimeDays().size() == 1) ?
+                    course.getClassTimeDays().get(0) :
+                    course.getClassTimeDays().get(0) + "|" + course.getClassTimeDays().get(1));
+        %>
+        <td><%=temp%></td>
+        <td><%=course.getClassTimeStart().toString()%>-<%=course.getClassTimeEnd().toString()%></td>
+        <td><%=course.getExamTimeStart().toString()%></td>
+        <td><%=course.getExamTimeEnd().toString()%></td>
+        <%
+            temp = new StringBuilder();
+            for(int i = 0; i < course.getPrerequisitesArray().size(); i++) {
+                if(i != course.getPrerequisitesArray().size() -1 )
+                    temp.append(course.getPrerequisitesArray().get(i)).append("|");
+                else
+                    temp.append(course.getPrerequisitesArray().get(i));
+            }
+        %>
+        <td>temp</td>
         <td>
             <form action="" method="POST" >
                 <input id="form_action" type="hidden" name="action" value="add">
-                <input id="form_class_code" type="hidden" name="course_code" value="8101001">
-                <input id="form_class_code" type="hidden" name="class_code" value="01">
+                <input id="form_class_code" type="hidden" name="course_code" value=<%=course.getCode()%>>
+                <input id="form_class_code" type="hidden" name="class_code" value=<%=course.getClassCode()%>>
                 <button type="submit">Add</button>
             </form>
         </td>
     </tr>
-    <tr>
-        <td>8101033</td>
-        <td>01</td>
-        <td>Islamic Thought 1</td>
-        <td>2</td>
-        <td>0</td>
-        <td>60</td>
-        <td>Umumi</td>
-        <td>Tuesday</td>
-        <td>9:00-10:30</td>
-        <td>2021-06-18T14:00:00</td>
-        <td>2021-06-18T17:00:00</td>
-        <td></td>
-        <td>
-            <form action="" method="POST" >
-                <input id="form_action" type="hidden" name="action" value="add">
-                <input id="form_class_code" type="hidden" name="course_code" value="8101033">
-                <input id="form_class_code" type="hidden" name="class_code" value="01">
-                <button type="submit">Add</button>
-            </form>
-        </td>
-    </tr>
+    <%
+        }
+    %>
 </table>
 </body>
 </html>
