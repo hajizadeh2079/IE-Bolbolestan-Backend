@@ -12,10 +12,7 @@ public class LogoutServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if(UnitSelectionSystem.getInstance().getLoggedInStudent() != null) {
             UnitSelectionSystem.getInstance().logoutStudent();
-            response.sendRedirect("/");
         }
-        else
-            response.sendRedirect("/");
-
+        response.sendRedirect("/login");
     }
 }
