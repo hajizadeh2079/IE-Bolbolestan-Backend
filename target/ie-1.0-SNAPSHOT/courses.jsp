@@ -3,6 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String std_id = (String) request.getAttribute("std_id");
+    String searchFilter = (String) request.getAttribute("search_filter");
     ArrayList<Course> filteredCourses = (ArrayList<Course>) request.getAttribute("filtered_courses");
 %>
 <!DOCTYPE html>
@@ -76,7 +77,7 @@
 
 <form class="search_form" action="" method="POST">
     <label>Search:</label>
-    <input type="text" name="search" value="">
+    <input type="text" name="search" value=<%=searchFilter%>>
     <button type="submit" name="action" value="search">Search</button>
     <button type="submit" name="action" value="clear">Clear Search</button>
 </form>
@@ -130,7 +131,7 @@
                     temp.append(course.getPrerequisitesArray().get(i));
             }
         %>
-        <td>temp</td>
+        <td><%=temp%></td>
         <td>
             <form action="" method="POST" >
                 <input id="form_action" type="hidden" name="action" value="add">
