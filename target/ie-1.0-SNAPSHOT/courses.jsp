@@ -1,7 +1,7 @@
 <%@ page import="com.example.model.UnitSelectionSystem" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String std_id = UnitSelectionSystem.getInstance().getLoggedInStudent();
+    String std_id = (String) request.getAttribute("std_id");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +20,7 @@
 </head>
 <body>
 <a href="/">Home</a>
-<li id="code">Student Id: <%=std_id%>></li>
+<li id="code">Student Id: <%=std_id%></li>
 <li id="units">Total Selected Units: 16</li>
 
 <br>

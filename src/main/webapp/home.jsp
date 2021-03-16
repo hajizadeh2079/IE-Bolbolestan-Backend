@@ -6,7 +6,7 @@
     <title>Home</title>
 </head>
 <%
-    String std_id = UnitSelectionSystem.getInstance().getLoggedInStudent();
+    String std_id = (String) request.getAttribute("std_id");
 %>
 <body>
 <ul>
