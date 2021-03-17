@@ -50,6 +50,10 @@ public class Course {
             prerequisitesArray.add((String)_prerequisites.get(i));
     }
 
+    public long getSignedUp() {
+        return capacity - remainingCapacity;
+    }
+
     public void decreasingRemainingCapacity() {
         remainingCapacity--;
     }

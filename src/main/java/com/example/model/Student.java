@@ -6,6 +6,7 @@ public class Student {
     private String secondName;
     private String birthDate;
     private ReportCard reportCard;
+    private WeeklySchedule lastFinalized;
     private WeeklySchedule weeklySchedule;
 
     public Student(String _id, String _name, String _secondName, String _birthDate) {
@@ -14,6 +15,7 @@ public class Student {
         secondName = _secondName;
         birthDate = _birthDate;
         reportCard = null;
+        lastFinalized = new WeeklySchedule();
         weeklySchedule = new WeeklySchedule();
     }
 
@@ -41,6 +43,10 @@ public class Student {
         return reportCard;
     }
 
+    public WeeklySchedule getLastFinalized() {
+        return lastFinalized;
+    }
+
     public void setReportCard(ReportCard reportCard) {
         this.reportCard = reportCard;
     }
@@ -51,5 +57,21 @@ public class Student {
 
     public void removeFromWeeklySchedule(Course course) {
         weeklySchedule.removeCourse(course);
+    }
+
+    public void resetPlan() {
+        weeklySchedule = new WeeklySchedule();
+        for (Course course: lastFinalized.getCourses())
+            weeklySchedule.addCourse(course);
+    }
+
+    public void submitPlan() {
+        for (Course course: weeklySchedule.getCourses())
+            course.decreasingRemainingCapacity();
+        for (Course course: lastFinalized.getCourses())
+            course.increasingRemainingCapacity();
+        lastFinalized = new WeeklySchedule();
+        for (Course course: weeklySchedule.getCourses())
+            lastFinalized.addCourse(course);
     }
 }

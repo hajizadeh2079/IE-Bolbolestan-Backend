@@ -13,6 +13,7 @@ public class UnitSelectionSystem {
     private static UnitSelectionSystem instance;
     private IOHandler ioHandler;
     private String loggedInStudent;
+    private String searchFilter;
 
     public ArrayList<Student> getStudents() {
         return students;
@@ -26,12 +27,53 @@ public class UnitSelectionSystem {
         return codesUnits;
     }
 
+    public void setSearchFilter(String searchFilter) {
+        this.searchFilter = searchFilter;
+    }
+
+    public void resetPlan() {
+        try {
+            findStudent(loggedInStudent).resetPlan();
+        } catch (Exception ignore) { }
+    }
+
+    public ArrayList<Course> getPlanCourses() {
+        try {
+            return findStudent(loggedInStudent).getWeeklySchedule().getCourses();
+        } catch (StudentNotFound studentNotFound) {
+            return null;
+        }
+    }
+
+    public int getTotalSelectedUnits() {
+        try {
+            return findStudent(loggedInStudent).getWeeklySchedule().sumOfUnits();
+        } catch (StudentNotFound studentNotFound) {
+            return 0;
+        }
+    }
+
+    public String getSearchFilter() {
+        return searchFilter;
+    }
+
+    public ArrayList<Course> getFilteredCourses() {
+        if (searchFilter == null)
+            return courses;
+        ArrayList<Course> filteredCourses = new ArrayList<Course>();
+        for (Course course: courses)
+            if (course.getName().contains(searchFilter))
+                filteredCourses.add(course);
+        return filteredCourses;
+    }
+
     public static UnitSelectionSystem getInstance() {
         if (instance == null) {
             instance = new UnitSelectionSystem();
             instance.ioHandler = new IOHandler();
             instance.prepareData();
             instance.loggedInStudent = null;
+            instance.searchFilter = null;
         }
         return instance;
     }
@@ -60,14 +102,35 @@ public class UnitSelectionSystem {
         }
     }
 
-    public boolean finalize(String studentId) throws StudentNotFound {
-        Student student = findStudent(studentId);
-        int sumOfUnits = student.getWeeklySchedule().sumOfUnits();
-        if (sumOfUnits <= 20 && sumOfUnits >= 12) {
-            student.getWeeklySchedule().finalizeSchedule();
-            return true;
+    public void submitPlan() throws StudentNotFound, UnitsMinOrMaxError, CapacityError,
+            PrerequisitesError, AlreadyPassedError {
+        Student student = findStudent(loggedInStudent);
+        WeeklySchedule weeklySchedule = student.getWeeklySchedule();
+        checkForUnitsLimitError(weeklySchedule);
+        for (Course course: weeklySchedule.getCourses()) {
+            checkForCapacityError(course);
+            checkForPrerequisitesError(student, course);
+            checkForAlreadyPassedError(student, course);
         }
-        return false;
+        student.submitPlan();
+    }
+
+    public void checkForAlreadyPassedError(Student student, Course course) throws AlreadyPassedError {
+        if (student.getReportCard().doesPassCourse(course.getCode()))
+            throw new AlreadyPassedError(course.getCode());
+    }
+
+    public void checkForCapacityError(Course course) throws CapacityError {
+        if (course.getRemainingCapacity() <= 0)
+            throw new CapacityError(course.getCode(), course.getClassCode());
+    }
+
+    public void checkForUnitsLimitError(WeeklySchedule weeklySchedule) throws UnitsMinOrMaxError {
+        int sumOfUnits = weeklySchedule.sumOfUnits();
+        if (sumOfUnits > 20)
+            throw new UnitsMinOrMaxError("Max");
+        if (sumOfUnits < 12)
+            throw new UnitsMinOrMaxError("Min");
     }
 
     public void checkForExamTimeCollisionError(Student student, Course newCourse) throws ExamTimeCollisionError {
@@ -118,16 +181,18 @@ public class UnitSelectionSystem {
         return false;
     }
 
-    public void removeFromWeeklySchedule(String studentId, String code, String classCode) throws Exception {
-        Student student = findStudent(studentId);
-        Course course = findCourse(code, classCode);
-        student.removeFromWeeklySchedule(course);
+    public void removeFromWeeklySchedule(String code, String classCode) {
+        try {
+            Student student = findStudent(loggedInStudent);
+            Course course = findCourse(code, classCode);
+            student.removeFromWeeklySchedule(course);
+        } catch (Exception ignore) { }
     }
 
-    public void addToWeeklySchedule(String studentId, String code, String classCode) throws Exception {
-        Student student = findStudent(studentId);
+    public void addToWeeklySchedule(String code, String classCode) throws StudentNotFound, OfferingNotFound,
+            ClassTimeCollisionError, ExamTimeCollisionError {
+        Student student = findStudent(loggedInStudent);
         Course newCourse = findCourse(code, classCode);
-        checkForPrerequisitesError(student, newCourse);
         checkForClassTimeCollisionError(student, newCourse);
         checkForExamTimeCollisionError(student, newCourse);
         for (Course course: student.getWeeklySchedule().getCourses())
@@ -136,10 +201,10 @@ public class UnitSelectionSystem {
         student.addToWeeklySchedule(newCourse);
     }
 
-    public void checkForPrerequisitesError(Student student, Course newCourse) throws PrerequisitesError{
+    public void checkForPrerequisitesError(Student student, Course newCourse) throws PrerequisitesError {
         for(String prerequisite : newCourse.getPrerequisitesArray())
             if(!student.getReportCard().doesPassCourse(prerequisite))
-                throw new PrerequisitesError(prerequisite);
+                throw new PrerequisitesError(prerequisite, newCourse.getCode());
     }
 
     public void addOfferings(JSONArray jsonArray) {
@@ -183,14 +248,14 @@ public class UnitSelectionSystem {
         students.add(student);
     }
 
-    public Student findStudent(String id)  throws StudentNotFound {
+    public Student findStudent(String id) throws StudentNotFound {
         for(Student student: students)
             if(student.getId().equals(id))
                 return student;
         throw new StudentNotFound();
     }
 
-    public Course findCourse(String code, String classCode)  throws OfferingNotFound {
+    public Course findCourse(String code, String classCode) throws OfferingNotFound {
         for(Course course: courses)
             if(course.getCode().equals(code) && course.getClassCode().equals(classCode))
                 return course;

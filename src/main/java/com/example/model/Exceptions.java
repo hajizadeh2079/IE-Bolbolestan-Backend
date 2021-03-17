@@ -25,8 +25,8 @@ class UnitsMinOrMaxError extends Exceptions {
 }
 
 class CapacityError extends Exceptions {
-    public CapacityError(String code) {
-        super("CapacityError " + code);
+    public CapacityError(String code, String classCode) {
+        super("CapacityError " + code + "-" + classCode);
     }
 }
 
@@ -43,7 +43,13 @@ class ExamTimeCollisionError extends Exceptions {
 }
 
 class PrerequisitesError extends Exceptions {
-    public PrerequisitesError(String code) {
-        super("prerequisites error for course : " + code);
+    public PrerequisitesError(String prerequisite, String code) {
+        super("PrerequisitesError " + prerequisite + " --> " + code);
+    }
+}
+
+class AlreadyPassedError extends Exceptions {
+    public AlreadyPassedError(String code) {
+        super("AlreadyPassedError " + code);
     }
 }

@@ -1,4 +1,3 @@
-<%@ page import="com.example.model.UnitSelectionSystem" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -6,7 +5,7 @@
     <title>Home</title>
 </head>
 <%
-    String std_id = UnitSelectionSystem.getInstance().getLoggedInStudent();
+    String std_id = (String) request.getAttribute("std_id");
 %>
 <body>
 <ul>
