@@ -31,6 +31,22 @@ public class UnitSelectionSystem {
         this.searchFilter = searchFilter;
     }
 
+    public ArrayList<Course> getPlanCourses() {
+        try {
+            return findStudent(loggedInStudent).getWeeklySchedule().getCourses();
+        } catch (StudentNotFound studentNotFound) {
+            return null;
+        }
+    }
+
+    public int getTotalSelectedUnits() {
+        try {
+            return findStudent(loggedInStudent).getWeeklySchedule().sumOfUnits();
+        } catch (StudentNotFound studentNotFound) {
+            return 0;
+        }
+    }
+
     public String getSearchFilter() {
         return searchFilter;
     }
@@ -84,7 +100,6 @@ public class UnitSelectionSystem {
         Student student = findStudent(studentId);
         int sumOfUnits = student.getWeeklySchedule().sumOfUnits();
         if (sumOfUnits <= 20 && sumOfUnits >= 12) {
-            student.getWeeklySchedule().finalizeSchedule();
             return true;
         }
         return false;
@@ -147,7 +162,6 @@ public class UnitSelectionSystem {
     public void addToWeeklySchedule(String studentId, String code, String classCode) throws Exception {
         Student student = findStudent(studentId);
         Course newCourse = findCourse(code, classCode);
-        checkForPrerequisitesError(student, newCourse);
         checkForClassTimeCollisionError(student, newCourse);
         checkForExamTimeCollisionError(student, newCourse);
         for (Course course: student.getWeeklySchedule().getCourses())
@@ -156,7 +170,7 @@ public class UnitSelectionSystem {
         student.addToWeeklySchedule(newCourse);
     }
 
-    public void checkForPrerequisitesError(Student student, Course newCourse) throws PrerequisitesError{
+    public void checkForPrerequisitesError(Student student, Course newCourse) throws PrerequisitesError {
         for(String prerequisite : newCourse.getPrerequisitesArray())
             if(!student.getReportCard().doesPassCourse(prerequisite))
                 throw new PrerequisitesError(prerequisite);

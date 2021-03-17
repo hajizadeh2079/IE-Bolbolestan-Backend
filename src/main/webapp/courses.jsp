@@ -4,7 +4,11 @@
 <%
     String std_id = (String) request.getAttribute("std_id");
     String searchFilter = (String) request.getAttribute("search_filter");
+    int totalSelectedUnits = (Integer) request.getAttribute("total_selected_units");
+    if (searchFilter == null)
+        searchFilter = "";
     ArrayList<Course> filteredCourses = (ArrayList<Course>) request.getAttribute("filtered_courses");
+    ArrayList<Course> planCourses = (ArrayList<Course>) request.getAttribute("plan_courses");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +28,7 @@
 <body>
 <a href="/">Home</a>
 <li id="code">Student Id: <%=std_id%></li>
-<li id="units">Total Selected Units: 16</li>
+<li id="units">Total Selected Units: <%=totalSelectedUnits%></li>
 
 <br>
 
@@ -36,34 +40,26 @@
         <th>Units</th>
         <th></th>
     </tr>
+    <%
+        for (Course course: planCourses) {
+    %>
     <tr>
-        <td>8101001</td>
-        <td>01</td>
-        <td>Advanced Programming</td>
-        <td>3</td>
+        <td><%=course.getCode()%></td>
+        <td><%=course.getClassCode()%></td>
+        <td><%=course.getName()%></td>
+        <td><%=course.getUnits()%></td>
         <td>
             <form action="" method="POST" >
                 <input id="form_action" type="hidden" name="action" value="remove">
-                <input id="form_course_code" type="hidden" name="course_code" value="8101001">
-                <input id="form_class_code" type="hidden" name="class_code" value="01">
+                <input id="form_course_code" type="hidden" name="course_code" value=<%=course.getCode()%>>
+                <input id="form_class_code" type="hidden" name="class_code" value=<%=course.getClassCode()%>>
                 <button type="submit">Remove</button>
             </form>
         </td>
     </tr>
-    <tr>
-        <td>8101033</td>
-        <td>01</td>
-        <td>Islamic Thought 1</td>
-        <td>2</td>
-        <td>
-            <form action="" method="POST" >
-                <input id="form_action" type="hidden" name="action" value="remove">
-                <input id="form_course_code" type="hidden" name="course_code" value="8101033">
-                <input id="form_class_code" type="hidden" name="class_code" value="01">
-                <button type="submit">Remove</button>
-            </form>
-        </td>
-    </tr>
+    <%
+        }
+    %>
 </table>
 
 <br>
@@ -81,7 +77,6 @@
     <button type="submit" name="action" value="search">Search</button>
     <button type="submit" name="action" value="clear">Clear Search</button>
 </form>
-
 
 
 <br>

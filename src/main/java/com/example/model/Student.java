@@ -6,6 +6,7 @@ public class Student {
     private String secondName;
     private String birthDate;
     private ReportCard reportCard;
+    private WeeklySchedule lastFinalized;
     private WeeklySchedule weeklySchedule;
 
     public Student(String _id, String _name, String _secondName, String _birthDate) {
@@ -14,6 +15,7 @@ public class Student {
         secondName = _secondName;
         birthDate = _birthDate;
         reportCard = null;
+        lastFinalized = new WeeklySchedule();
         weeklySchedule = new WeeklySchedule();
     }
 
