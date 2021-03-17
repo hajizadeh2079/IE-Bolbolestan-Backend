@@ -159,14 +159,16 @@ public class UnitSelectionSystem {
         return false;
     }
 
-    public void removeFromWeeklySchedule(String studentId, String code, String classCode) throws Exception {
-        Student student = findStudent(studentId);
-        Course course = findCourse(code, classCode);
-        student.removeFromWeeklySchedule(course);
+    public void removeFromWeeklySchedule(String code, String classCode) {
+        try {
+            Student student = findStudent(loggedInStudent);
+            Course course = findCourse(code, classCode);
+            student.removeFromWeeklySchedule(course);
+        } catch (Exception ignore) { }
     }
 
-    public void addToWeeklySchedule(String studentId, String code, String classCode) throws Exception {
-        Student student = findStudent(studentId);
+    public void addToWeeklySchedule(String code, String classCode) throws Exception {
+        Student student = findStudent(loggedInStudent);
         Course newCourse = findCourse(code, classCode);
         checkForClassTimeCollisionError(student, newCourse);
         checkForExamTimeCollisionError(student, newCourse);

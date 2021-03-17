@@ -31,14 +31,19 @@ public class CoursesServlet extends HttpServlet {
             case "add":
                 String courseCode = request.getParameter("course_code");
                 String classCode = request.getParameter("class_code");
-                String studentId = UnitSelectionSystem.getInstance().getLoggedInStudent();
                 try {
-                    UnitSelectionSystem.getInstance().addToWeeklySchedule(studentId, courseCode, classCode);
+                    UnitSelectionSystem.getInstance().addToWeeklySchedule(courseCode, classCode);
                     response.sendRedirect("/courses");
                 } catch (Exception exception) {
                     request.setAttribute("error", exception.getMessage());
                     doGet(request, response);
                 }
+                break;
+            case "remove":
+                courseCode = request.getParameter("course_code");
+                classCode = request.getParameter("class_code");
+                UnitSelectionSystem.getInstance().removeFromWeeklySchedule(courseCode, classCode);
+                response.sendRedirect("/courses");
                 break;
         }
     }
@@ -53,8 +58,6 @@ public class CoursesServlet extends HttpServlet {
             request.setAttribute("search_filter", UnitSelectionSystem.getInstance().getSearchFilter());
             request.setAttribute("total_selected_units", UnitSelectionSystem.getInstance().getTotalSelectedUnits());
             request.setAttribute("plan_courses", UnitSelectionSystem.getInstance().getPlanCourses());
-
-//            request.setAttribute("error", UnitSelectionSystem.getInstance().getError());
             request.getRequestDispatcher("/courses.jsp").forward(request, response);
         }
     }
