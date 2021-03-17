@@ -29,7 +29,6 @@
   <component name="ChangeListManager">
     <list default="true" id="5788c95f-5125-4a49-850c-450385f56634" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/plan.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/plan.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,13 +62,6 @@
     <option name="FILTER_DEBUG" value="true" />
     <option name="CUSTOM_FILTER" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="C:\Program Files\JetBrains\IntelliJ IDEA 2020.2.3\plugins\maven\lib\maven3" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
   <component name="ProjectId" id="1phybqTLRBwYv2RXrhXg3Tw99wc" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -90,17 +82,6 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Tomcat 7.0.108" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 7.0.108" ALTERNATIVE_JRE_ENABLED="false">
       <deployment>
         <artifact name="ie:war exploded">
@@ -191,7 +172,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="e89e0697-2634-4231-b3c2-1df23c9392a4" name="Default Changelist" comment="" />
+      <changelist id="5788c95f-5125-4a49-850c-450385f56634" name="Default Changelist" comment="" />
       <created>1615649693163</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -204,6 +185,7 @@
       <workItem from="1615908800187" duration="751000" />
       <workItem from="1615909563121" duration="2608000" />
       <workItem from="1615922131302" duration="16759000" />
+      <workItem from="1615980530215" duration="1302000" />
     </task>
     <servers />
   </component>

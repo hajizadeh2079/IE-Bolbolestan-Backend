@@ -3,6 +3,8 @@ package com.example.model;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -62,7 +64,7 @@ public class UnitSelectionSystem {
             return courses;
         ArrayList<Course> filteredCourses = new ArrayList<Course>();
         for (Course course: courses)
-            if (course.getName().contains(searchFilter))
+            if (course.getName().toLowerCase(Locale.ROOT).contains(searchFilter.toLowerCase(Locale.ROOT)))
                 filteredCourses.add(course);
         return filteredCourses;
     }
