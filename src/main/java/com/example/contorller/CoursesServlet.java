@@ -29,7 +29,8 @@ public class CoursesServlet extends HttpServlet {
                 try {
                     UnitSelectionSystem.getInstance().addToWeeklySchedule(studentId, courseCode, classCode);
                 } catch (Exception exception) {
-                    exception.printStackTrace();
+                    request.setAttribute("error", exception.getMessage());
+                    doGet(request, response);
                 }
                 break;
         }

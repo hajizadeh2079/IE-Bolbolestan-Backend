@@ -3,10 +3,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String std_id = (String) request.getAttribute("std_id");
+    String error = (String) request.getAttribute("error");
     String searchFilter = (String) request.getAttribute("search_filter");
-    int totalSelectedUnits = (Integer) request.getAttribute("total_selected_units");
     if (searchFilter == null)
         searchFilter = "";
+    int totalSelectedUnits = (Integer) request.getAttribute("total_selected_units");
     ArrayList<Course> filteredCourses = (ArrayList<Course>) request.getAttribute("filtered_courses");
     ArrayList<Course> planCourses = (ArrayList<Course>) request.getAttribute("plan_courses");
 %>
@@ -62,6 +63,14 @@
     %>
 </table>
 
+<%
+    if (error != null) {
+%>
+<h3><%=error%>></h3>
+<%
+    }
+%>
+
 <br>
 
 <form action="" method="POST">
@@ -77,7 +86,6 @@
     <button type="submit" name="action" value="search">Search</button>
     <button type="submit" name="action" value="clear">Clear Search</button>
 </form>
-
 
 <br>
 
