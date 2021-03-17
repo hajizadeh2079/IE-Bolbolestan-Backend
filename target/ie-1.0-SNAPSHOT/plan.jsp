@@ -1,7 +1,4 @@
-<%@ page import="com.example.model.Course" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.example.model.Course" %>
 <%@ page import="java.util.HashMap" %>
 <%
     String std_id = (String) request.getAttribute("std_id");
