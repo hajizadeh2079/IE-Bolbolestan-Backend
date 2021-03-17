@@ -5,14 +5,13 @@ import com.example.model.UnitSelectionSystem;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
 @WebServlet(name = "plan", value = "/plan")
 public class PlanServlet  extends HttpServlet {
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String id = UnitSelectionSystem.getInstance().getLoggedInStudent();
         if (id == null)
             response.sendRedirect("/login");

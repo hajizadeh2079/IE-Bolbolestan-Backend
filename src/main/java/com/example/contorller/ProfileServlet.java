@@ -1,17 +1,15 @@
 package com.example.contorller;
-
 import com.example.model.Student;
 import com.example.model.UnitSelectionSystem;
 
 import java.io.*;
-import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
 @WebServlet(name = "profile", value = "/profile")
 public class ProfileServlet extends HttpServlet {
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String id = UnitSelectionSystem.getInstance().getLoggedInStudent();
         if (id == null)
             response.sendRedirect("/login");

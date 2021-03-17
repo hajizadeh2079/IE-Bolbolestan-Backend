@@ -1,5 +1,4 @@
 <%@ page import="com.example.model.Student" %>
-<%@ page import="com.example.model.Course" %>
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
