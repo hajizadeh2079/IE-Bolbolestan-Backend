@@ -1,7 +1,10 @@
 package com.example.contorller;
+import com.example.model.Course;
 import com.example.model.UnitSelectionSystem;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -13,7 +16,18 @@ public class PlanServlet  extends HttpServlet {
         if (id == null)
             response.sendRedirect("/login");
         else {
-            request.getRequestDispatcher("/plan.jsp").forward(request, response);
+            try {
+                ArrayList<Course> courses = UnitSelectionSystem.getInstance().findStudent(id).getLastFinalized().getCourses();
+                HashMap<String, String> plan = new HashMap<>();
+                for(Course course: courses) {
+                    for(String day: course.getClassTimeDays()) {
+                        plan.put(day + "-" + course.getClassTimeStart(), course.getName());
+                    }
+                }
+                request.setAttribute("std_id", id);
+                request.setAttribute("plan", plan);
+                request.getRequestDispatcher("/plan.jsp").forward(request, response);
+            } catch (Exception ignored) {}
         }
     }
 }

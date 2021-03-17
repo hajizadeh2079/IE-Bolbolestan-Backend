@@ -1,4 +1,12 @@
+<%@ page import="com.example.model.Course" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.example.model.Course" %>
+<%@ page import="java.util.HashMap" %>
+<%
+    String std_id = (String) request.getAttribute("std_id");
+    HashMap<String, String> plan = (HashMap<String, String>) request.getAttribute("plan");
+%>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,7 +25,7 @@
 </head>
 <body>
 <a href="/">Home</a>
-<li id="code">Student Id: 810196000</li>
+<li id="code">Student Id: <%= std_id%></li>
 <br>
 <table>
     <tr>
@@ -30,43 +38,43 @@
     </tr>
     <tr>
         <td>Saturday</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td><%= plan.getOrDefault("Saturday-07:30", "")%></td>
+        <td><%= plan.getOrDefault("Saturday-09:00", "")%></td>
+        <td><%= plan.getOrDefault("Saturday-10:30", "")%></td>
+        <td><%= plan.getOrDefault("Saturday-14:00", "")%></td>
+        <td><%= plan.getOrDefault("Saturday-16:00", "")%></td>
     </tr>
     <tr>
         <td>Sunday</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td><%= plan.getOrDefault("Sunday-07:30", "")%></td>
+        <td><%= plan.getOrDefault("Sunday-09:00", "")%></td>
+        <td><%= plan.getOrDefault("Sunday-10:30", "")%></td>
+        <td><%= plan.getOrDefault("Sunday-14:00", "")%></td>
+        <td><%= plan.getOrDefault("Sunday-16:00", "")%></td>
     </tr>
     <tr>
         <td>Monday</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td><%= plan.getOrDefault("Monday-07:30", "")%></td>
+        <td><%= plan.getOrDefault("Monday-09:00", "")%></td>
+        <td><%= plan.getOrDefault("Monday-10:30", "")%></td>
+        <td><%= plan.getOrDefault("Monday-14:00", "")%></td>
+        <td><%= plan.getOrDefault("Monday-16:00", "")%></td>
     </tr>
     <tr>
         <td>Tuesday</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td><%= plan.getOrDefault("Tuesday-07:30", "")%></td>
+        <td><%= plan.getOrDefault("Tuesday-09:00", "")%></td>
+        <td><%= plan.getOrDefault("Tuesday-10:30", "")%></td>
+        <td><%= plan.getOrDefault("Tuesday-14:00", "")%></td>
+        <td><%= plan.getOrDefault("Tuesday-16:00", "")%></td>
     </tr>
     <tr>
         <td>Wednesday</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td><%= plan.getOrDefault("Wednesday-07:30", "")%></td>
+        <td><%= plan.getOrDefault("Wednesday-09:00", "")%></td>
+        <td><%= plan.getOrDefault("Wednesday-10:30", "")%></td>
+        <td><%= plan.getOrDefault("Wednesday-14:00", "")%></td>
+        <td><%= plan.getOrDefault("Wednesday-16:00", "")%></td>
     </tr>
 </table>
 </body>
