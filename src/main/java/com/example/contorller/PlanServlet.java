@@ -11,6 +11,7 @@ import javax.servlet.annotation.*;
 
 @WebServlet(name = "plan", value = "/plan")
 public class PlanServlet  extends HttpServlet {
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = UnitSelectionSystem.getInstance().getLoggedInStudent();
         if (id == null)
@@ -27,7 +28,7 @@ public class PlanServlet  extends HttpServlet {
                 request.setAttribute("std_id", id);
                 request.setAttribute("plan", plan);
                 request.getRequestDispatcher("/plan.jsp").forward(request, response);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) { }
         }
     }
 }

@@ -10,6 +10,7 @@ import javax.servlet.annotation.*;
 
 @WebServlet(name = "profile", value = "/profile")
 public class ProfileServlet extends HttpServlet {
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = UnitSelectionSystem.getInstance().getLoggedInStudent();
         if (id == null)
@@ -19,7 +20,7 @@ public class ProfileServlet extends HttpServlet {
                 Student student = UnitSelectionSystem.getInstance().findStudent(id);
                 request.setAttribute("student", student);
                 request.getRequestDispatcher("/profile.jsp").forward(request, response);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) { }
         }
     }
 }
