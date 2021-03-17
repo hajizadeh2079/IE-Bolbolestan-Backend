@@ -43,6 +43,10 @@ public class Student {
         return reportCard;
     }
 
+    public WeeklySchedule getLastFinalized() {
+        return lastFinalized;
+    }
+
     public void setReportCard(ReportCard reportCard) {
         this.reportCard = reportCard;
     }
@@ -59,5 +63,15 @@ public class Student {
         weeklySchedule = new WeeklySchedule();
         for (Course course: lastFinalized.getCourses())
             weeklySchedule.addCourse(course);
+    }
+
+    public void submitPlan() {
+        for (Course course: weeklySchedule.getCourses())
+            course.decreasingRemainingCapacity();
+        for (Course course: lastFinalized.getCourses())
+            course.increasingRemainingCapacity();
+        lastFinalized = new WeeklySchedule();
+        for (Course course: weeklySchedule.getCourses())
+            lastFinalized.addCourse(course);
     }
 }

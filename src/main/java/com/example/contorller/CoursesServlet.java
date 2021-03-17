@@ -11,6 +11,7 @@ import java.io.IOException;
 
 @WebServlet(name = "Courses", value = "/courses")
 public class CoursesServlet extends HttpServlet {
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         switch (action) {
@@ -44,6 +45,15 @@ public class CoursesServlet extends HttpServlet {
                 classCode = request.getParameter("class_code");
                 UnitSelectionSystem.getInstance().removeFromWeeklySchedule(courseCode, classCode);
                 response.sendRedirect("/courses");
+                break;
+            case "submit":
+                try {
+                    UnitSelectionSystem.getInstance().submitPlan();
+                    response.sendRedirect("/plan");
+                } catch (Exception exception) {
+                    request.setAttribute("error", exception.getMessage());
+                    request.getRequestDispatcher("submit_failed.jsp").forward(request, response);
+                }
                 break;
         }
     }

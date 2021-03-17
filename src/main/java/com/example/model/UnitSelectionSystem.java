@@ -102,13 +102,35 @@ public class UnitSelectionSystem {
         }
     }
 
-    public boolean finalize(String studentId) throws StudentNotFound {
-        Student student = findStudent(studentId);
-        int sumOfUnits = student.getWeeklySchedule().sumOfUnits();
-        if (sumOfUnits <= 20 && sumOfUnits >= 12) {
-            return true;
+    public void submitPlan() throws StudentNotFound, UnitsMinOrMaxError, CapacityError,
+            PrerequisitesError, AlreadyPassedError {
+        Student student = findStudent(loggedInStudent);
+        WeeklySchedule weeklySchedule = student.getWeeklySchedule();
+        checkForUnitsLimitError(weeklySchedule);
+        for (Course course: weeklySchedule.getCourses()) {
+            checkForCapacityError(course);
+            checkForPrerequisitesError(student, course);
+            checkForAlreadyPassedError(student, course);
         }
-        return false;
+        student.submitPlan();
+    }
+
+    public void checkForAlreadyPassedError(Student student, Course course) throws AlreadyPassedError {
+        if (student.getReportCard().doesPassCourse(course.getCode()))
+            throw new AlreadyPassedError(course.getCode());
+    }
+
+    public void checkForCapacityError(Course course) throws CapacityError {
+        if (course.getRemainingCapacity() <= 0)
+            throw new CapacityError(course.getCode(), course.getClassCode());
+    }
+
+    public void checkForUnitsLimitError(WeeklySchedule weeklySchedule) throws UnitsMinOrMaxError {
+        int sumOfUnits = weeklySchedule.sumOfUnits();
+        if (sumOfUnits > 20)
+            throw new UnitsMinOrMaxError("Max");
+        if (sumOfUnits < 12)
+            throw new UnitsMinOrMaxError("Min");
     }
 
     public void checkForExamTimeCollisionError(Student student, Course newCourse) throws ExamTimeCollisionError {
@@ -167,7 +189,8 @@ public class UnitSelectionSystem {
         } catch (Exception ignore) { }
     }
 
-    public void addToWeeklySchedule(String code, String classCode) throws Exception {
+    public void addToWeeklySchedule(String code, String classCode) throws StudentNotFound, OfferingNotFound,
+            ClassTimeCollisionError, ExamTimeCollisionError {
         Student student = findStudent(loggedInStudent);
         Course newCourse = findCourse(code, classCode);
         checkForClassTimeCollisionError(student, newCourse);
@@ -181,7 +204,7 @@ public class UnitSelectionSystem {
     public void checkForPrerequisitesError(Student student, Course newCourse) throws PrerequisitesError {
         for(String prerequisite : newCourse.getPrerequisitesArray())
             if(!student.getReportCard().doesPassCourse(prerequisite))
-                throw new PrerequisitesError(prerequisite);
+                throw new PrerequisitesError(prerequisite, newCourse.getCode());
     }
 
     public void addOfferings(JSONArray jsonArray) {
@@ -225,14 +248,14 @@ public class UnitSelectionSystem {
         students.add(student);
     }
 
-    public Student findStudent(String id)  throws StudentNotFound {
+    public Student findStudent(String id) throws StudentNotFound {
         for(Student student: students)
             if(student.getId().equals(id))
                 return student;
         throw new StudentNotFound();
     }
 
-    public Course findCourse(String code, String classCode)  throws OfferingNotFound {
+    public Course findCourse(String code, String classCode) throws OfferingNotFound {
         for(Course course: courses)
             if(course.getCode().equals(code) && course.getClassCode().equals(classCode))
                 return course;
