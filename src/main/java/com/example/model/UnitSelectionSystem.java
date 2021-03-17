@@ -31,6 +31,12 @@ public class UnitSelectionSystem {
         this.searchFilter = searchFilter;
     }
 
+    public void resetPlan() {
+        try {
+            findStudent(loggedInStudent).resetPlan();
+        } catch (Exception ignore) { }
+    }
+
     public ArrayList<Course> getPlanCourses() {
         try {
             return findStudent(loggedInStudent).getWeeklySchedule().getCourses();

@@ -18,9 +18,15 @@ public class CoursesServlet extends HttpServlet {
                 String searchFilter = request.getParameter("search");
                 if (!searchFilter.equals(""))
                     UnitSelectionSystem.getInstance().setSearchFilter(searchFilter);
+                response.sendRedirect("/courses");
                 break;
             case "clear":
                 UnitSelectionSystem.getInstance().setSearchFilter(null);
+                response.sendRedirect("/courses");
+                break;
+            case "reset":
+                UnitSelectionSystem.getInstance().resetPlan();
+                response.sendRedirect("/courses");
                 break;
             case "add":
                 String courseCode = request.getParameter("course_code");
@@ -28,13 +34,13 @@ public class CoursesServlet extends HttpServlet {
                 String studentId = UnitSelectionSystem.getInstance().getLoggedInStudent();
                 try {
                     UnitSelectionSystem.getInstance().addToWeeklySchedule(studentId, courseCode, classCode);
+                    response.sendRedirect("/courses");
                 } catch (Exception exception) {
                     request.setAttribute("error", exception.getMessage());
                     doGet(request, response);
                 }
                 break;
         }
-        response.sendRedirect("/courses");
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

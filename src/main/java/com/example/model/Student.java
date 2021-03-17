@@ -54,4 +54,10 @@ public class Student {
     public void removeFromWeeklySchedule(Course course) {
         weeklySchedule.removeCourse(course);
     }
+
+    public void resetPlan() {
+        weeklySchedule = new WeeklySchedule();
+        for (Course course: lastFinalized.getCourses())
+            weeklySchedule.addCourse(course);
+    }
 }

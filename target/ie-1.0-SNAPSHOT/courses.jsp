@@ -66,7 +66,7 @@
 <%
     if (error != null) {
 %>
-<h3><%=error%>></h3>
+<h3><%=error%></h3>
 <%
     }
 %>
