@@ -94,12 +94,12 @@ public class UnitSelectionSystem {
 
     public void prepareData() {
         JSONArray jsonArray;
-        jsonArray = ioHandler.getData("http://138.197.181.131:5000/api/courses");
+        jsonArray = ioHandler.getData("http://138.197.181.131:5100/api/courses");
         instance.addOfferings(jsonArray);
-        jsonArray = ioHandler.getData("http://138.197.181.131:5000/api/students");
+        jsonArray = ioHandler.getData("http://138.197.181.131:5100/api/students");
         instance.addStudents(jsonArray);
         for (Student student: instance.getStudents()) {
-            jsonArray = ioHandler.getData("http://138.197.181.131:5000/api/grades/" + student.getId());
+            jsonArray = ioHandler.getData("http://138.197.181.131:5100/api/grades/" + student.getId());
             student.setReportCard(new ReportCard(jsonArray, instance.getCodesUnits()));
         }
     }
@@ -244,9 +244,14 @@ public class UnitSelectionSystem {
     public void addStudent(JSONObject jo) {
         String id = (String)jo.get("id");
         String name = (String)jo.get("name");
-        String enteredAt = (String)jo.get("secondName");
+        String secondName = (String)jo.get("secondName");
         String birthDate = (String)jo.get("birthDate");
-        Student student = new Student(id, name, enteredAt, birthDate);
+        String field = (String)jo.get("field");
+        String faculty = (String)jo.get("faculty");
+        String level = (String)jo.get("level");
+        String status = (String)jo.get("status");
+        String img = (String)jo.get("img");
+        Student student = new Student(id, name, secondName, birthDate, field, faculty, level, status, img);
         students.add(student);
     }
 

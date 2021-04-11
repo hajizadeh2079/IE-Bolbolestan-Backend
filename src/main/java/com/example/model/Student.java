@@ -5,15 +5,26 @@ public class Student {
     private String name;
     private String secondName;
     private String birthDate;
+    private String field;
+    private String faculty;
+    private String level;
+    private String status;
+    private String img;
     private ReportCard reportCard;
     private WeeklySchedule lastFinalized;
     private WeeklySchedule weeklySchedule;
 
-    public Student(String _id, String _name, String _secondName, String _birthDate) {
+    public Student(String _id, String _name, String _secondName, String _birthDate, String _field, String _faculty,
+                   String _level, String _status, String _img) {
         id = _id;
         name = _name;
         secondName = _secondName;
         birthDate = _birthDate;
+        field = _field;
+        faculty = _faculty;
+        level = _level;
+        status = _status;
+        img = _img;
         reportCard = null;
         lastFinalized = new WeeklySchedule();
         weeklySchedule = new WeeklySchedule();
@@ -33,6 +44,26 @@ public class Student {
 
     public String getBirthDate() {
         return birthDate;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public String getFaculty() {
+        return faculty;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getImg() {
+        return img;
     }
 
     public WeeklySchedule getWeeklySchedule() {

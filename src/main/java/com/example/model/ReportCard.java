@@ -2,18 +2,24 @@ package com.example.model;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ReportCard {
+    private ArrayList<Grade> gradesHistory = new ArrayList<Grade>();
     private HashMap<String, Long> grades = new HashMap<>();
     private HashMap<String, Long> codesUnits;
 
     public ReportCard(JSONArray jsonArray, HashMap<String, Long> _codesUnits) {
-        JSONObject temp;
         for (Object jsonObject: jsonArray) {
-            temp = (JSONObject) jsonObject;
-            grades.put((String) temp.get("code"), (Long) temp.get("grade"));
+            JSONObject temp = (JSONObject) jsonObject;
+            String code = (String) temp.get("code");
+            Long grade = (Long) temp.get("grade");
+            Long term = (Long) temp.get("term");
+            if ((!grades.containsKey(code)) || (grades.get(code) < grade))
+                grades.put(code, grade);
+            gradesHistory.add(new Grade(code, grade, term));
         }
         codesUnits = _codesUnits;
     }
@@ -42,5 +48,9 @@ public class ReportCard {
 
     public HashMap<String, Long> getGrades() {
         return grades;
+    }
+
+    public ArrayList<Grade> getGradesHistory() {
+        return gradesHistory;
     }
 }

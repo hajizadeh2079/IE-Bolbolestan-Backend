@@ -1,6 +1,5 @@
 <%@ page import="com.example.model.Student" %>
-<%@ page import="com.example.model.Course" %>
-<%@ page import="java.util.Map" %>
+<%@ page import="com.example.model.Grade" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     Student student = (Student) request.getAttribute("student");
@@ -33,11 +32,13 @@
     <tr>
         <th>Code</th>
         <th>Grade</th>
+        <th>Term</th>
     </tr>
-    <%for (Map.Entry<String, Long> entry : student.getReportCard().getGrades().entrySet()) {%>
+    <%for (Grade grade: student.getReportCard().getGradesHistory()) {%>
     <tr>
-        <td><%= entry.getKey()%></td>
-        <td><%= entry.getValue()%></td>
+        <td><%= grade.getCode()%></td>
+        <td><%= grade.getGrade()%></td>
+        <td><%= grade.getTerm()%></td>
     </tr>
     <%}%>
 </table>
