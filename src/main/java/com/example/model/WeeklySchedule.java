@@ -3,8 +3,8 @@ package com.example.model;
 import java.util.ArrayList;
 
 public class WeeklySchedule {
-    private ArrayList<Course> lastFinalizedCourses;
-    private ArrayList<Course> lastWaitingCourses;
+    private ArrayList<Course> lastFinalizedCourses = new ArrayList<Course>();
+    private ArrayList<Course> lastWaitingCourses = new ArrayList<Course>();
 
     private ArrayList<Course> finalizedCourses = new ArrayList<Course>();
     private ArrayList<Course> nonFinalizedCourses = new ArrayList<Course>();
@@ -65,6 +65,7 @@ public class WeeklySchedule {
 
     public void reset() {
         finalizedCourses = new ArrayList<Course>();
+        nonFinalizedCourses = new ArrayList<Course>();
         waitingCourses = new ArrayList<Course>();
         finalizedCourses.addAll(lastFinalizedCourses);
         waitingCourses.addAll(lastWaitingCourses);
@@ -72,11 +73,11 @@ public class WeeklySchedule {
 
     public void submit() {
         for (Course course: lastFinalizedCourses)
-            course.increaseRemainingCapacity();
+            course.decreaseSignedUp();
         for (Course course: finalizedCourses)
-            course.decreaseRemainingCapacity();
+            course.increaseSignedUp();
         for (Course course: nonFinalizedCourses)
-            course.decreaseRemainingCapacity();
+            course.increaseSignedUp();
         for (Course course: lastWaitingCourses)
             course.decreaseCapacity();
         for (Course course: waitingCourses)
@@ -84,10 +85,14 @@ public class WeeklySchedule {
         lastFinalizedCourses = new ArrayList<Course>();
         lastWaitingCourses = new ArrayList<Course>();
         lastFinalizedCourses.addAll(finalizedCourses);
+        lastFinalizedCourses.addAll(nonFinalizedCourses);
         lastWaitingCourses.addAll(waitingCourses);
     }
 
     public void waitListToFinalizedCourse() {
-
+        for (Course course: lastWaitingCourses) {
+            lastFinalizedCourses.add(course);
+            course.increaseSignedUp();
+        }
     }
 }

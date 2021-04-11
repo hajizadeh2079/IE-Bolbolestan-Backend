@@ -21,7 +21,7 @@ public class Course {
     private LocalDateTime examTimeEnd;
     private long capacity;
     private ArrayList<String> prerequisitesArray = new ArrayList<String>();
-    private long remainingCapacity;
+    private long signedUp;
 
     public Course(String _code, String _classCode, String _name, String _instructor, String _type, long _unit,
                   JSONObject _classTime, JSONObject _examTime, long _capacity, JSONArray _prerequisites) {
@@ -45,21 +45,21 @@ public class Course {
         examTimeStart = LocalDateTime.parse((String)_examTime.get("start"), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         examTimeEnd = LocalDateTime.parse((String)_examTime.get("end"), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         capacity = _capacity;
-        remainingCapacity =  _capacity;
+        signedUp =  0;
         for (i = 0; i < _prerequisites.size(); i++)
             prerequisitesArray.add((String)_prerequisites.get(i));
     }
 
     public long getSignedUp() {
-        return capacity - remainingCapacity;
+        return signedUp;
     }
 
-    public void decreaseRemainingCapacity() {
-        remainingCapacity--;
+    public void decreaseSignedUp() {
+        signedUp--;
     }
 
-    public void increaseRemainingCapacity() {
-        remainingCapacity++;
+    public void increaseSignedUp() {
+        signedUp++;
     }
 
     public void decreaseCapacity() {
@@ -71,7 +71,7 @@ public class Course {
     }
 
     public long getRemainingCapacity() {
-        return remainingCapacity;
+        return capacity - signedUp;
     }
 
     public String getCode() {

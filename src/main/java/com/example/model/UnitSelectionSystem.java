@@ -104,13 +104,17 @@ public class UnitSelectionSystem {
         }
     }
 
+    public void waitListToFinalizedCourse() {
+        for (Student student: students)
+            student.waitListToFinalizedCourse();
+    }
+
     public void submitPlan() throws StudentNotFound, UnitsMinOrMaxError, CapacityError,
             PrerequisitesError, AlreadyPassedError {
         Student student = findStudent(loggedInStudent);
         WeeklySchedule weeklySchedule = student.getWeeklySchedule();
         checkForUnitsLimitError(weeklySchedule);
         for (Course course: weeklySchedule.getAllCourses()) {
-            checkForCapacityError(course);
             checkForPrerequisitesError(student, course);
             checkForAlreadyPassedError(student, course);
         }
