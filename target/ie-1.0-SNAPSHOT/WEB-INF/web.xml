@@ -7,4 +7,28 @@
         <error-code>404</error-code>
         <location>/404.jsp</location>
     </error-page>
+
+    <display-name>IE Servlet-Spring React</display-name>
+    
+    <servlet>
+        <servlet-name>home</servlet-name>
+        <servlet-class>
+            com.example.controller.HomeServlet
+        </servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>WEB-INF/web.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <filter>
+        <filter-name>UTF8Filter</filter-name>
+        <filter-class>com.example.controller.UTF8Filter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>UTF8Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>

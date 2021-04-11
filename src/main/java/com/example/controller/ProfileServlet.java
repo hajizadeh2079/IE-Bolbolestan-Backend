@@ -1,4 +1,4 @@
-package com.example.contorller;
+package com.example.controller;
 import com.example.model.Student;
 import com.example.model.UnitSelectionSystem;
 

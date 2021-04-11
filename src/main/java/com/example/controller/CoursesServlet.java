@@ -1,4 +1,4 @@
-package com.example.contorller;
+package com.example.controller;
 
 import com.example.model.UnitSelectionSystem;
 
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "Courses", value = "/courses")
+@WebServlet(name = "courses", value = "/courses")
 public class CoursesServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
