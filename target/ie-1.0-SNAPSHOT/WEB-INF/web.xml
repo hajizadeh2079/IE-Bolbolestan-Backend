@@ -9,7 +9,7 @@
     </error-page>
 
     <display-name>IE Servlet-Spring React</display-name>
-    
+
     <servlet>
         <servlet-name>home</servlet-name>
         <servlet-class>
@@ -21,6 +21,11 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+
+    <servlet-mapping>
+        <servlet-name>home</servlet-name>
+        <url-pattern></url-pattern>
+    </servlet-mapping>
 
     <filter>
         <filter-name>UTF8Filter</filter-name>

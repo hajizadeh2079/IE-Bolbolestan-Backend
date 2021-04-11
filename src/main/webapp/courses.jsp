@@ -143,6 +143,14 @@
                 <button type="submit">Add</button>
             </form>
         </td>
+        <td>
+            <form action="" method="POST" >
+                <input id="form_action" type="hidden" name="action" value="wait">
+                <input id="form_class_code" type="hidden" name="course_code" value=<%=course.getCode()%>>
+                <input id="form_class_code" type="hidden" name="class_code" value=<%=course.getClassCode()%>>
+                <button type="submit">Wait</button>
+            </form>
+        </td>
     </tr>
     <%
         }

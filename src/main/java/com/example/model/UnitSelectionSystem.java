@@ -41,7 +41,7 @@ public class UnitSelectionSystem {
 
     public ArrayList<Course> getPlanCourses() {
         try {
-            return findStudent(loggedInStudent).getWeeklySchedule().getCourses();
+            return findStudent(loggedInStudent).getWeeklySchedule().getAllCourses();
         } catch (StudentNotFound studentNotFound) {
             return null;
         }
@@ -109,11 +109,15 @@ public class UnitSelectionSystem {
         Student student = findStudent(loggedInStudent);
         WeeklySchedule weeklySchedule = student.getWeeklySchedule();
         checkForUnitsLimitError(weeklySchedule);
-        for (Course course: weeklySchedule.getCourses()) {
+        for (Course course: weeklySchedule.getAllCourses()) {
             checkForCapacityError(course);
             checkForPrerequisitesError(student, course);
             checkForAlreadyPassedError(student, course);
         }
+        for (Course course: weeklySchedule.getFinalizedCourses())
+            checkForCapacityError(course);
+        for (Course course: weeklySchedule.getNonFinalizedCourses())
+            checkForCapacityError(course);
         student.submitPlan();
     }
 
@@ -136,7 +140,7 @@ public class UnitSelectionSystem {
     }
 
     public void checkForExamTimeCollisionError(Student student, Course newCourse) throws ExamTimeCollisionError {
-        ArrayList<Course> courses = student.getWeeklySchedule().getCourses();
+        ArrayList<Course> courses = student.getWeeklySchedule().getAllCourses();
         for (Course course : courses) {
             if (course.getCode().equals(newCourse.getCode()))
                 continue;
@@ -154,7 +158,7 @@ public class UnitSelectionSystem {
     }
 
     public void checkForClassTimeCollisionError(Student student, Course newCourse) throws ClassTimeCollisionError {
-        ArrayList<Course> courses = student.getWeeklySchedule().getCourses();
+        ArrayList<Course> courses = student.getWeeklySchedule().getAllCourses();
         for (Course course : courses) {
             if (course.getCode().equals(newCourse.getCode()))
                 continue;
@@ -197,10 +201,22 @@ public class UnitSelectionSystem {
         Course newCourse = findCourse(code, classCode);
         checkForClassTimeCollisionError(student, newCourse);
         checkForExamTimeCollisionError(student, newCourse);
-        for (Course course: student.getWeeklySchedule().getCourses())
+        for (Course course: student.getWeeklySchedule().getAllCourses())
             if (course.getCode().equals(newCourse.getCode()))
                 return;
         student.addToWeeklySchedule(newCourse);
+    }
+
+    public void addToWaitList(String code, String classCode) throws StudentNotFound, OfferingNotFound,
+            ClassTimeCollisionError, ExamTimeCollisionError {
+        Student student = findStudent(loggedInStudent);
+        Course newCourse = findCourse(code, classCode);
+        checkForClassTimeCollisionError(student, newCourse);
+        checkForExamTimeCollisionError(student, newCourse);
+        for (Course course: student.getWeeklySchedule().getAllCourses())
+            if (course.getCode().equals(newCourse.getCode()))
+                return;
+        student.addToWaitList(newCourse);
     }
 
     public void checkForPrerequisitesError(Student student, Course newCourse) throws PrerequisitesError {

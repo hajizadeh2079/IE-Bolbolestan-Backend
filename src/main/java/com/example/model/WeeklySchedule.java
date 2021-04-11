@@ -3,24 +3,91 @@ package com.example.model;
 import java.util.ArrayList;
 
 public class WeeklySchedule {
-    private ArrayList<Course> courses = new ArrayList<Course>();
+    private ArrayList<Course> lastFinalizedCourses;
+    private ArrayList<Course> lastWaitingCourses;
 
-    public void addCourse(Course course) {
-        courses.add(course);
+    private ArrayList<Course> finalizedCourses = new ArrayList<Course>();
+    private ArrayList<Course> nonFinalizedCourses = new ArrayList<Course>();
+    private ArrayList<Course> waitingCourses = new ArrayList<Course>();
+
+    public ArrayList<Course> getLastFinalizedCourses() {
+        return lastFinalizedCourses;
     }
 
-    public void removeCourse(Course course) {
-        courses.remove(course);
+    public ArrayList<Course> getLastWaitingCourses() {
+        return lastWaitingCourses;
+    }
+
+    public ArrayList<Course> getFinalizedCourses() {
+        return finalizedCourses;
+    }
+
+    public ArrayList<Course> getNonFinalizedCourses() {
+        return nonFinalizedCourses;
+    }
+
+    public ArrayList<Course> getWaitingCourses() {
+        return waitingCourses;
+    }
+
+    public ArrayList<Course> getAllCourses() {
+        ArrayList<Course> courses = new ArrayList<Course>();
+        courses.addAll(finalizedCourses);
+        courses.addAll(nonFinalizedCourses);
+        courses.addAll(waitingCourses);
+        return courses;
     }
 
     public int sumOfUnits() {
         int sum = 0;
-        for (Course course: courses)
+        for (Course course: finalizedCourses)
+            sum += course.getUnits();
+        for (Course course: nonFinalizedCourses)
+            sum += course.getUnits();
+        for (Course course: waitingCourses)
             sum += course.getUnits();
         return sum;
     }
 
-    public ArrayList<Course> getCourses() {
-        return courses;
+    public void addCourse(Course course) {
+        nonFinalizedCourses.add(course);
+    }
+
+    public void addToWaitList(Course course) {
+        waitingCourses.add(course);
+    }
+
+    public void removeCourse(Course course) {
+        finalizedCourses.remove(course);
+        nonFinalizedCourses.remove(course);
+        waitingCourses.remove(course);
+    }
+
+    public void reset() {
+        finalizedCourses = new ArrayList<Course>();
+        waitingCourses = new ArrayList<Course>();
+        finalizedCourses.addAll(lastFinalizedCourses);
+        waitingCourses.addAll(lastWaitingCourses);
+    }
+
+    public void submit() {
+        for (Course course: lastFinalizedCourses)
+            course.increaseRemainingCapacity();
+        for (Course course: finalizedCourses)
+            course.decreaseRemainingCapacity();
+        for (Course course: nonFinalizedCourses)
+            course.decreaseRemainingCapacity();
+        for (Course course: lastWaitingCourses)
+            course.decreaseCapacity();
+        for (Course course: waitingCourses)
+            course.increaseCapacity();
+        lastFinalizedCourses = new ArrayList<Course>();
+        lastWaitingCourses = new ArrayList<Course>();
+        lastFinalizedCourses.addAll(finalizedCourses);
+        lastWaitingCourses.addAll(waitingCourses);
+    }
+
+    public void waitListToFinalizedCourse() {
+
     }
 }

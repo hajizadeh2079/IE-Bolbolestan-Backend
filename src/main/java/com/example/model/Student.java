@@ -11,7 +11,6 @@ public class Student {
     private String status;
     private String img;
     private ReportCard reportCard;
-    private WeeklySchedule lastFinalized;
     private WeeklySchedule weeklySchedule;
 
     public Student(String _id, String _name, String _secondName, String _birthDate, String _field, String _faculty,
@@ -26,7 +25,6 @@ public class Student {
         status = _status;
         img = _img;
         reportCard = null;
-        lastFinalized = new WeeklySchedule();
         weeklySchedule = new WeeklySchedule();
     }
 
@@ -66,16 +64,12 @@ public class Student {
         return img;
     }
 
-    public WeeklySchedule getWeeklySchedule() {
-        return weeklySchedule;
-    }
-
     public ReportCard getReportCard() {
         return reportCard;
     }
 
-    public WeeklySchedule getLastFinalized() {
-        return lastFinalized;
+    public WeeklySchedule getWeeklySchedule() {
+        return weeklySchedule;
     }
 
     public void setReportCard(ReportCard reportCard) {
@@ -86,23 +80,23 @@ public class Student {
         weeklySchedule.addCourse(course);
     }
 
+    public void addToWaitList(Course course) {
+        weeklySchedule.addToWaitList(course);
+    }
+
+    public void waitListToFinalizedCourse() {
+        weeklySchedule.waitListToFinalizedCourse();
+    }
+
     public void removeFromWeeklySchedule(Course course) {
         weeklySchedule.removeCourse(course);
     }
 
     public void resetPlan() {
-        weeklySchedule = new WeeklySchedule();
-        for (Course course: lastFinalized.getCourses())
-            weeklySchedule.addCourse(course);
+        weeklySchedule.reset();
     }
 
     public void submitPlan() {
-        for (Course course: weeklySchedule.getCourses())
-            course.decreasingRemainingCapacity();
-        for (Course course: lastFinalized.getCourses())
-            course.increasingRemainingCapacity();
-        lastFinalized = new WeeklySchedule();
-        for (Course course: weeklySchedule.getCourses())
-            lastFinalized.addCourse(course);
+        weeklySchedule.submit();
     }
 }

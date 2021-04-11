@@ -54,12 +54,20 @@ public class Course {
         return capacity - remainingCapacity;
     }
 
-    public void decreasingRemainingCapacity() {
+    public void decreaseRemainingCapacity() {
         remainingCapacity--;
     }
 
-    public void increasingRemainingCapacity() {
+    public void increaseRemainingCapacity() {
         remainingCapacity++;
+    }
+
+    public void decreaseCapacity() {
+        capacity--;
+    }
+
+    public void increaseCapacity() {
+        capacity++;
     }
 
     public long getRemainingCapacity() {

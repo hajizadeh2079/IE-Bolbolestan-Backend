@@ -40,6 +40,17 @@ public class CoursesServlet extends HttpServlet {
                     doGet(request, response);
                 }
                 break;
+            case "wait":
+                courseCode = request.getParameter("course_code");
+                classCode = request.getParameter("class_code");
+                try {
+                    UnitSelectionSystem.getInstance().addToWaitList(courseCode, classCode);
+                    response.sendRedirect("/courses");
+                } catch (Exception exception) {
+                    request.setAttribute("error", exception.getMessage());
+                    doGet(request, response);
+                }
+                break;
             case "remove":
                 courseCode = request.getParameter("course_code");
                 classCode = request.getParameter("class_code");

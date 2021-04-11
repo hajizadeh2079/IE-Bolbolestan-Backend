@@ -17,7 +17,7 @@ public class PlanServlet  extends HttpServlet {
             response.sendRedirect("/login");
         else {
             try {
-                ArrayList<Course> courses = UnitSelectionSystem.getInstance().findStudent(id).getLastFinalized().getCourses();
+                ArrayList<Course> courses = UnitSelectionSystem.getInstance().findStudent(id).getWeeklySchedule().getLastFinalizedCourses();
                 HashMap<String, String> plan = new HashMap<>();
                 for(Course course: courses) {
                     for(String day: course.getClassTimeDays()) {
