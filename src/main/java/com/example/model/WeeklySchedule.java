@@ -94,5 +94,6 @@ public class WeeklySchedule {
             lastFinalizedCourses.add(course);
             course.increaseSignedUp();
         }
+        lastWaitingCourses = new ArrayList<Course>();
     }
 }

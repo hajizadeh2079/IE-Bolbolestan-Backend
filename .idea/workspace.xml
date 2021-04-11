@@ -29,15 +29,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5788c95f-5125-4a49-850c-450385f56634" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/model/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/model/Course.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/model/UnitSelectionSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/model/UnitSelectionSystem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/model/WeeklySchedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/model/WeeklySchedule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/model/Course.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/model/Course.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/model/UnitSelectionSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/model/UnitSelectionSystem.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/model/WeeklySchedule.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/model/WeeklySchedule.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/ie-1.0-SNAPSHOT/WEB-INF/classes/com/example/model/Course.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/ie-1.0-SNAPSHOT/WEB-INF/classes/com/example/model/Course.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/ie-1.0-SNAPSHOT/WEB-INF/classes/com/example/model/UnitSelectionSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/ie-1.0-SNAPSHOT/WEB-INF/classes/com/example/model/UnitSelectionSystem.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/ie-1.0-SNAPSHOT/WEB-INF/classes/com/example/model/WeeklySchedule.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/ie-1.0-SNAPSHOT/WEB-INF/classes/com/example/model/WeeklySchedule.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -204,6 +196,7 @@
       <workItem from="1615980530215" duration="1302000" />
       <workItem from="1615983798978" duration="1319000" />
       <workItem from="1618134733324" duration="23046000" />
+      <workItem from="1618177461018" duration="3196000" />
     </task>
     <servers />
   </component>
