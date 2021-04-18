@@ -1,4 +1,4 @@
-package com.example.model;
+package IE.server.services;
 
 public class Exceptions extends Exception {
     public Exceptions(String s) {

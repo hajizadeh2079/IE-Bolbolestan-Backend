@@ -1,4 +1,4 @@
-package com.example.model;
+package IE.server.services;
 
 public class MinJob implements Runnable {
 

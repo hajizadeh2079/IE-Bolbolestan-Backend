@@ -1,4 +1,4 @@
-package com.example.model;
+package IE.server.services;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.model;
+package IE.server.services;
 
 public class Student {
     private String id;

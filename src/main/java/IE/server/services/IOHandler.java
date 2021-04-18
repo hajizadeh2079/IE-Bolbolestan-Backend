@@ -1,4 +1,4 @@
-package com.example.model;
+package IE.server.services;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;

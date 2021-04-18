@@ -1,4 +1,4 @@
-package com.example.model;
+package IE.server.services;
 
 public class Grade {
     private String code;
