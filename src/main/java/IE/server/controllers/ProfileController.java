@@ -5,21 +5,24 @@ import IE.server.services.Student;
 import IE.server.services.UnitSelectionSystem;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DecimalFormat;
+
 @CrossOrigin
 @RestController
-@RequestMapping(value = "")
-public class HomeController {
+@RequestMapping(value = "profiles")
+public class ProfileController {
 
-    @GetMapping("profiles/{id}")
-    public ProfileModel getHomeData(@PathVariable String id) {
+    @GetMapping("/{id}")
+    public ProfileModel getProfileData(@PathVariable String id) {
         try {
             Student student = UnitSelectionSystem.getInstance().findStudent(id);
             String name = student.getName();
             String secondName = student.getSecondName();
             String stdId = student.getId();
             String birthDate = student.getBirthDate();
-            String gpa = String.valueOf(student.getReportCard().calcGPA()).substring(0, 5);
-            String tpu = String.valueOf(student.getReportCard().calcTPU());
+            DecimalFormat df = new DecimalFormat("0.00");
+            String gpa = df.format(student.getReportCard().calcGPA());
+            String tpu = df.format(student.getReportCard().calcTPU());
             String faculty = student.getFaculty();
             String field = student.getField();
             String level = student.getLevel();

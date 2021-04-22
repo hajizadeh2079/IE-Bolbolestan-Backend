@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "")
+@RequestMapping(value = "students")
 public class UserController {
 
-    @GetMapping("students/{id}")
-    public UserModel getHomeData(@PathVariable String id) {
+    @GetMapping("/{id}")
+    public UserModel getUserData(@PathVariable String id) {
         String stdId = "";
         try {
             stdId = UnitSelectionSystem.getInstance().findStudent(id).getId();

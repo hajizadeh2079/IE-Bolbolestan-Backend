@@ -11,7 +11,7 @@ public class ReportCard {
     private HashMap<String, Long> grades = new HashMap<>();
     private HashMap<String, Long> codesUnits;
 
-    public ReportCard(JSONArray jsonArray, HashMap<String, Long> _codesUnits) {
+    public ReportCard(JSONArray jsonArray, HashMap<String, Long> _codesUnits, HashMap<String, String> _codesNames) {
         for (Object jsonObject: jsonArray) {
             JSONObject temp = (JSONObject) jsonObject;
             String code = (String) temp.get("code");
@@ -19,7 +19,7 @@ public class ReportCard {
             Long term = (Long) temp.get("term");
             if ((!grades.containsKey(code)) || (grades.get(code) < grade))
                 grades.put(code, grade);
-            gradesHistory.add(new Grade(code, grade, term));
+            gradesHistory.add(new Grade(code, _codesNames.get(code), _codesUnits.get(code), grade, term));
         }
         codesUnits = _codesUnits;
     }

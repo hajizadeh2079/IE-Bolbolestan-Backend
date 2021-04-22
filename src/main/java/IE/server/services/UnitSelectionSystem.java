@@ -12,6 +12,7 @@ public class UnitSelectionSystem {
     private ArrayList<Student> students = new ArrayList<Student>();
     private ArrayList<Course> courses = new ArrayList<Course>();
     private HashMap<String, Long> codesUnits = new HashMap<>();
+    private HashMap<String, String> codesNames = new HashMap<>();
     private static UnitSelectionSystem instance;
     private IOHandler ioHandler;
     private String loggedInStudent;
@@ -27,6 +28,27 @@ public class UnitSelectionSystem {
 
     public HashMap<String, Long> getCodesUnits() {
         return codesUnits;
+    }
+
+    public HashMap<String, String> getCodesNames() {
+        return codesNames;
+    }
+
+    public ArrayList<Report> getGradesHistory(String id) throws StudentNotFound {
+        ArrayList<Grade> gradesHistory = instance.findStudent(id).getReportCard().getGradesHistory();
+        Long maxTerm = 0L;
+        for (Grade grade: gradesHistory)
+            if (grade.getTerm() > maxTerm)
+                maxTerm = grade.getTerm();
+        ArrayList<Report> reports = new ArrayList<Report>();
+        for (Long i = maxTerm; i > 0; i--) {
+            ArrayList<Grade> temp = new ArrayList<Grade>();
+            for(Grade grade: gradesHistory)
+                if(grade.getTerm().equals(i))
+                    temp.add(grade);
+            reports.add(new Report(temp, i));
+        }
+        return reports;
     }
 
     public void setSearchFilter(String searchFilter) {
@@ -100,7 +122,7 @@ public class UnitSelectionSystem {
         instance.addStudents(jsonArray);
         for (Student student: instance.getStudents()) {
             jsonArray = ioHandler.getData("http://138.197.181.131:5100/api/grades/" + student.getId());
-            student.setReportCard(new ReportCard(jsonArray, instance.getCodesUnits()));
+            student.setReportCard(new ReportCard(jsonArray, instance.getCodesUnits(), instance.getCodesNames()));
         }
     }
 
@@ -253,6 +275,7 @@ public class UnitSelectionSystem {
                 break;
         courses.add(index, course);
         codesUnits.put(code, units);
+        codesNames.put(code, name);
     }
 
     public void addStudents(JSONArray jsonArray) {
