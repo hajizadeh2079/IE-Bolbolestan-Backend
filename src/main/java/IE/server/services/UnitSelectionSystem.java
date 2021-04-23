@@ -92,11 +92,9 @@ public class UnitSelectionSystem {
     }
 
     public ArrayList<Course> getFilteredCourses(String search, String type) {
-        if (search.equals(""))
-            return courses;
         ArrayList<Course> filteredCourses = new ArrayList<Course>();
         for (Course course: courses)
-            if (course.getName().contains(search))
+            if (course.getName().contains(search) && (course.getType().equals(type) || type.equals("all")))
                 filteredCourses.add(course);
         return filteredCourses;
     }
