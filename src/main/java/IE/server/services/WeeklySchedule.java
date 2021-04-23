@@ -74,25 +74,30 @@ public class WeeklySchedule {
     public void submit() {
         for (Course course: lastFinalizedCourses)
             course.decreaseSignedUp();
+        for (Course course: lastWaitingCourses)
+            course.decreaseSignedUp();
         for (Course course: finalizedCourses)
             course.increaseSignedUp();
         for (Course course: nonFinalizedCourses)
             course.increaseSignedUp();
-        for (Course course: lastWaitingCourses)
-            course.decreaseSignedUp();
         for (Course course: waitingCourses)
             course.increaseSignedUp();
         lastFinalizedCourses = new ArrayList<Course>();
         lastWaitingCourses = new ArrayList<Course>();
+        finalizedCourses.addAll(nonFinalizedCourses);
         lastFinalizedCourses.addAll(finalizedCourses);
-        lastFinalizedCourses.addAll(nonFinalizedCourses);
         lastWaitingCourses.addAll(waitingCourses);
+        nonFinalizedCourses = new ArrayList<Course>();
     }
 
     public void waitListToFinalizedCourse() {
         for (Course course: lastWaitingCourses) {
             lastFinalizedCourses.add(course);
             course.increaseCapacity();
+            if (waitingCourses.contains(course)) {
+                finalizedCourses.add(course);
+                waitingCourses.remove(course);
+            }
         }
         lastWaitingCourses = new ArrayList<Course>();
     }

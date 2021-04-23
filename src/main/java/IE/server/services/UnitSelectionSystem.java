@@ -65,9 +65,9 @@ public class UnitSelectionSystem {
         this.searchFilter = searchFilter;
     }
 
-    public void resetPlan() {
+    public void resetPlan(String id) {
         try {
-            findStudent(loggedInStudent).resetPlan();
+            findStudent(id).resetPlan();
         } catch (Exception ignore) { }
     }
 
@@ -141,9 +141,9 @@ public class UnitSelectionSystem {
             student.waitListToFinalizedCourse();
     }
 
-    public void submitPlan() throws StudentNotFound, UnitsMinOrMaxError, CapacityError,
+    public void submitPlan(String id) throws StudentNotFound, UnitsMinOrMaxError, CapacityError,
             PrerequisitesError, AlreadyPassedError {
-        Student student = findStudent(loggedInStudent);
+        Student student = findStudent(id);
         WeeklySchedule weeklySchedule = student.getWeeklySchedule();
         checkForUnitsLimitError(weeklySchedule);
         for (Course course: weeklySchedule.getAllCourses()) {

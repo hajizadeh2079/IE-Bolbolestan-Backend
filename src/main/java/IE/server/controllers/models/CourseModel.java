@@ -1,22 +1,12 @@
 package IE.server.controllers.models;
 
 public class CourseModel {
-    private String id;
     private String code;
     private String classCode;
 
-    public CourseModel(String id, String code, String classCode) {
-        this.id = id;
+    public CourseModel(String code, String classCode) {
         this.code = code;
         this.classCode = classCode;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getCode() {
