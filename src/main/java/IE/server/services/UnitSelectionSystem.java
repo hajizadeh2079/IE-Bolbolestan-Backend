@@ -223,9 +223,9 @@ public class UnitSelectionSystem {
         return false;
     }
 
-    public void removeFromWeeklySchedule(String code, String classCode) {
+    public void removeFromWeeklySchedule(String id, String code, String classCode) {
         try {
-            Student student = findStudent(loggedInStudent);
+            Student student = findStudent(id);
             Course course = findCourse(code, classCode);
             student.removeFromWeeklySchedule(course);
         } catch (Exception ignore) { }

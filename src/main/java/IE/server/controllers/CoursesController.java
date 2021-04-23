@@ -43,4 +43,11 @@ public class CoursesController {
             return null;
         }
     }
+
+    @DeleteMapping
+    public ResponseModel deleteCourse(@RequestBody CourseModel courseModel) {
+        UnitSelectionSystem.getInstance().removeFromWeeklySchedule(courseModel.getId(), courseModel.getCode(), courseModel.getClassCode());
+        return new ResponseModel(true, "Done!");
+    }
+
 }
