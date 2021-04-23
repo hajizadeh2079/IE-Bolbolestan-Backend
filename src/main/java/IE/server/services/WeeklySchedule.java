@@ -79,9 +79,9 @@ public class WeeklySchedule {
         for (Course course: nonFinalizedCourses)
             course.increaseSignedUp();
         for (Course course: lastWaitingCourses)
-            course.decreaseCapacity();
+            course.decreaseSignedUp();
         for (Course course: waitingCourses)
-            course.increaseCapacity();
+            course.increaseSignedUp();
         lastFinalizedCourses = new ArrayList<Course>();
         lastWaitingCourses = new ArrayList<Course>();
         lastFinalizedCourses.addAll(finalizedCourses);
@@ -92,7 +92,7 @@ public class WeeklySchedule {
     public void waitListToFinalizedCourse() {
         for (Course course: lastWaitingCourses) {
             lastFinalizedCourses.add(course);
-            course.increaseSignedUp();
+            course.increaseCapacity();
         }
         lastWaitingCourses = new ArrayList<Course>();
     }

@@ -51,6 +51,16 @@ public class UnitSelectionSystem {
         return reports;
     }
 
+    public void addCourse(String id, String code, String classCode) throws StudentNotFound, OfferingNotFound,
+            ExamTimeCollisionError, ClassTimeCollisionError {
+        Student student = instance.findStudent(id);
+        Course newCourse = instance.findCourse(code, classCode);
+        if (newCourse.getRemainingCapacity() > 0)
+            instance.addToWeeklySchedule(student, newCourse);
+        else
+            instance.addToWaitList(student, newCourse);
+    }
+
     public void setSearchFilter(String searchFilter) {
         this.searchFilter = searchFilter;
     }
@@ -221,10 +231,7 @@ public class UnitSelectionSystem {
         } catch (Exception ignore) { }
     }
 
-    public void addToWeeklySchedule(String code, String classCode) throws StudentNotFound, OfferingNotFound,
-            ClassTimeCollisionError, ExamTimeCollisionError {
-        Student student = findStudent(loggedInStudent);
-        Course newCourse = findCourse(code, classCode);
+    public void addToWeeklySchedule(Student student, Course newCourse) throws ClassTimeCollisionError, ExamTimeCollisionError {
         checkForClassTimeCollisionError(student, newCourse);
         checkForExamTimeCollisionError(student, newCourse);
         for (Course course: student.getWeeklySchedule().getAllCourses())
@@ -233,10 +240,7 @@ public class UnitSelectionSystem {
         student.addToWeeklySchedule(newCourse);
     }
 
-    public void addToWaitList(String code, String classCode) throws StudentNotFound, OfferingNotFound,
-            ClassTimeCollisionError, ExamTimeCollisionError {
-        Student student = findStudent(loggedInStudent);
-        Course newCourse = findCourse(code, classCode);
+    public void addToWaitList(Student student, Course newCourse) throws ClassTimeCollisionError, ExamTimeCollisionError {
         checkForClassTimeCollisionError(student, newCourse);
         checkForExamTimeCollisionError(student, newCourse);
         for (Course course: student.getWeeklySchedule().getAllCourses())
