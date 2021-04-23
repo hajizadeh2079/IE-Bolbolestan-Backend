@@ -81,12 +81,12 @@ public class UnitSelectionSystem {
         return searchFilter;
     }
 
-    public ArrayList<Course> getFilteredCourses() {
-        if (searchFilter == null)
+    public ArrayList<Course> getFilteredCourses(String search, String type) {
+        if (search.equals(""))
             return courses;
         ArrayList<Course> filteredCourses = new ArrayList<Course>();
         for (Course course: courses)
-            if (course.getName().toLowerCase(Locale.ROOT).contains(searchFilter.toLowerCase(Locale.ROOT)))
+            if (course.getName().contains(search))
                 filteredCourses.add(course);
         return filteredCourses;
     }
