@@ -42,6 +42,14 @@ public class ReportCard {
         return res;
     }
 
+    public Long maxTerm() {
+        Long maxTerm = 0L;
+        for (Grade grade: gradesHistory)
+            if (grade.getTerm() > maxTerm)
+                maxTerm = grade.getTerm();
+        return maxTerm;
+    }
+
     public boolean doesPassCourse(String code) {
         return grades.containsKey(code) && grades.get(code) >= 10;
     }

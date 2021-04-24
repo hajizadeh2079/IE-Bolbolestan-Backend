@@ -36,10 +36,7 @@ public class UnitSelectionSystem {
 
     public ArrayList<Report> getGradesHistory(String id) throws StudentNotFound {
         ArrayList<Grade> gradesHistory = instance.findStudent(id).getReportCard().getGradesHistory();
-        Long maxTerm = 0L;
-        for (Grade grade: gradesHistory)
-            if (grade.getTerm() > maxTerm)
-                maxTerm = grade.getTerm();
+        Long maxTerm = instance.findStudent(id).getReportCard().maxTerm();
         ArrayList<Report> reports = new ArrayList<Report>();
         for (Long i = maxTerm; i > 0; i--) {
             ArrayList<Grade> temp = new ArrayList<Grade>();

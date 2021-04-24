@@ -2,6 +2,7 @@ package IE.server.controllers;
 
 import IE.server.controllers.models.CourseModel;
 import IE.server.controllers.models.ResponseModel;
+import IE.server.controllers.models.ScheduleModel;
 import IE.server.controllers.models.SelectedCourseModel;
 import IE.server.services.*;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,18 @@ public class PlanController {
             ArrayList<Course> waitingCourses = student.getWeeklySchedule().getWaitingCourses();
             int sumOfUnits = student.getWeeklySchedule().sumOfUnits();
             return new SelectedCourseModel(finalizedCourses, nonFinalizedCourses, waitingCourses, sumOfUnits);
+        } catch (Exception exception) {
+            return null;
+        }
+    }
+
+    @GetMapping("finalized/{id}")
+    public ScheduleModel getPlanData(@PathVariable String id) {
+        try {
+            Student student = UnitSelectionSystem.getInstance().findStudent(id);
+            ArrayList<Course> lastFinalizedCourses = student.getWeeklySchedule().getLastFinalizedCourses();
+            Long maxTerm = student.getReportCard().maxTerm();
+            return new ScheduleModel(lastFinalizedCourses, maxTerm + 1);
         } catch (Exception exception) {
             return null;
         }
