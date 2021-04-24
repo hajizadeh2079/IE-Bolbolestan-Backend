@@ -20,7 +20,7 @@ class OfferingNotFound extends Exceptions {
 
 class UnitsMinOrMaxError extends Exceptions {
     public UnitsMinOrMaxError(String MinOrMax) {
-        super(MinOrMax + "UnitsError");
+        super(MinOrMax.equals("Min") ? "عدم رعايت حداقل تعداد واحد" : "عدم رعايت حداكثر تعداد واحد");
     }
 }
 
@@ -32,24 +32,24 @@ class CapacityError extends Exceptions {
 
 class ClassTimeCollisionError extends Exceptions {
     public ClassTimeCollisionError(String code1, String classCode1, String code2, String classCode2) {
-        super("ClassTimeCollisionError " + code1 + "-" + classCode1 + " " + code2 + "-" + classCode2);
+        super("تداخل زمانی كلاس: " + classCode1 + "-" + code1 + " با " + classCode2 + "-" + code2);
     }
 }
 
 class ExamTimeCollisionError extends Exceptions {
     public ExamTimeCollisionError(String code1, String classCode1, String code2, String classCode2) {
-        super("ExamTimeCollisionError " + code1 + "-" + classCode1 + " " + code2 + "-" + classCode2);
+        super("تداخل زمانی امتحان:  " + classCode1 + "-" + code1 + " با " + classCode2 + "-" + code2);
     }
 }
 
 class PrerequisitesError extends Exceptions {
     public PrerequisitesError(String prerequisite, String code) {
-        super("PrerequisitesError " + prerequisite + " --> " + code);
+        super("عدم رعايت پيشنيازی:  " + prerequisite + " --> " + code);
     }
 }
 
 class AlreadyPassedError extends Exceptions {
     public AlreadyPassedError(String code) {
-        super("AlreadyPassedError " + code);
+        super("عدم امكان اخذ مجدد درس گذرانده شده:  " + code);
     }
 }
