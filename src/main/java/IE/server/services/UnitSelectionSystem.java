@@ -61,10 +61,6 @@ public class UnitSelectionSystem {
             instance.addToWaitList(student, newCourse);
     }
 
-    public void setSearchFilter(String searchFilter) {
-        this.searchFilter = searchFilter;
-    }
-
     public void resetPlan(String id) {
         try {
             findStudent(id).resetPlan();
@@ -77,18 +73,6 @@ public class UnitSelectionSystem {
         } catch (StudentNotFound studentNotFound) {
             return null;
         }
-    }
-
-    public int getTotalSelectedUnits() {
-        try {
-            return findStudent(loggedInStudent).getWeeklySchedule().sumOfUnits();
-        } catch (StudentNotFound studentNotFound) {
-            return 0;
-        }
-    }
-
-    public String getSearchFilter() {
-        return searchFilter;
     }
 
     public ArrayList<Course> getFilteredCourses(String search, String type) {
@@ -108,18 +92,6 @@ public class UnitSelectionSystem {
             instance.searchFilter = null;
         }
         return instance;
-    }
-
-    public String getLoggedInStudent() {
-        return loggedInStudent;
-    }
-
-    public void setLoggedInStudent(String id) {
-        loggedInStudent = id;
-    }
-
-    public void logoutStudent() {
-        loggedInStudent = null;
     }
 
     public void prepareData() {

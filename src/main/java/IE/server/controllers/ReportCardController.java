@@ -10,6 +10,7 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping(value = "reports")
 public class ReportCardController {
+
     @GetMapping("/{id}")
     public ArrayList<Report> getReportsData(@PathVariable String id) {
         try {
