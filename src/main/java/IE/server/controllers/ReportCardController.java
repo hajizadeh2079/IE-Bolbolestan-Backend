@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
-@CrossOrigin
 @RestController
 @RequestMapping(value = "reports")
 public class ReportCardController {

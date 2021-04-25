@@ -4,7 +4,6 @@ import IE.server.controllers.models.UserModel;
 import IE.server.services.UnitSelectionSystem;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
 @RestController
 @RequestMapping(value = "students")
 public class UserController {
