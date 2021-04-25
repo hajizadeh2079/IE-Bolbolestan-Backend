@@ -15,8 +15,6 @@ public class UnitSelectionSystem {
     private HashMap<String, String> codesNames = new HashMap<>();
     private static UnitSelectionSystem instance;
     private IOHandler ioHandler;
-    private String loggedInStudent;
-    private String searchFilter;
 
     public ArrayList<Student> getStudents() {
         return students;
@@ -64,14 +62,6 @@ public class UnitSelectionSystem {
         } catch (Exception ignore) { }
     }
 
-    public ArrayList<Course> getPlanCourses() {
-        try {
-            return findStudent(loggedInStudent).getWeeklySchedule().getAllCourses();
-        } catch (StudentNotFound studentNotFound) {
-            return null;
-        }
-    }
-
     public ArrayList<Course> getFilteredCourses(String search, String type) {
         ArrayList<Course> filteredCourses = new ArrayList<Course>();
         for (Course course: courses)
@@ -85,8 +75,6 @@ public class UnitSelectionSystem {
             instance = new UnitSelectionSystem();
             instance.ioHandler = new IOHandler();
             instance.prepareData();
-            instance.loggedInStudent = null;
-            instance.searchFilter = null;
         }
         return instance;
     }
