@@ -21,6 +21,7 @@ public class Course {
     private LocalDateTime examTimeEnd;
     private long capacity;
     private ArrayList<String> prerequisitesArray = new ArrayList<String>();
+    private ArrayList<String> prerequisitesNamesArray;
     private long signedUp;
 
     public Course(String _code, String _classCode, String _name, String _instructor, String _type, long _unit,
@@ -124,5 +125,13 @@ public class Course {
 
     public String getType() {
         return type;
+    }
+
+    public ArrayList<String> getPrerequisitesNamesArray() {
+        return prerequisitesNamesArray;
+    }
+
+    public void setPrerequisitesNamesArray(ArrayList<String> prerequisitesNamesArray) {
+        this.prerequisitesNamesArray = prerequisitesNamesArray;
     }
 }

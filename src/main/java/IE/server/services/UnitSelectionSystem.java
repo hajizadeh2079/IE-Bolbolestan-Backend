@@ -226,6 +226,12 @@ public class UnitSelectionSystem {
         for (Object o : jsonArray) {
             addOffering((JSONObject) o);
         }
+        for (Course course: courses) {
+            ArrayList<String> prerequisites = new ArrayList<String>();
+            for (String code: course.getPrerequisitesArray())
+                prerequisites.add(codesNames.get(code));
+            course.setPrerequisitesNamesArray(prerequisites);
+        }
     }
 
     public void addOffering(JSONObject jo) {
