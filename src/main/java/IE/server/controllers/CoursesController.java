@@ -1,5 +1,6 @@
 package IE.server.controllers;
 
+import IE.server.controllers.models.CourseDTO;
 import IE.server.services.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 public class CoursesController {
 
     @GetMapping
-    public ArrayList<Course> getCoursesData(@RequestParam String search, @RequestParam String type) {
+    public ArrayList<CourseDTO> getCoursesData(@RequestParam String search, @RequestParam String type) {
         return UnitSelectionSystem.getInstance().getFilteredCourses(search, type);
     }
 }

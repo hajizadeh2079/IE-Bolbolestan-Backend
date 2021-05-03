@@ -1,10 +1,8 @@
 package IE.server.repository;
 
 import IE.server.controllers.models.GradeDTO;
-import IE.server.exceptions.StudentNotFound;
 import IE.server.repository.models.GradeDAO;
 import IE.server.repository.models.GradeUnitDAO;
-import IE.server.repository.models.StudentDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

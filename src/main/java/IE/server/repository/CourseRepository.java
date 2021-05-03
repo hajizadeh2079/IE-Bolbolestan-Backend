@@ -4,7 +4,9 @@ import IE.server.repository.models.CourseDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class CourseRepository {
     private static CourseRepository instance;
@@ -65,5 +67,54 @@ public class CourseRepository {
         }
         st.close();
         con.close();
+    }
+
+    public ArrayList<CourseDAO> getFilteredCourses(String searchFilter, String typeFilter) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st;
+        if (typeFilter.equals("all")) {
+            st = con.prepareStatement(
+                    "SELECT * FROM Course\n" +
+                            "WHERE name LIKE \"%" + searchFilter + "%\";"
+            );
+        }
+        else {
+            st = con.prepareStatement(
+                    "SELECT * FROM Course\n" +
+                            "WHERE name LIKE \"%" + searchFilter + "%\" AND type = ?;"
+            );
+            st.setString(1, typeFilter);
+        }
+        try {
+            ResultSet rs = st.executeQuery();
+            if (rs == null) {
+                st.close();
+                con.close();
+                return new ArrayList<CourseDAO>();
+            }
+            ArrayList<CourseDAO> filteredCourses = new ArrayList<CourseDAO>();
+            while (rs.next()) {
+                String code = rs.getString(1);
+                String classCode = rs.getString(2);
+                String name = rs.getString(3);
+                int units = Integer.parseInt(rs.getString(4));
+                String type = rs.getString(5);
+                String instructor = rs.getString(6);
+                int capacity = Integer.parseInt(rs.getString(7));
+                String classTimeStart = rs.getString(8);
+                String classTimeEnd = rs.getString(9);
+                String examTimeStart = rs.getString(10);
+                String examTimeEnd = rs.getString(11);
+                filteredCourses.add(new CourseDAO(code, classCode, name, instructor, units, type, classTimeStart, classTimeEnd, examTimeStart, examTimeEnd, capacity));
+            }
+            st.close();
+            con.close();
+            return filteredCourses;
+        } catch (Exception e) {
+            st.close();
+            con.close();
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

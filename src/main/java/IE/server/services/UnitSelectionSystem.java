@@ -5,6 +5,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import IE.server.controllers.models.CourseDTO;
 import IE.server.controllers.models.GradeDTO;
 import IE.server.controllers.models.ReportDTO;
 import IE.server.exceptions.StudentNotFound;
@@ -64,12 +65,23 @@ public class UnitSelectionSystem {
         } catch (Exception ignore) { }
     }
 */
-    public ArrayList<Course> getFilteredCourses(String search, String type) {
-        ArrayList<Course> filteredCourses = new ArrayList<Course>();
-        for (Course course: courses)
-            if (course.getName().contains(search) && (course.getType().equals(type) || type.equals("all")))
-                filteredCourses.add(course);
-        return filteredCourses;
+    public ArrayList<CourseDTO> getFilteredCourses(String search, String type) {
+        try {
+            ArrayList<CourseDAO> courseDAOS = CourseRepository.getInstance().getFilteredCourses(search, type);
+            ArrayList<CourseDTO> filteredCourses = new ArrayList<CourseDTO>();
+            for (CourseDAO courseDAO: courseDAOS) {
+                ArrayList<String> prerequisitesNamesArray = PrerequisiteRepository.getInstance().getPrerequisitesNames(courseDAO.getCode(), courseDAO.getClassCode());
+                ArrayList<String> classTimeDays = ClassDayRepository.getInstance().getClassDays(courseDAO.getCode(), courseDAO.getClassCode());
+                // Todo
+                int signedUp = 0;
+                // Todo
+                filteredCourses.add(new CourseDTO(courseDAO.getCode(), courseDAO.getClassCode(), courseDAO.getName(), courseDAO.getInstructor(), courseDAO.getUnits(), courseDAO.getType(), classTimeDays, courseDAO.getClassTimeStart(), courseDAO.getClassTimeEnd(), courseDAO.getExamTimeStart(), courseDAO.getExamTimeEnd(), courseDAO.getCapacity(), prerequisitesNamesArray, signedUp));
+            }
+            return filteredCourses;
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            return new ArrayList<CourseDTO>();
+        }
     }
 
     public static UnitSelectionSystem getInstance() {

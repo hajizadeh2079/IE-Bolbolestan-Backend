@@ -4,7 +4,9 @@ import IE.server.repository.models.ClassDayDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ClassDayRepository {
     private static ClassDayRepository instance;
@@ -50,5 +52,34 @@ public class ClassDayRepository {
         }
         st.close();
         con.close();
+    }
+
+    public ArrayList<String> getClassDays(String code, String classCode) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(
+                "SELECT day FROM ClassDay\n" +
+                        "WHERE code = ? AND classCode = ?;\n"
+        );
+        st.setString(1, code);
+        st.setString(2, classCode);
+        try {
+            ResultSet rs = st.executeQuery();
+            if (rs == null) {
+                st.close();
+                con.close();
+                return new ArrayList<String>();
+            }
+            ArrayList<String> classDays = new ArrayList<String>();
+            while (rs.next())
+                classDays.add(rs.getString(1));
+            st.close();
+            con.close();
+            return classDays;
+        } catch (Exception e) {
+            st.close();
+            con.close();
+            e.printStackTrace();
+            throw e;
+        }
     }
 }
