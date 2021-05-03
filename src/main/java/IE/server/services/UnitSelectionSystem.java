@@ -4,9 +4,10 @@ import java.sql.SQLException;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 
+import IE.server.repository.CourseRepository;
 import IE.server.repository.StudentRepository;
+import IE.server.repository.models.CourseDAO;
 import IE.server.repository.models.StudentDAO;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -227,23 +228,28 @@ public class UnitSelectionSystem {
 
     public void addOffering(JSONObject jo) {
         String code = (String)jo.get("code");
-        String name = (String)jo.get("name");
-        String instructor = (String)jo.get("instructor");
-        long units = (Long)jo.get("units");
-        JSONObject classTime = (JSONObject)jo.get("classTime");
-        JSONObject examTime = (JSONObject)jo.get("examTime");
-        long capacity = (Long) jo.get("capacity");
-        JSONArray prerequisites = (JSONArray)jo.get("prerequisites");
         String classCode = (String)jo.get("classCode");
+        String name = (String)jo.get("name");
+        int units = ((Long)jo.get("units")).intValue();
+        String instructor = (String)jo.get("instructor");
+        int capacity = ((Long) jo.get("capacity")).intValue();
         String type = (String)jo.get("type");
-        Course course = new Course(code, classCode, name, instructor, type, units, classTime, examTime, capacity, prerequisites);
-        int index = 0;
-        for (index = 0; index < courses.size(); index++)
-            if (name.equals(courses.get(index).getName()))
-                break;
-        courses.add(index, course);
-        codesUnits.put(code, units);
-        codesNames.put(code, name);
+        JSONObject classTime = (JSONObject)jo.get("classTime");
+        String time = (String)classTime.get("time");
+        String classTimeStart = time.substring(0, time.indexOf("-"));
+        classTimeStart = (classTimeStart.length() < 5) ? "0" + classTimeStart : classTimeStart;
+        String classTimeEnd = time.substring(time.indexOf("-") + 1);
+        classTimeEnd = (classTimeEnd.length() < 5) ? "0" + classTimeEnd : classTimeEnd;
+        JSONObject examTime = (JSONObject)jo.get("examTime");
+        String examTimeStart = (String)examTime.get("start");
+        String examTimeEnd = (String)examTime.get("end");
+        CourseDAO courseDAO = new CourseDAO(code, classCode, name, instructor, units, type, classTimeStart ,classTimeEnd, examTimeStart, examTimeEnd, capacity);
+        try {
+            CourseRepository.getInstance().insert(courseDAO);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            System.out.println("error in CourseRepository.insert query.");
+        }
     }
 
     public void addStudents(JSONArray jsonArray) {
