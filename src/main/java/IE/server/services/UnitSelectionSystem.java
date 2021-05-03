@@ -5,6 +5,10 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import IE.server.controllers.models.Grade;
+import IE.server.controllers.models.GradeDTO;
+import IE.server.controllers.models.Report;
+import IE.server.controllers.models.ReportDTO;
 import IE.server.exceptions.StudentNotFound;
 import IE.server.repository.*;
 import IE.server.repository.models.*;
@@ -35,18 +39,15 @@ public class UnitSelectionSystem {
         return codesNames;
     }
 
-    public ArrayList<Report> getGradesHistory(String id) throws StudentNotFound {
-        ArrayList<Grade> gradesHistory = instance.findStudent(id).getReportCard().getGradesHistory();
-        Long maxTerm = instance.findStudent(id).getReportCard().maxTerm();
-        ArrayList<Report> reports = new ArrayList<Report>();
-        for (Long i = maxTerm; i > 0; i--) {
-            ArrayList<Grade> temp = new ArrayList<Grade>();
-            for(Grade grade: gradesHistory)
-                if(grade.getTerm().equals(i))
-                    temp.add(grade);
-            reports.add(new Report(temp, i));
+    public ArrayList<ReportDTO> getGradesHistory(String id) throws SQLException {
+        int maxTerm = GradeRepository.getInstance().getMaxTermById(id);
+        ArrayList<ReportDTO> reportsDTO = new ArrayList<ReportDTO>();
+        for (int term = maxTerm; term > 0; term--) {
+            ArrayList<GradeDTO> gradesHistory = GradeRepository.getInstance().getReportCard(id, term);
+            double gpa = GradeRepository.getInstance().getReportCardGPA(id, term);
+            reportsDTO.add(new ReportDTO(gradesHistory, term, gpa));
         }
-        return reports;
+        return reportsDTO;
     }
 
     public void addCourse(String id, String code, String classCode) throws StudentNotFound, OfferingNotFound,

@@ -1,6 +1,6 @@
 package IE.server.controllers;
 
-import IE.server.controllers.models.UserModel;
+import IE.server.controllers.models.UserDTO;
 import IE.server.services.UnitSelectionSystem;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @GetMapping("/{id}")
-    public UserModel getUserData(@PathVariable String id) {
+    public UserDTO getUserData(@PathVariable String id) {
         String stdId = "";
         try {
             stdId = UnitSelectionSystem.getInstance().findStudent(id).getId();
         } catch (Exception ignored) { }
-        return new UserModel(stdId);
+        return new UserDTO(stdId);
     }
 }

@@ -1,5 +1,6 @@
 package IE.server.services;
 
+import IE.server.controllers.models.Grade;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import java.util.ArrayList;

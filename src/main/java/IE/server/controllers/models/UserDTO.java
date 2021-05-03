@@ -1,9 +1,9 @@
 package IE.server.controllers.models;
 
-public class UserModel {
+public class UserDTO {
     private String id;
 
-    public UserModel(String id) {
+    public UserDTO(String id) {
         this.id = id;
     }
 
