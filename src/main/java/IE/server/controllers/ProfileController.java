@@ -1,7 +1,7 @@
 package IE.server.controllers;
 
-import IE.server.controllers.models.ProfileModel;
-import IE.server.services.Student;
+import IE.server.controllers.models.ProfileDTO;
+import IE.server.repository.models.StudentDAO;
 import IE.server.services.UnitSelectionSystem;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,22 +12,22 @@ import java.text.DecimalFormat;
 public class ProfileController {
 
     @GetMapping("/{id}")
-    public ProfileModel getProfileData(@PathVariable String id) {
+    public ProfileDTO getProfileData(@PathVariable String id) {
         try {
-            Student student = UnitSelectionSystem.getInstance().findStudent(id);
-            String name = student.getName();
-            String secondName = student.getSecondName();
-            String stdId = student.getId();
-            String birthDate = student.getBirthDate();
+            StudentDAO studentDAO = UnitSelectionSystem.getInstance().findStudent(id);
+            String name = studentDAO.getName();
+            String secondName = studentDAO.getSecondName();
+            String stdId = studentDAO.getId();
+            String birthDate = studentDAO.getBirthDate();
             DecimalFormat df = new DecimalFormat("0.00");
-            String gpa = df.format(student.getReportCard().calcGPA());
-            String tpu = df.format(student.getReportCard().calcTPU());
-            String faculty = student.getFaculty();
-            String field = student.getField();
-            String level = student.getLevel();
-            String status = student.getStatus();
-            String img = student.getImg();
-            return new ProfileModel(stdId, name, secondName, birthDate, field, faculty, level, status, img, gpa, tpu);
+            String gpa = df.format(UnitSelectionSystem.getInstance().calcGPA(id));
+            String tpu = df.format(UnitSelectionSystem.getInstance().calcTPU(id));
+            String faculty = studentDAO.getFaculty();
+            String field = studentDAO.getField();
+            String level = studentDAO.getLevel();
+            String status = studentDAO.getStatus();
+            String img = studentDAO.getImg();
+            return new ProfileDTO(stdId, name, secondName, birthDate, field, faculty, level, status, img, gpa, tpu);
         } catch (Exception ignored) { }
         return null;
     }

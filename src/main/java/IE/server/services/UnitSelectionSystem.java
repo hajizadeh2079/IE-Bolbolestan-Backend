@@ -324,6 +324,24 @@ public class UnitSelectionSystem {
         return StudentRepository.getInstance().findById(id);
     }
 
+    public int calcTPU (String id) {
+        try {
+            return GradeRepository.getInstance().calcTPU(id);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            return 0;
+        }
+    }
+
+    public double calcGPA (String id) {
+        try {
+            return GradeRepository.getInstance().calcGPA(id);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            return -1;
+        }
+    }
+
     public Course findCourse(String code, String classCode) throws OfferingNotFound {
         for(Course course: courses)
             if(course.getCode().equals(code) && course.getClassCode().equals(classCode))

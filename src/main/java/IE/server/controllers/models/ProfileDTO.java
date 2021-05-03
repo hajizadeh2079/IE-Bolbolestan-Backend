@@ -1,6 +1,6 @@
 package IE.server.controllers.models;
 
-public class ProfileModel {
+public class ProfileDTO {
     private String stdId;
     private String name;
     private String secondName;
@@ -13,7 +13,7 @@ public class ProfileModel {
     private String gpa;
     private String tpu;
 
-    public ProfileModel(String stdId, String name, String secondName, String birthDate, String field,
+    public ProfileDTO(String stdId, String name, String secondName, String birthDate, String field,
                         String faculty, String level, String status, String img, String gpa, String tpu) {
         this.stdId = stdId;
         this.name = name;

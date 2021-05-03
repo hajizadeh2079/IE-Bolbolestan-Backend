@@ -1,9 +1,12 @@
 package IE.server.repository;
 
+import IE.server.exceptions.StudentNotFound;
 import IE.server.repository.models.GradeDAO;
+import IE.server.repository.models.StudentDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class GradeRepository {
@@ -53,5 +56,60 @@ public class GradeRepository {
         }
         st.close();
         con.close();
+    }
+
+    public double calcGPA(String id) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(
+                "SELECT SUM(temp3) / SUM(units) AS GPA\n" +
+                    "FROM (SELECT units, SUM(grade * units) AS temp3\n" +
+                    "      FROM (SELECT c.units, g.grade\n" +
+                    "              FROM grade g join course c on c.code = g.code\n" +
+                    "              WHERE g.id = ?) AS temp\n" +
+                    "      GROUP BY units) AS temp2;"
+        );
+        st.setString(1, id);
+        try {
+            ResultSet rs = st.executeQuery();
+            if (rs == null) {
+                st.close();
+                con.close();
+                return -1;
+            }
+            st.close();
+            con.close();
+            return Double.parseDouble(rs.getString(1));
+        } catch (Exception e) {
+            st.close();
+            con.close();
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public int calcTPU(String id) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(
+                "SELECT SUM(units) AS TPU\n" +
+                    "FROM grade g join course c on c.code = g.code\n" +
+                    "WHERE g.id = ? AND g.grade >= 10;"
+        );
+        st.setString(1, id);
+        try {
+            ResultSet rs = st.executeQuery();
+            if (rs == null) {
+                st.close();
+                con.close();
+                return 0;
+            }
+            st.close();
+            con.close();
+            return Integer.parseInt(rs.getString(1));
+        } catch (Exception e) {
+            st.close();
+            con.close();
+            e.printStackTrace();
+            throw e;
+        }
     }
 }
