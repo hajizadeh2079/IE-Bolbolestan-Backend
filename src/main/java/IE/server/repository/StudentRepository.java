@@ -4,7 +4,9 @@ import IE.server.repository.models.StudentDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class StudentRepository {
     private static StudentRepository instance;
@@ -65,5 +67,32 @@ public class StudentRepository {
         }
         st.close();
         con.close();
+    }
+
+    public ArrayList<String> getAllIds() throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(
+                "SELECT id from Student;"
+        );
+        try {
+            ResultSet rs = st.executeQuery();
+            if (rs == null) {
+                st.close();
+                con.close();
+                return new ArrayList<String>();
+            }
+            ArrayList<String> ids = new ArrayList<String>();
+            while (rs.next()) {
+                ids.add(rs.getString(1));
+            }
+            st.close();
+            con.close();
+            return ids;
+        } catch (Exception e) {
+            st.close();
+            con.close();
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

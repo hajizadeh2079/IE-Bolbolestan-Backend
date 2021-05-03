@@ -5,14 +5,8 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import IE.server.repository.ClassDayRepository;
-import IE.server.repository.CourseRepository;
-import IE.server.repository.PrerequisiteRepository;
-import IE.server.repository.StudentRepository;
-import IE.server.repository.models.ClassDayDAO;
-import IE.server.repository.models.CourseDAO;
-import IE.server.repository.models.PrerequisiteDAO;
-import IE.server.repository.models.StudentDAO;
+import IE.server.repository.*;
+import IE.server.repository.models.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -94,9 +88,9 @@ public class UnitSelectionSystem {
         instance.setPrerequisites(jsonArray);
         jsonArray = ioHandler.getData("http://138.197.181.131:5100/api/students");
         instance.addStudents(jsonArray);
-        for (Student student: instance.getStudents()) {
-            jsonArray = ioHandler.getData("http://138.197.181.131:5100/api/grades/" + student.getId());
-            student.setReportCard(new ReportCard(jsonArray, instance.getCodesUnits(), instance.getCodesNames()));
+        for (String id: instance.getStudentsId()) {
+            jsonArray = ioHandler.getData("http://138.197.181.131:5100/api/grades/" + id);
+            instance.setGrades(id, jsonArray);
         }
     }
 
@@ -231,6 +225,21 @@ public class UnitSelectionSystem {
         }
     }
 
+    public void setGrades(String id, JSONArray jsonArray) {
+        try {
+            for (Object o : jsonArray) {
+                JSONObject temp = (JSONObject) o;
+                String code = (String) temp.get("code");
+                int grade = ((Long) temp.get("grade")).intValue();
+                int term = ((Long) temp.get("term")).intValue();
+                GradeDAO gradeDAO = new GradeDAO(id, code, term, grade);
+                GradeRepository.getInstance().insert(gradeDAO);
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+    }
+
     public void setPrerequisite(JSONObject jo) {
         String code = (String)jo.get("code");
         String classCode = (String)jo.get("classCode");
@@ -298,6 +307,15 @@ public class UnitSelectionSystem {
             StudentRepository.getInstance().insert(studentDAO);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
+        }
+    }
+
+    public ArrayList<String> getStudentsId() {
+        try {
+            return StudentRepository.getInstance().getAllIds();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            return new ArrayList<String>();
         }
     }
 
