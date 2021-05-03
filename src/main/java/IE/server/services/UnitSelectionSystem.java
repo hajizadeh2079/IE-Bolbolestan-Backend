@@ -5,8 +5,10 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import IE.server.repository.ClassDayRepository;
 import IE.server.repository.CourseRepository;
 import IE.server.repository.StudentRepository;
+import IE.server.repository.models.ClassDayDAO;
 import IE.server.repository.models.CourseDAO;
 import IE.server.repository.models.StudentDAO;
 import org.json.simple.JSONArray;
@@ -243,12 +245,16 @@ public class UnitSelectionSystem {
         JSONObject examTime = (JSONObject)jo.get("examTime");
         String examTimeStart = (String)examTime.get("start");
         String examTimeEnd = (String)examTime.get("end");
+        JSONArray jsonArray = (JSONArray)classTime.get("days");
         CourseDAO courseDAO = new CourseDAO(code, classCode, name, instructor, units, type, classTimeStart ,classTimeEnd, examTimeStart, examTimeEnd, capacity);
         try {
             CourseRepository.getInstance().insert(courseDAO);
+            for (Object o : jsonArray) {
+                ClassDayDAO classDayDAO = new ClassDayDAO(code, classCode, (String) o);
+                ClassDayRepository.getInstance().insert(classDayDAO);
+            }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
-            System.out.println("error in CourseRepository.insert query.");
         }
     }
 
@@ -275,7 +281,6 @@ public class UnitSelectionSystem {
             StudentRepository.getInstance().insert(studentDAO);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
-            System.out.println("error in StudentRepository.insert query.");
         }
     }
 

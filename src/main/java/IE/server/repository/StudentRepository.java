@@ -37,7 +37,6 @@ public class StudentRepository {
                 instance = new StudentRepository();
             } catch (SQLException e) {
                 e.printStackTrace();
-                System.out.println("error in StudentRepository.create query.");
             }
         }
         return instance;
@@ -62,7 +61,6 @@ public class StudentRepository {
         try {
             st.execute();
         } catch (Exception e) {
-            System.out.println("error in StudentRepository.insert query.");
             e.printStackTrace();
         }
         st.close();
