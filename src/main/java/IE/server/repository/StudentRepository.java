@@ -1,5 +1,6 @@
 package IE.server.repository;
 
+import IE.server.exceptions.StudentNotFound;
 import IE.server.repository.models.StudentDAO;
 
 import java.sql.Connection;
@@ -88,6 +89,42 @@ public class StudentRepository {
             st.close();
             con.close();
             return ids;
+        } catch (Exception e) {
+            st.close();
+            con.close();
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public StudentDAO findById(String id) throws SQLException, StudentNotFound {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(
+                "SELECT * FROM Student S WHERE S.id = ?;"
+        );
+        st.setString(1, id);
+        try {
+            ResultSet rs = st.executeQuery();
+            if (rs == null) {
+                st.close();
+                con.close();
+                throw new StudentNotFound();
+            }
+            String stdId = rs.getString(1);
+            String name = rs.getString(2);
+            String secondName = rs.getString(3);
+            String email = rs.getString(4);
+            String password = rs.getString(5);
+            String birthDate = rs.getString(6);
+            String field = rs.getString(7);
+            String faculty = rs.getString(8);
+            String level = rs.getString(9);
+            String status = rs.getString(10);
+            String img = rs.getString(11);
+            StudentDAO studentDAO = new StudentDAO(stdId, name, secondName, email, password, birthDate, field, faculty, level, status, img);
+            st.close();
+            con.close();
+            return studentDAO;
         } catch (Exception e) {
             st.close();
             con.close();

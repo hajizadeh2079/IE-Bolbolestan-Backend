@@ -5,6 +5,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import IE.server.exceptions.StudentNotFound;
 import IE.server.repository.*;
 import IE.server.repository.models.*;
 import org.json.simple.JSONArray;
@@ -319,11 +320,8 @@ public class UnitSelectionSystem {
         }
     }
 
-    public Student findStudent(String id) throws StudentNotFound {
-        for(Student student: students)
-            if(student.getId().equals(id))
-                return student;
-        throw new StudentNotFound();
+    public StudentDAO findStudent(String id) throws StudentNotFound, SQLException {
+        return StudentRepository.getInstance().findById(id);
     }
 
     public Course findCourse(String code, String classCode) throws OfferingNotFound {
