@@ -1,10 +1,13 @@
 package IE.server.services;
 
+import java.sql.SQLException;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import IE.server.repository.StudentRepository;
+import IE.server.repository.models.StudentDAO;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -253,14 +256,21 @@ public class UnitSelectionSystem {
         String id = (String)jo.get("id");
         String name = (String)jo.get("name");
         String secondName = (String)jo.get("secondName");
+        String email = (String)jo.get("email");
+        String password = (String)jo.get("password");
         String birthDate = (String)jo.get("birthDate");
         String field = (String)jo.get("field");
         String faculty = (String)jo.get("faculty");
         String level = (String)jo.get("level");
         String status = (String)jo.get("status");
         String img = (String)jo.get("img");
-        Student student = new Student(id, name, secondName, birthDate, field, faculty, level, status, img);
-        students.add(student);
+        StudentDAO studentDAO = new StudentDAO(id, name, secondName, email, password, birthDate, field, faculty, level, status, img);
+        try {
+            StudentRepository.getInstance().insert(studentDAO);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            System.out.println("error in StudentRepository.insert query.");
+        }
     }
 
     public Student findStudent(String id) throws StudentNotFound {
