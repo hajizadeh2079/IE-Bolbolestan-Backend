@@ -7,9 +7,11 @@ import java.util.HashMap;
 
 import IE.server.repository.ClassDayRepository;
 import IE.server.repository.CourseRepository;
+import IE.server.repository.PrerequisiteRepository;
 import IE.server.repository.StudentRepository;
 import IE.server.repository.models.ClassDayDAO;
 import IE.server.repository.models.CourseDAO;
+import IE.server.repository.models.PrerequisiteDAO;
 import IE.server.repository.models.StudentDAO;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -89,6 +91,7 @@ public class UnitSelectionSystem {
         JSONArray jsonArray;
         jsonArray = ioHandler.getData("http://138.197.181.131:5100/api/courses");
         instance.addOfferings(jsonArray);
+        instance.setPrerequisites(jsonArray);
         jsonArray = ioHandler.getData("http://138.197.181.131:5100/api/students");
         instance.addStudents(jsonArray);
         for (Student student: instance.getStudents()) {
@@ -220,11 +223,25 @@ public class UnitSelectionSystem {
         for (Object o : jsonArray) {
             addOffering((JSONObject) o);
         }
-        for (Course course: courses) {
-            ArrayList<String> prerequisites = new ArrayList<String>();
-            for (String code: course.getPrerequisitesArray())
-                prerequisites.add(codesNames.get(code));
-            course.setPrerequisitesNamesArray(prerequisites);
+    }
+
+    public void setPrerequisites(JSONArray jsonArray) {
+        for (Object o : jsonArray) {
+            setPrerequisite((JSONObject) o);
+        }
+    }
+
+    public void setPrerequisite(JSONObject jo) {
+        String code = (String)jo.get("code");
+        String classCode = (String)jo.get("classCode");
+        JSONArray jsonArray = (JSONArray)jo.get("prerequisites");
+        try {
+            for (Object o : jsonArray) {
+                PrerequisiteDAO prerequisiteDAO = new PrerequisiteDAO(code, classCode, (String) o);
+                PrerequisiteRepository.getInstance().insert(prerequisiteDAO);
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
     }
 
