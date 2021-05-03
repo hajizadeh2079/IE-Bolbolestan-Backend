@@ -5,9 +5,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import IE.server.controllers.models.Grade;
 import IE.server.controllers.models.GradeDTO;
-import IE.server.controllers.models.Report;
 import IE.server.controllers.models.ReportDTO;
 import IE.server.exceptions.StudentNotFound;
 import IE.server.repository.*;
@@ -44,12 +42,12 @@ public class UnitSelectionSystem {
         ArrayList<ReportDTO> reportsDTO = new ArrayList<ReportDTO>();
         for (int term = maxTerm; term > 0; term--) {
             ArrayList<GradeDTO> gradesHistory = GradeRepository.getInstance().getReportCard(id, term);
-            double gpa = GradeRepository.getInstance().getReportCardGPA(id, term);
+            double gpa = instance.calcGPA(GradeRepository.getInstance().getTermGrades(id, term));
             reportsDTO.add(new ReportDTO(gradesHistory, term, gpa));
         }
         return reportsDTO;
     }
-
+/*
     public void addCourse(String id, String code, String classCode) throws StudentNotFound, OfferingNotFound,
             ExamTimeCollisionError, ClassTimeCollisionError {
         Student student = instance.findStudent(id);
@@ -65,7 +63,7 @@ public class UnitSelectionSystem {
             findStudent(id).resetPlan();
         } catch (Exception ignore) { }
     }
-
+*/
     public ArrayList<Course> getFilteredCourses(String search, String type) {
         ArrayList<Course> filteredCourses = new ArrayList<Course>();
         for (Course course: courses)
@@ -96,11 +94,39 @@ public class UnitSelectionSystem {
         }
     }
 
+    public int calcTPU (String id) {
+        try {
+            return GradeRepository.getInstance().calcTPU(id);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            return 0;
+        }
+    }
+
+    public double calcFinalGPA (String id) {
+        try {
+            return instance.calcGPA(GradeRepository.getInstance().getLastGrades(id));
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            return -1;
+        }
+    }
+
+    public double calcGPA(ArrayList<GradeUnitDAO> grades) {
+        int sumOfUnits = 0;
+        double sum = 0.0;
+        for (GradeUnitDAO gradeUnitDAO: grades) {
+            sumOfUnits += gradeUnitDAO.getUnits();
+            sum += (gradeUnitDAO.getGrade() * gradeUnitDAO.getUnits());
+        }
+        return sum / sumOfUnits;
+    }
+
     public void waitListToFinalizedCourse() {
         for (Student student: students)
             student.waitListToFinalizedCourse();
     }
-
+/*
     public void submitPlan(String id) throws StudentNotFound, UnitsMinOrMaxError, CapacityError,
             PrerequisitesError, AlreadyPassedError {
         Student student = findStudent(id);
@@ -121,7 +147,7 @@ public class UnitSelectionSystem {
         if (student.getReportCard().doesPassCourse(course.getCode()))
             throw new AlreadyPassedError(course.getCode());
     }
-
+*/
     public void checkForCapacityError(Course course) throws CapacityError {
         if (course.getRemainingCapacity() <= 0)
             throw new CapacityError(course.getCode(), course.getClassCode());
@@ -182,7 +208,7 @@ public class UnitSelectionSystem {
         }
         return false;
     }
-
+/*
     public void removeFromWeeklySchedule(String id, String code, String classCode) {
         try {
             Student student = findStudent(id);
@@ -190,7 +216,7 @@ public class UnitSelectionSystem {
             student.removeFromWeeklySchedule(course);
         } catch (Exception ignore) { }
     }
-
+*/
     public void addToWeeklySchedule(Student student, Course newCourse) throws ClassTimeCollisionError, ExamTimeCollisionError {
         checkForClassTimeCollisionError(student, newCourse);
         checkForExamTimeCollisionError(student, newCourse);
@@ -208,13 +234,13 @@ public class UnitSelectionSystem {
                 return;
         student.addToWaitList(newCourse);
     }
-
+/*
     public void checkForPrerequisitesError(Student student, Course newCourse) throws PrerequisitesError {
         for(String prerequisite : newCourse.getPrerequisitesArray())
             if(!student.getReportCard().doesPassCourse(prerequisite))
                 throw new PrerequisitesError(prerequisite, newCourse.getCode());
     }
-
+*/
     public void addOfferings(JSONArray jsonArray) {
         for (Object o : jsonArray) {
             addOffering((JSONObject) o);
@@ -323,24 +349,6 @@ public class UnitSelectionSystem {
 
     public StudentDAO findStudent(String id) throws StudentNotFound, SQLException {
         return StudentRepository.getInstance().findById(id);
-    }
-
-    public int calcTPU (String id) {
-        try {
-            return GradeRepository.getInstance().calcTPU(id);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-            return 0;
-        }
-    }
-
-    public double calcGPA (String id) {
-        try {
-            return GradeRepository.getInstance().calcGPA(id);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-            return -1;
-        }
     }
 
     public Course findCourse(String code, String classCode) throws OfferingNotFound {

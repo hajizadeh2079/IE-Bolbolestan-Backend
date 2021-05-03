@@ -10,7 +10,6 @@ public class Student {
     private String level;
     private String status;
     private String img;
-    private ReportCard reportCard;
     private WeeklySchedule weeklySchedule;
 
     public Student(String _id, String _name, String _secondName, String _birthDate, String _field, String _faculty,
@@ -24,7 +23,6 @@ public class Student {
         level = _level;
         status = _status;
         img = _img;
-        reportCard = null;
         weeklySchedule = new WeeklySchedule();
     }
 
@@ -64,16 +62,8 @@ public class Student {
         return img;
     }
 
-    public ReportCard getReportCard() {
-        return reportCard;
-    }
-
     public WeeklySchedule getWeeklySchedule() {
         return weeklySchedule;
-    }
-
-    public void setReportCard(ReportCard reportCard) {
-        this.reportCard = reportCard;
     }
 
     public void addToWeeklySchedule(Course course) {

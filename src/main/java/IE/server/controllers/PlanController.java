@@ -12,7 +12,7 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping(value = "plans")
 public class PlanController {
-
+/*
     @GetMapping("/{id}")
     public SelectedCourseModel getCoursesData(@PathVariable String id) {
         try {
@@ -70,4 +70,5 @@ public class PlanController {
         UnitSelectionSystem.getInstance().resetPlan(id);
         return new ResponseModel(true, "Done!");
     }
+ */
 }

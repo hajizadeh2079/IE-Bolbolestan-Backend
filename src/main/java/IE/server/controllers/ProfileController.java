@@ -20,7 +20,7 @@ public class ProfileController {
             String stdId = studentDAO.getId();
             String birthDate = studentDAO.getBirthDate();
             DecimalFormat df = new DecimalFormat("0.00");
-            String gpa = df.format(UnitSelectionSystem.getInstance().calcGPA(id));
+            String gpa = df.format(UnitSelectionSystem.getInstance().calcFinalGPA(id));
             String tpu = df.format(UnitSelectionSystem.getInstance().calcTPU(id));
             String faculty = studentDAO.getFaculty();
             String field = studentDAO.getField();

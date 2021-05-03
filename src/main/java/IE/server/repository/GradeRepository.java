@@ -3,6 +3,7 @@ package IE.server.repository;
 import IE.server.controllers.models.GradeDTO;
 import IE.server.exceptions.StudentNotFound;
 import IE.server.repository.models.GradeDAO;
+import IE.server.repository.models.GradeUnitDAO;
 import IE.server.repository.models.StudentDAO;
 
 import java.sql.Connection;
@@ -60,15 +61,14 @@ public class GradeRepository {
         con.close();
     }
 
-    public double calcGPA(String id) throws SQLException {
+    public ArrayList<GradeUnitDAO> getLastGrades(String id) throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(
-                "SELECT SUM(temp3) / SUM(units) AS GPA\n" +
-                    "FROM (SELECT units, SUM(grade * units) AS temp3\n" +
-                    "      FROM (SELECT c.units, g.grade\n" +
-                    "              FROM grade g join course c on c.code = g.code\n" +
-                    "              WHERE g.id = ?) AS temp\n" +
-                    "      GROUP BY units) AS temp2;"
+                "SELECT g.grade, c.units\n" +
+                        "FROM grade g join course c on c.code = g.code\n" +
+                        "WHERE g.id = ? AND g.code NOT IN (SELECT g2.code\n" +
+                        "                                          FROM grade g2\n" +
+                        "                                          WHERE g2.id = g.id AND g2.code = g.code AND g2.term > g.term);"
         );
         st.setString(1, id);
         try {
@@ -76,11 +76,17 @@ public class GradeRepository {
             if (rs == null) {
                 st.close();
                 con.close();
-                return -1;
+                return new ArrayList<GradeUnitDAO>();
+            }
+            ArrayList<GradeUnitDAO> lastGrades = new ArrayList<GradeUnitDAO>();
+            while (rs.next()) {
+                int grade = Integer.parseInt(rs.getString(1));
+                int units = Integer.parseInt(rs.getString(2));
+                lastGrades.add(new GradeUnitDAO(grade, units));
             }
             st.close();
             con.close();
-            return Double.parseDouble(rs.getString(1));
+            return lastGrades;
         } catch (Exception e) {
             st.close();
             con.close();
@@ -104,9 +110,11 @@ public class GradeRepository {
                 con.close();
                 return 0;
             }
+            rs.next();
+            int tpu = Integer.parseInt(rs.getString(1));
             st.close();
             con.close();
-            return Integer.parseInt(rs.getString(1));
+            return tpu;
         } catch (Exception e) {
             st.close();
             con.close();
@@ -128,9 +136,11 @@ public class GradeRepository {
                 con.close();
                 return 0;
             }
+            rs.next();
+            int maxTerm = Integer.parseInt(rs.getString(1));
             st.close();
             con.close();
-            return Integer.parseInt(rs.getString(1));
+            return maxTerm;
         } catch (Exception e) {
             st.close();
             con.close();
@@ -155,8 +165,6 @@ public class GradeRepository {
                 con.close();
                 return new ArrayList<GradeDTO>();
             }
-            st.close();
-            con.close();
             ArrayList<GradeDTO> gradesHistory = new ArrayList<GradeDTO>();
             while (rs.next()) {
                 String code = rs.getString(1);
@@ -165,6 +173,8 @@ public class GradeRepository {
                 int grade = Integer.parseInt(rs.getString(4));
                 gradesHistory.add(new GradeDTO(code, name, units, grade));
             }
+            st.close();
+            con.close();
             return gradesHistory;
         } catch (Exception e) {
             st.close();
@@ -174,28 +184,31 @@ public class GradeRepository {
         }
     }
 
-    public double getReportCardGPA(String id, int term) throws SQLException {
+    public ArrayList<GradeUnitDAO> getTermGrades(String id, int term) throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(
-                "SELECT SUM(temp3) / SUM(units) AS GPA\n" +
-                        "FROM (SELECT units, SUM(grade * units) AS temp3\n" +
-                        "      FROM (SELECT c.units, g.grade\n" +
-                        "              FROM grade g join course c on c.code = g.code\n" +
-                        "              WHERE g.term = ? AND g.id = ?) AS temp\n" +
-                        "      GROUP BY units) AS temp2;"
+                "SELECT g.grade, c.units\n" +
+                        "FROM grade g join course c on c.code = g.code\n" +
+                        "WHERE g.id = ? AND g.term = ?;"
         );
-        st.setString(1, String.valueOf(term));
-        st.setString(2, id);
+        st.setString(1, id);
+        st.setString(2, String.valueOf(term));
         try {
             ResultSet rs = st.executeQuery();
             if (rs == null) {
                 st.close();
                 con.close();
-                return -1;
+                return new ArrayList<GradeUnitDAO>();
+            }
+            ArrayList<GradeUnitDAO> termGrades = new ArrayList<GradeUnitDAO>();
+            while (rs.next()) {
+                int grade = Integer.parseInt(rs.getString(1));
+                int units = Integer.parseInt(rs.getString(2));
+                termGrades.add(new GradeUnitDAO(grade, units));
             }
             st.close();
             con.close();
-            return Double.parseDouble(rs.getString(1));
+            return termGrades;
         } catch (Exception e) {
             st.close();
             con.close();

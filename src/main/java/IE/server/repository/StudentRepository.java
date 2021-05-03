@@ -110,6 +110,7 @@ public class StudentRepository {
                 con.close();
                 throw new StudentNotFound();
             }
+            rs.next();
             String stdId = rs.getString(1);
             String name = rs.getString(2);
             String secondName = rs.getString(3);
