@@ -3,10 +3,7 @@ package IE.server.repository;
 import IE.server.repository.models.CourseDAO;
 import IE.server.repository.models.WeeklyScheduleDAO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class WeeklyScheduleRepository {
@@ -142,6 +139,39 @@ public class WeeklyScheduleRepository {
         st.setString(4, String.valueOf(status));
         try {
             st.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        st.close();
+        con.close();
+    }
+
+    public void submitPlan(String id) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        Statement st = con.createStatement();
+        st.addBatch(
+                "DELETE FROM weeklyschedule\n" +
+                        "WHERE id = " + id + " AND (status = 1 OR status = 2);\n"
+        );
+        st.addBatch(
+                "UPDATE weeklyschedule\n" +
+                        "SET status = 3\n" +
+                        "WHERE id = " + id + " AND status = 4;\n"
+        );
+        st.addBatch(
+                "INSERT INTO weeklyschedule (id, code, classCode, status)\n" +
+                        "SELECT id, code, classCode, 1\n" +
+                        "FROM weeklyschedule\n" +
+                        "WHERE id = " + id + " AND status = 3;\n"
+        );
+        st.addBatch(
+                "INSERT INTO weeklyschedule (id, code, classCode, status)\n" +
+                        "SELECT id, code, classCode, 2\n" +
+                        "FROM weeklyschedule\n" +
+                        "WHERE id = " + id + " AND status = 5;"
+        );
+        try {
+            st.executeBatch();
         } catch (Exception e) {
             e.printStackTrace();
         }

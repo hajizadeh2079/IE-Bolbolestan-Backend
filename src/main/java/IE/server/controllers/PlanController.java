@@ -50,7 +50,7 @@ public class PlanController {
             return new ResponseDTO(false, exception.getMessage());
         }
     }
-/*
+
     @PostMapping("submit/{id}")
     public ResponseDTO submitPlan(@PathVariable String id) {
         try {
@@ -60,7 +60,7 @@ public class PlanController {
             return new ResponseDTO(false, exception.getMessage());
         }
     }
-
+/*
     @PostMapping("reset/{id}")
     public ResponseDTO resetPlan(@PathVariable String id) {
         UnitSelectionSystem.getInstance().resetPlan(id);

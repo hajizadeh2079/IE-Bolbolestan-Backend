@@ -166,35 +166,37 @@ public class UnitSelectionSystem {
             sum += course.getUnits();
         return sum;
     }
-    /*
-    public void submitPlan(String id) throws StudentNotFound, UnitsMinOrMaxError, CapacityError,
-            PrerequisitesError, AlreadyPassedError {
-        Student student = findStudent(id);
-        WeeklySchedule weeklySchedule = student.getWeeklySchedule();
-        checkForUnitsLimitError(weeklySchedule);
-        for (Course course: weeklySchedule.getAllCourses()) {
-            checkForPrerequisitesError(student, course);
-            checkForAlreadyPassedError(student, course);
-        }
-        for (Course course: weeklySchedule.getFinalizedCourses())
-            checkForCapacityError(course);
-        for (Course course: weeklySchedule.getNonFinalizedCourses())
-            checkForCapacityError(course);
-        student.submitPlan();
-    }
 
+    public void submitPlan(String id) throws StudentNotFound, UnitsMinOrMaxError,
+            PrerequisitesError, AlreadyPassedError, SQLException {
+        ArrayList<CourseDAO> finalizedCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.finalized);
+        ArrayList<CourseDAO> nonFinalizedCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.nonFinalized);
+        ArrayList<CourseDAO> waitingCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.waiting);
+        int sumOfUnits = instance.sumOfUnits(finalizedCourses, nonFinalizedCourses, waitingCourses);
+        checkForUnitsLimitError(sumOfUnits);
+        /*
+        for (CourseDAO course: finalizedCourses) {
+            checkForPrerequisitesError(id, course);
+            checkForAlreadyPassedError(id, course);
+        }
+        for (CourseDAO course: nonFinalizedCourses) {
+            checkForPrerequisitesError(id, course);
+            checkForAlreadyPassedError(id, course);
+        }
+        for (CourseDAO course: waitingCourses) {
+            checkForPrerequisitesError(id, course);
+            checkForAlreadyPassedError(id, course);
+        }
+        */
+        WeeklyScheduleRepository.getInstance().submitPlan(id);
+    }
+/*
     public void checkForAlreadyPassedError(Student student, Course course) throws AlreadyPassedError {
         if (student.getReportCard().doesPassCourse(course.getCode()))
             throw new AlreadyPassedError(course.getCode());
     }
 */
-    public void checkForCapacityError(Course course) throws CapacityError {
-        if (course.getRemainingCapacity() <= 0)
-            throw new CapacityError(course.getCode(), course.getClassCode());
-    }
-
-    public void checkForUnitsLimitError(WeeklySchedule weeklySchedule) throws UnitsMinOrMaxError {
-        int sumOfUnits = weeklySchedule.sumOfUnits();
+    public void checkForUnitsLimitError(int sumOfUnits) throws UnitsMinOrMaxError {
         if (sumOfUnits > 20)
             throw new UnitsMinOrMaxError("Max");
         if (sumOfUnits < 12)
