@@ -1,7 +1,7 @@
 package IE.server.controllers;
 
-import IE.server.controllers.models.CourseModel;
-import IE.server.controllers.models.ResponseModel;
+import IE.server.controllers.models.OfferingDTO;
+import IE.server.controllers.models.ResponseDTO;
 import IE.server.controllers.models.ScheduleModel;
 import IE.server.controllers.models.SelectedCourseModel;
 import IE.server.services.*;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping(value = "plans")
 public class PlanController {
-/*
+    /*
     @GetMapping("/{id}")
     public SelectedCourseModel getCoursesData(@PathVariable String id) {
         try {
@@ -40,35 +40,35 @@ public class PlanController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseModel deleteCourse(@PathVariable String id, @RequestBody CourseModel courseModel) {
-        UnitSelectionSystem.getInstance().removeFromWeeklySchedule(id, courseModel.getCode(), courseModel.getClassCode());
-        return new ResponseModel(true, "Done!");
+    public ResponseDTO deleteCourse(@PathVariable String id, @RequestBody OfferingDTO OfferingDTO) {
+        UnitSelectionSystem.getInstance().removeFromWeeklySchedule(id, OfferingDTO.getCode(), OfferingDTO.getClassCode());
+        return new ResponseDTO(true, "Done!");
     }
-
+*/
     @PostMapping("/{id}")
-    public ResponseModel addCourse(@PathVariable String id, @RequestBody CourseModel courseModel) {
+    public ResponseDTO addCourse(@PathVariable String id, @RequestBody OfferingDTO OfferingDTO) {
         try {
-            UnitSelectionSystem.getInstance().addCourse(id, courseModel.getCode(), courseModel.getClassCode());
-            return new ResponseModel(true, "Done!");
+            UnitSelectionSystem.getInstance().addCourse(id, OfferingDTO.getCode(), OfferingDTO.getClassCode());
+            return new ResponseDTO(true, "Done!");
         } catch (Exception exception) {
-            return new ResponseModel(false, exception.getMessage());
+            return new ResponseDTO(false, exception.getMessage());
         }
     }
-
+/*
     @PostMapping("submit/{id}")
-    public ResponseModel submitPlan(@PathVariable String id) {
+    public ResponseDTO submitPlan(@PathVariable String id) {
         try {
             UnitSelectionSystem.getInstance().submitPlan(id);
-            return new ResponseModel(true, "Done!");
+            return new ResponseDTO(true, "Done!");
         } catch (Exception exception) {
-            return new ResponseModel(false, exception.getMessage());
+            return new ResponseDTO(false, exception.getMessage());
         }
     }
 
     @PostMapping("reset/{id}")
-    public ResponseModel resetPlan(@PathVariable String id) {
+    public ResponseDTO resetPlan(@PathVariable String id) {
         UnitSelectionSystem.getInstance().resetPlan(id);
-        return new ResponseModel(true, "Done!");
+        return new ResponseDTO(true, "Done!");
     }
  */
 }

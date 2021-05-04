@@ -6,12 +6,6 @@ public class Exceptions extends Exception {
     }
 }
 
-class OfferingNotFound extends Exceptions {
-    public OfferingNotFound() {
-        super("OfferingNotFound");
-    }
-}
-
 class UnitsMinOrMaxError extends Exceptions {
     public UnitsMinOrMaxError(String MinOrMax) {
         super(MinOrMax.equals("Min") ? "عدم رعايت حداقل تعداد واحد" : "عدم رعايت حداكثر تعداد واحد");

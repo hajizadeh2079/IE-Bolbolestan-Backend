@@ -1,10 +1,10 @@
 package IE.server.controllers.models;
 
-public class CourseModel {
+public class OfferingDTO {
     private String code;
     private String classCode;
 
-    public CourseModel(String code, String classCode) {
+    public OfferingDTO(String code, String classCode) {
         this.code = code;
         this.classCode = classCode;
     }

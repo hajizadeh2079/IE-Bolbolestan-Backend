@@ -8,6 +8,7 @@ import java.util.HashMap;
 import IE.server.controllers.models.CourseDTO;
 import IE.server.controllers.models.GradeDTO;
 import IE.server.controllers.models.ReportDTO;
+import IE.server.exceptions.OfferingNotFound;
 import IE.server.exceptions.StudentNotFound;
 import IE.server.repository.*;
 import IE.server.repository.models.*;
@@ -48,17 +49,22 @@ public class UnitSelectionSystem {
         }
         return reportsDTO;
     }
-/*
+
     public void addCourse(String id, String code, String classCode) throws StudentNotFound, OfferingNotFound,
             ExamTimeCollisionError, ClassTimeCollisionError {
-        Student student = instance.findStudent(id);
-        Course newCourse = instance.findCourse(code, classCode);
-        if (newCourse.getRemainingCapacity() > 0)
-            instance.addToWeeklySchedule(student, newCourse);
-        else
-            instance.addToWaitList(student, newCourse);
+        try {
+            int signedUp = WeeklyScheduleRepository.getInstance().calcSignedUp(code, classCode);
+            CourseDAO newCourse = CourseRepository.getInstance().getCourse(code, classCode);
+            int capacity = newCourse.getCapacity();
+            if (capacity - signedUp > 0)
+                instance.addToWeeklySchedule(id, newCourse, 4);
+            else
+                instance.addToWeeklySchedule(id, newCourse, 5);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
     }
-
+/*
     public void resetPlan(String id) {
         try {
             findStudent(id).resetPlan();
@@ -72,9 +78,7 @@ public class UnitSelectionSystem {
             for (CourseDAO courseDAO: courseDAOS) {
                 ArrayList<String> prerequisitesNamesArray = PrerequisiteRepository.getInstance().getPrerequisitesNames(courseDAO.getCode(), courseDAO.getClassCode());
                 ArrayList<String> classTimeDays = ClassDayRepository.getInstance().getClassDays(courseDAO.getCode(), courseDAO.getClassCode());
-                // Todo
-                int signedUp = 0;
-                // Todo
+                int signedUp = WeeklyScheduleRepository.getInstance().calcSignedUp(courseDAO.getCode(), courseDAO.getClassCode());
                 filteredCourses.add(new CourseDTO(courseDAO.getCode(), courseDAO.getClassCode(), courseDAO.getName(), courseDAO.getInstructor(), courseDAO.getUnits(), courseDAO.getType(), classTimeDays, courseDAO.getClassTimeStart(), courseDAO.getClassTimeEnd(), courseDAO.getExamTimeStart(), courseDAO.getExamTimeEnd(), courseDAO.getCapacity(), prerequisitesNamesArray, signedUp));
             }
             return filteredCourses;
@@ -220,7 +224,7 @@ public class UnitSelectionSystem {
         }
         return false;
     }
-/*
+    /*
     public void removeFromWeeklySchedule(String id, String code, String classCode) {
         try {
             Student student = findStudent(id);
@@ -229,22 +233,16 @@ public class UnitSelectionSystem {
         } catch (Exception ignore) { }
     }
 */
-    public void addToWeeklySchedule(Student student, Course newCourse) throws ClassTimeCollisionError, ExamTimeCollisionError {
-        checkForClassTimeCollisionError(student, newCourse);
-        checkForExamTimeCollisionError(student, newCourse);
+    public void addToWeeklySchedule(String id, CourseDAO newCourse, int status) throws ClassTimeCollisionError, ExamTimeCollisionError, SQLException {
+        /*
+        checkForClassTimeCollisionError(id, newCourse);
+        checkForExamTimeCollisionError(id, newCourse);
         for (Course course: student.getWeeklySchedule().getAllCourses())
             if (course.getCode().equals(newCourse.getCode()))
                 return;
-        student.addToWeeklySchedule(newCourse);
-    }
 
-    public void addToWaitList(Student student, Course newCourse) throws ClassTimeCollisionError, ExamTimeCollisionError {
-        checkForClassTimeCollisionError(student, newCourse);
-        checkForExamTimeCollisionError(student, newCourse);
-        for (Course course: student.getWeeklySchedule().getAllCourses())
-            if (course.getCode().equals(newCourse.getCode()))
-                return;
-        student.addToWaitList(newCourse);
+        */
+        WeeklyScheduleRepository.getInstance().insert(new WeeklyScheduleDAO(id, newCourse.getCode(), newCourse.getClassCode(), status));
     }
 /*
     public void checkForPrerequisitesError(Student student, Course newCourse) throws PrerequisitesError {

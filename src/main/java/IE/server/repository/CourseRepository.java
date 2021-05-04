@@ -1,5 +1,6 @@
 package IE.server.repository;
 
+import IE.server.exceptions.OfferingNotFound;
 import IE.server.repository.models.CourseDAO;
 
 import java.sql.Connection;
@@ -110,6 +111,44 @@ public class CourseRepository {
             st.close();
             con.close();
             return filteredCourses;
+        } catch (Exception e) {
+            st.close();
+            con.close();
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public CourseDAO getCourse(String code, String classCode) throws SQLException, OfferingNotFound {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st;
+        st = con.prepareStatement(
+                "SELECT *\n" +
+                        "FROM course\n" +
+                        "WHERE code = ? AND classCode = ?;"
+        );
+        st.setString(1, code);
+        st.setString(2, classCode);
+        try {
+            ResultSet rs = st.executeQuery();
+            if (rs == null) {
+                st.close();
+                con.close();
+                throw new OfferingNotFound();
+            }
+            rs.next();
+            String name = rs.getString(3);
+            int units = Integer.parseInt(rs.getString(4));
+            String type = rs.getString(5);
+            String instructor = rs.getString(6);
+            int capacity = Integer.parseInt(rs.getString(7));
+            String classTimeStart = rs.getString(8);
+            String classTimeEnd = rs.getString(9);
+            String examTimeStart = rs.getString(10);
+            String examTimeEnd = rs.getString(11);
+            st.close();
+            con.close();
+            return new CourseDAO(code, classCode, name, instructor, units, type, classTimeStart, classTimeEnd, examTimeStart, examTimeEnd, capacity);
         } catch (Exception e) {
             st.close();
             con.close();
