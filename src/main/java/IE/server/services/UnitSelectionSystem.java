@@ -11,6 +11,7 @@ import java.util.HashMap;
 import IE.server.controllers.models.CourseDTO;
 import IE.server.controllers.models.GradeDTO;
 import IE.server.controllers.models.ReportDTO;
+import IE.server.controllers.models.SelectedCourseDTO;
 import IE.server.exceptions.ExamTimeCollisionError;
 import IE.server.exceptions.OfferingNotFound;
 import IE.server.exceptions.StudentNotFound;
@@ -61,9 +62,9 @@ public class UnitSelectionSystem {
             CourseDAO newCourse = CourseRepository.getInstance().getCourse(code, classCode);
             int capacity = newCourse.getCapacity();
             if (capacity - signedUp > 0)
-                instance.addToWeeklySchedule(id, newCourse, 4);
+                instance.addToWeeklySchedule(id, newCourse, Status.nonFinalized);
             else
-                instance.addToWeeklySchedule(id, newCourse, 5);
+                instance.addToWeeklySchedule(id, newCourse, Status.waiting);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
@@ -146,7 +147,26 @@ public class UnitSelectionSystem {
         for (Student student: students)
             student.waitListToFinalizedCourse();
     }
-/*
+
+    public SelectedCourseDTO getSelectedCourses(String id) throws SQLException {
+        ArrayList<CourseDAO> finalizedCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.finalized);
+        ArrayList<CourseDAO> nonFinalizedCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.nonFinalized);
+        ArrayList<CourseDAO> waitingCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.waiting);
+        int sumOfUnits = instance.sumOfUnits(finalizedCourses, nonFinalizedCourses, waitingCourses);
+        return new SelectedCourseDTO(finalizedCourses, nonFinalizedCourses, waitingCourses, sumOfUnits);
+    }
+
+    public int sumOfUnits(ArrayList<CourseDAO> finalizedCourses, ArrayList<CourseDAO> nonFinalizedCourses, ArrayList<CourseDAO> waitingCourses) {
+        int sum = 0;
+        for (CourseDAO course: finalizedCourses)
+            sum += course.getUnits();
+        for (CourseDAO course: nonFinalizedCourses)
+            sum += course.getUnits();
+        for (CourseDAO course: waitingCourses)
+            sum += course.getUnits();
+        return sum;
+    }
+    /*
     public void submitPlan(String id) throws StudentNotFound, UnitsMinOrMaxError, CapacityError,
             PrerequisitesError, AlreadyPassedError {
         Student student = findStudent(id);
@@ -224,18 +244,18 @@ public class UnitSelectionSystem {
 
     public void removeFromWeeklySchedule(String id, String code, String classCode) {
         try {
-            WeeklyScheduleRepository.getInstance().delete(id, code, classCode, 3);
-            WeeklyScheduleRepository.getInstance().delete(id, code, classCode, 4);
-            WeeklyScheduleRepository.getInstance().delete(id, code, classCode, 5);
+            WeeklyScheduleRepository.getInstance().delete(id, code, classCode, Status.finalized);
+            WeeklyScheduleRepository.getInstance().delete(id, code, classCode, Status.nonFinalized);
+            WeeklyScheduleRepository.getInstance().delete(id, code, classCode, Status.waiting);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
     }
 
     public void addToWeeklySchedule(String id, CourseDAO newCourse, int status) throws ClassTimeCollisionError, ExamTimeCollisionError, SQLException {
-        ArrayList<CourseDAO> courses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, 3);
-        courses.addAll(WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, 4));
-        courses.addAll(WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, 5));
+        ArrayList<CourseDAO> courses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.finalized);
+        courses.addAll(WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.nonFinalized));
+        courses.addAll(WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.waiting));
         checkForClassTimeCollisionError(courses, newCourse);
         checkForExamTimeCollisionError(courses, newCourse);
         WeeklyScheduleRepository.getInstance().insert(new WeeklyScheduleDAO(id, newCourse.getCode(), newCourse.getClassCode(), status));

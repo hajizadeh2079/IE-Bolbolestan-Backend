@@ -3,7 +3,7 @@ package IE.server.controllers;
 import IE.server.controllers.models.OfferingDTO;
 import IE.server.controllers.models.ResponseDTO;
 import IE.server.controllers.models.ScheduleModel;
-import IE.server.controllers.models.SelectedCourseModel;
+import IE.server.controllers.models.SelectedCourseDTO;
 import IE.server.services.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,21 +12,16 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping(value = "plans")
 public class PlanController {
-    /*
+
     @GetMapping("/{id}")
-    public SelectedCourseModel getCoursesData(@PathVariable String id) {
+    public SelectedCourseDTO getCoursesData(@PathVariable String id) {
         try {
-            Student student = UnitSelectionSystem.getInstance().findStudent(id);
-            ArrayList<Course> finalizedCourses = student.getWeeklySchedule().getFinalizedCourses();
-            ArrayList<Course> nonFinalizedCourses = student.getWeeklySchedule().getNonFinalizedCourses();
-            ArrayList<Course> waitingCourses = student.getWeeklySchedule().getWaitingCourses();
-            int sumOfUnits = student.getWeeklySchedule().sumOfUnits();
-            return new SelectedCourseModel(finalizedCourses, nonFinalizedCourses, waitingCourses, sumOfUnits);
+            return UnitSelectionSystem.getInstance().getSelectedCourses(id);
         } catch (Exception exception) {
             return null;
         }
     }
-
+/*
     @GetMapping("finalized/{id}")
     public ScheduleModel getPlanData(@PathVariable String id) {
         try {
