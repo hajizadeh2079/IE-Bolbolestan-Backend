@@ -1,13 +1,17 @@
 package IE.server.services;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import IE.server.controllers.models.CourseDTO;
 import IE.server.controllers.models.GradeDTO;
 import IE.server.controllers.models.ReportDTO;
+import IE.server.exceptions.ExamTimeCollisionError;
 import IE.server.exceptions.OfferingNotFound;
 import IE.server.exceptions.StudentNotFound;
 import IE.server.repository.*;
@@ -177,38 +181,31 @@ public class UnitSelectionSystem {
             throw new UnitsMinOrMaxError("Min");
     }
 
-    public void checkForExamTimeCollisionError(Student student, Course newCourse) throws ExamTimeCollisionError {
-        ArrayList<Course> courses = student.getWeeklySchedule().getAllCourses();
-        for (Course course : courses) {
-            if (course.getCode().equals(newCourse.getCode()))
-                continue;
+    public void checkForExamTimeCollisionError(ArrayList<CourseDAO> courses, CourseDAO newCourse) throws ExamTimeCollisionError {
+        for (CourseDAO course : courses)
             if (checkForCollisionExamTime(course, newCourse))
                 throw new ExamTimeCollisionError(course.getCode(), course.getClassCode(), newCourse.getCode(), newCourse.getClassCode());
-        }
     }
 
-    public boolean checkForCollisionExamTime(Course course1, Course course2) {
-        long start1ToSeconds = course1.getExamTimeStart().toEpochSecond(ZoneOffset.UTC);
-        long end1ToSeconds = course1.getExamTimeEnd().toEpochSecond(ZoneOffset.UTC);
-        long start2ToSeconds = course2.getExamTimeStart().toEpochSecond(ZoneOffset.UTC);
-        long end2ToSeconds = course2.getExamTimeEnd().toEpochSecond(ZoneOffset.UTC);
+    public boolean checkForCollisionExamTime(CourseDAO course1, CourseDAO course2) {
+        long start1ToSeconds = LocalDateTime.parse(course1.getExamTimeStart(), DateTimeFormatter.ISO_LOCAL_DATE_TIME).toEpochSecond(ZoneOffset.UTC);
+        long end1ToSeconds = LocalDateTime.parse(course1.getExamTimeEnd(), DateTimeFormatter.ISO_LOCAL_DATE_TIME).toEpochSecond(ZoneOffset.UTC);
+        long start2ToSeconds = LocalDateTime.parse(course2.getExamTimeStart(), DateTimeFormatter.ISO_LOCAL_DATE_TIME).toEpochSecond(ZoneOffset.UTC);
+        long end2ToSeconds = LocalDateTime.parse(course2.getExamTimeEnd(), DateTimeFormatter.ISO_LOCAL_DATE_TIME).toEpochSecond(ZoneOffset.UTC);
         return start1ToSeconds < end2ToSeconds && start2ToSeconds < end1ToSeconds;
     }
 
-    public void checkForClassTimeCollisionError(Student student, Course newCourse) throws ClassTimeCollisionError {
-        ArrayList<Course> courses = student.getWeeklySchedule().getAllCourses();
-        for (Course course : courses) {
-            if (course.getCode().equals(newCourse.getCode()))
-                continue;
+    public void checkForClassTimeCollisionError(ArrayList<CourseDAO> courses, CourseDAO newCourse) throws ClassTimeCollisionError, SQLException {
+        for (CourseDAO course : courses) {
             if (checkForCollisionClassTime(course, newCourse))
                 throw new ClassTimeCollisionError(course.getCode(), course.getClassCode(), newCourse.getCode(), newCourse.getClassCode());
         }
     }
 
-    public boolean checkForCollisionClassTime(Course course1, Course course2) {
+    public boolean checkForCollisionClassTime(CourseDAO course1, CourseDAO course2) throws SQLException {
         boolean haveSameDay = false;
-        for (String classDay1 : course1.getClassTimeDays()) {
-            for (String classDay2: course2.getClassTimeDays()) {
+        for (String classDay1 : ClassDayRepository.getInstance().getClassDays(course1.getCode(), course1.getClassCode())) {
+            for (String classDay2: ClassDayRepository.getInstance().getClassDays(course2.getCode(), course2.getClassCode())) {
                 if (classDay1.equals(classDay2)) {
                     haveSameDay = true;
                     break;
@@ -216,10 +213,10 @@ public class UnitSelectionSystem {
             }
         }
         if (haveSameDay) {
-            int start1ToSeconds = course1.getClassTimeStart().toSecondOfDay();
-            int end1ToSeconds = course1.getClassTimeEnd().toSecondOfDay();
-            int start2ToSeconds = course2.getClassTimeStart().toSecondOfDay();
-            int end2ToSeconds = course2.getClassTimeEnd().toSecondOfDay();
+            int start1ToSeconds = LocalTime.parse(course1.getClassTimeStart(), DateTimeFormatter.ISO_LOCAL_TIME).toSecondOfDay();
+            int end1ToSeconds = LocalTime.parse(course1.getClassTimeEnd(), DateTimeFormatter.ISO_LOCAL_TIME).toSecondOfDay();
+            int start2ToSeconds = LocalTime.parse(course2.getClassTimeStart(), DateTimeFormatter.ISO_LOCAL_TIME).toSecondOfDay();
+            int end2ToSeconds = LocalTime.parse(course2.getClassTimeEnd(), DateTimeFormatter.ISO_LOCAL_TIME).toSecondOfDay();
             return start1ToSeconds < end2ToSeconds && start2ToSeconds < end1ToSeconds;
         }
         return false;
@@ -234,14 +231,11 @@ public class UnitSelectionSystem {
     }
 */
     public void addToWeeklySchedule(String id, CourseDAO newCourse, int status) throws ClassTimeCollisionError, ExamTimeCollisionError, SQLException {
-        /*
-        checkForClassTimeCollisionError(id, newCourse);
-        checkForExamTimeCollisionError(id, newCourse);
-        for (Course course: student.getWeeklySchedule().getAllCourses())
-            if (course.getCode().equals(newCourse.getCode()))
-                return;
-
-        */
+        ArrayList<CourseDAO> courses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, 3);
+        courses.addAll(WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, 4));
+        courses.addAll(WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, 5));
+        checkForClassTimeCollisionError(courses, newCourse);
+        checkForExamTimeCollisionError(courses, newCourse);
         WeeklyScheduleRepository.getInstance().insert(new WeeklyScheduleDAO(id, newCourse.getCode(), newCourse.getClassCode(), status));
     }
 /*

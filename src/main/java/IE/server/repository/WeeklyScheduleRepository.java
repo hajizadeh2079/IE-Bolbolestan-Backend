@@ -20,7 +20,7 @@ public class WeeklyScheduleRepository {
                         "code varchar(255)," +
                         "classCode varchar(255)," +
                         "status int," +
-                        "PRIMARY KEY (id, code)," +
+                        "PRIMARY KEY (id, code, status)," +
                         "FOREIGN KEY (code, classCode) REFERENCES COURSE(code, classCode) ON DELETE CASCADE," +
                         "FOREIGN KEY (id) REFERENCES STUDENT(id) ON DELETE CASCADE);"
         );

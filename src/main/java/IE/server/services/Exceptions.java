@@ -24,12 +24,6 @@ class ClassTimeCollisionError extends Exceptions {
     }
 }
 
-class ExamTimeCollisionError extends Exceptions {
-    public ExamTimeCollisionError(String code1, String classCode1, String code2, String classCode2) {
-        super("تداخل زمانی امتحان:  " + classCode1 + "-" + code1 + " با " + classCode2 + "-" + code2);
-    }
-}
-
 class PrerequisitesError extends Exceptions {
     public PrerequisitesError(String prerequisite, String code) {
         super("عدم رعايت پيشنيازی:  " + prerequisite + " --> " + code);
