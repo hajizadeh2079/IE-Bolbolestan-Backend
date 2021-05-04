@@ -6,40 +6,17 @@ import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import IE.server.controllers.models.*;
-import IE.server.exceptions.ExamTimeCollisionError;
-import IE.server.exceptions.OfferingNotFound;
-import IE.server.exceptions.StudentNotFound;
+import IE.server.exceptions.*;
 import IE.server.repository.*;
 import IE.server.repository.models.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class UnitSelectionSystem {
-    private ArrayList<Student> students = new ArrayList<Student>();
-    private ArrayList<Course> courses = new ArrayList<Course>();
-    private HashMap<String, Long> codesUnits = new HashMap<>();
-    private HashMap<String, String> codesNames = new HashMap<>();
     private static UnitSelectionSystem instance;
     private IOHandler ioHandler;
-
-    public ArrayList<Student> getStudents() {
-        return students;
-    }
-
-    public ArrayList<Course> getCourses() {
-        return courses;
-    }
-
-    public HashMap<String, Long> getCodesUnits() {
-        return codesUnits;
-    }
-
-    public HashMap<String, String> getCodesNames() {
-        return codesNames;
-    }
 
     public ArrayList<ReportDTO> getGradesHistory(String id) throws SQLException {
         int maxTerm = GradeRepository.getInstance().getMaxTermById(id);
@@ -52,7 +29,7 @@ public class UnitSelectionSystem {
         return reportsDTO;
     }
 
-    public void addCourse(String id, String code, String classCode) throws StudentNotFound, OfferingNotFound,
+    public void addCourse(String id, String code, String classCode) throws OfferingNotFound,
             ExamTimeCollisionError, ClassTimeCollisionError {
         try {
             int signedUp = WeeklyScheduleRepository.getInstance().calcSignedUp(code, classCode);
@@ -187,9 +164,8 @@ public class UnitSelectionSystem {
 
     public void submitPlan(String id) throws UnitsMinOrMaxError,
             PrerequisitesError, AlreadyPassedError {
-        ArrayList<CourseDAO> finalizedCourses = null;
         try {
-            finalizedCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.finalized);
+            ArrayList<CourseDAO> finalizedCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.finalized);
             ArrayList<CourseDAO> nonFinalizedCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.nonFinalized);
             ArrayList<CourseDAO> waitingCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.waiting);
             int sumOfUnits = instance.sumOfUnits(finalizedCourses, nonFinalizedCourses, waitingCourses);
@@ -398,12 +374,5 @@ public class UnitSelectionSystem {
 
     public StudentDAO findStudent(String id) throws StudentNotFound, SQLException {
         return StudentRepository.getInstance().findById(id);
-    }
-
-    public Course findCourse(String code, String classCode) throws OfferingNotFound {
-        for(Course course: courses)
-            if(course.getCode().equals(code) && course.getClassCode().equals(classCode))
-                return course;
-        throw new OfferingNotFound();
     }
 }

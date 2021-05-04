@@ -29,7 +29,6 @@ public class PlanController {
         }
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseDTO deleteCourse(@PathVariable String id, @RequestBody OfferingDTO OfferingDTO) {
         UnitSelectionSystem.getInstance().removeFromWeeklySchedule(id, OfferingDTO.getCode(), OfferingDTO.getClassCode());
