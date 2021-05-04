@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.*;
 @EnableScheduling
 public class BackgroundJobManager {
 
-    @Scheduled(fixedDelay = 900000)
+    @Scheduled(fixedDelay = 60000)
     public void waitListToFinalizedCourse() {
         UnitSelectionSystem.getInstance().waitListToFinalizedCourse();
     }

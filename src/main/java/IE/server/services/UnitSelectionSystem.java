@@ -143,8 +143,11 @@ public class UnitSelectionSystem {
     }
 
     public void waitListToFinalizedCourse() {
-        for (Student student: students)
-            student.waitListToFinalizedCourse();
+        try {
+            WeeklyScheduleRepository.getInstance().waitListToFinalizedCourse();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
     }
 
     public ScheduleDTO getPlan(String id) {

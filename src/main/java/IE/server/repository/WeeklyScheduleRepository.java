@@ -206,4 +206,48 @@ public class WeeklyScheduleRepository {
         st.close();
         con.close();
     }
+
+    public void waitListToFinalizedCourse() throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        Statement st = con.createStatement();
+        st.addBatch(
+                "UPDATE course c\n" +
+                        "SET capacity = capacity + (SELECT COUNT(*)\n" +
+                        "                            FROM weeklyschedule w\n" +
+                        "                            WHERE c.code = w.code AND c.classCode = w.classCode AND w.status = 2)"
+        );
+        st.addBatch(
+                "CREATE TABLE IF NOT EXISTS Temp(\n" +
+                        "    id varchar(255),\n" +
+                        "    code varchar(255),\n" +
+                        "    classCode varchar(255),\n" +
+                        "    PRIMARY KEY (id, code),\n" +
+                        "    FOREIGN KEY (code, classCode) REFERENCES COURSE(code, classCode) ON DELETE CASCADE,\n" +
+                        "    FOREIGN KEY (id) REFERENCES STUDENT(id) ON DELETE CASCADE);\n"
+        );
+        st.addBatch(
+                "INSERT INTO Temp\n" +
+                        "SELECT id, code, classCode\n" +
+                        "FROM weeklyschedule\n" +
+                        "WHERE status = 2;\n"
+        );
+        st.addBatch(
+                "UPDATE weeklyschedule\n" +
+                        "SET status = 3\n" +
+                        "WHERE status = 5 AND (id, code, classCode) IN (SELECT * FROM Temp);\n"
+        );
+        st.addBatch("DROP TABLE Temp;");
+        st.addBatch(
+                "UPDATE weeklyschedule\n" +
+                        "SET status = 1\n" +
+                        "WHERE status = 2;\n"
+        );
+        try {
+            st.executeBatch();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        st.close();
+        con.close();
+    }
 }
