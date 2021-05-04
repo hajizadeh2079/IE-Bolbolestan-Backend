@@ -108,8 +108,9 @@ public class GradeRepository {
                 con.close();
                 return 0;
             }
-            rs.next();
-            int tpu = Integer.parseInt(rs.getString(1));
+            int tpu = 0;
+            if (rs.next())
+                tpu = Integer.parseInt(rs.getString(1));
             st.close();
             con.close();
             return tpu;
@@ -134,8 +135,9 @@ public class GradeRepository {
                 con.close();
                 return 0;
             }
-            rs.next();
-            int maxTerm = Integer.parseInt(rs.getString(1));
+            int maxTerm = 0;
+            if (rs.next())
+                maxTerm = Integer.parseInt(rs.getString(1));
             st.close();
             con.close();
             return maxTerm;
@@ -235,7 +237,7 @@ public class GradeRepository {
                 return 0;
             }
             int grade = 0;
-            while (rs.next())
+            if (rs.next())
                 grade = Integer.parseInt(rs.getString(1));
             st.close();
             con.close();

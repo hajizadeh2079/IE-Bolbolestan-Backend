@@ -136,19 +136,24 @@ public class CourseRepository {
                 con.close();
                 throw new OfferingNotFound();
             }
-            rs.next();
-            String name = rs.getString(3);
-            int units = Integer.parseInt(rs.getString(4));
-            String type = rs.getString(5);
-            String instructor = rs.getString(6);
-            int capacity = Integer.parseInt(rs.getString(7));
-            String classTimeStart = rs.getString(8);
-            String classTimeEnd = rs.getString(9);
-            String examTimeStart = rs.getString(10);
-            String examTimeEnd = rs.getString(11);
+            CourseDAO courseDAO = null;
+            if (rs.next()) {
+                String name = rs.getString(3);
+                int units = Integer.parseInt(rs.getString(4));
+                String type = rs.getString(5);
+                String instructor = rs.getString(6);
+                int capacity = Integer.parseInt(rs.getString(7));
+                String classTimeStart = rs.getString(8);
+                String classTimeEnd = rs.getString(9);
+                String examTimeStart = rs.getString(10);
+                String examTimeEnd = rs.getString(11);
+                courseDAO = new CourseDAO(code, classCode, name, instructor, units, type, classTimeStart, classTimeEnd, examTimeStart, examTimeEnd, capacity);
+            }
             st.close();
             con.close();
-            return new CourseDAO(code, classCode, name, instructor, units, type, classTimeStart, classTimeEnd, examTimeStart, examTimeEnd, capacity);
+            if (courseDAO == null)
+                throw new OfferingNotFound();
+            return courseDAO;
         } catch (Exception e) {
             st.close();
             con.close();

@@ -110,21 +110,26 @@ public class StudentRepository {
                 con.close();
                 throw new StudentNotFound();
             }
-            rs.next();
-            String stdId = rs.getString(1);
-            String name = rs.getString(2);
-            String secondName = rs.getString(3);
-            String email = rs.getString(4);
-            String password = rs.getString(5);
-            String birthDate = rs.getString(6);
-            String field = rs.getString(7);
-            String faculty = rs.getString(8);
-            String level = rs.getString(9);
-            String status = rs.getString(10);
-            String img = rs.getString(11);
-            StudentDAO studentDAO = new StudentDAO(stdId, name, secondName, email, password, birthDate, field, faculty, level, status, img);
+            StudentDAO studentDAO = null;
+            if (rs.next()) {
+                String stdId = rs.getString(1);
+                String name = rs.getString(2);
+                String secondName = rs.getString(3);
+                String email = rs.getString(4);
+                String password = rs.getString(5);
+                String birthDate = rs.getString(6);
+                String field = rs.getString(7);
+                String faculty = rs.getString(8);
+                String level = rs.getString(9);
+                String status = rs.getString(10);
+                String img = rs.getString(11);
+                studentDAO = new StudentDAO(stdId, name, secondName, email, password, birthDate, field, faculty, level, status, img);
+            }
             st.close();
             con.close();
+            if (studentDAO == null) {
+                throw new StudentNotFound();
+            }
             return studentDAO;
         } catch (Exception e) {
             st.close();

@@ -71,8 +71,9 @@ public class WeeklyScheduleRepository {
                 con.close();
                 return 0;
             }
-            rs.next();
-            int signedUp = Integer.parseInt(rs.getString(1));
+            int signedUp = 0;
+            if (rs.next())
+                signedUp = Integer.parseInt(rs.getString(1));
             st.close();
             con.close();
             return signedUp;
