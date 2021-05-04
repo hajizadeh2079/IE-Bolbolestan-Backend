@@ -2,12 +2,10 @@ package IE.server.controllers;
 
 import IE.server.controllers.models.OfferingDTO;
 import IE.server.controllers.models.ResponseDTO;
-import IE.server.controllers.models.ScheduleModel;
+import IE.server.controllers.models.ScheduleDTO;
 import IE.server.controllers.models.SelectedCourseDTO;
 import IE.server.services.*;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping(value = "plans")
@@ -21,19 +19,16 @@ public class PlanController {
             return null;
         }
     }
-/*
+
     @GetMapping("finalized/{id}")
-    public ScheduleModel getPlanData(@PathVariable String id) {
+    public ScheduleDTO getPlanData(@PathVariable String id) {
         try {
-            Student student = UnitSelectionSystem.getInstance().findStudent(id);
-            ArrayList<Course> lastFinalizedCourses = student.getWeeklySchedule().getLastFinalizedCourses();
-            Long maxTerm = student.getReportCard().maxTerm();
-            return new ScheduleModel(lastFinalizedCourses, maxTerm + 1);
+            return UnitSelectionSystem.getInstance().getPlan(id);
         } catch (Exception exception) {
             return null;
         }
     }
-*/
+
 
     @DeleteMapping("/{id}")
     public ResponseDTO deleteCourse(@PathVariable String id, @RequestBody OfferingDTO OfferingDTO) {

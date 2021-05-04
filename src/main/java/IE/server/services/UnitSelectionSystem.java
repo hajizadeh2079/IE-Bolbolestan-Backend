@@ -8,10 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import IE.server.controllers.models.CourseDTO;
-import IE.server.controllers.models.GradeDTO;
-import IE.server.controllers.models.ReportDTO;
-import IE.server.controllers.models.SelectedCourseDTO;
+import IE.server.controllers.models.*;
 import IE.server.exceptions.ExamTimeCollisionError;
 import IE.server.exceptions.OfferingNotFound;
 import IE.server.exceptions.StudentNotFound;
@@ -148,6 +145,22 @@ public class UnitSelectionSystem {
     public void waitListToFinalizedCourse() {
         for (Student student: students)
             student.waitListToFinalizedCourse();
+    }
+
+    public ScheduleDTO getPlan(String id) {
+        try {
+            ArrayList<CourseDAO> courseDAOS = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.lastFinalized);
+            ArrayList<CourseDTO> courses = new ArrayList<CourseDTO>();
+            for (CourseDAO courseDAO: courseDAOS) {
+                ArrayList<String> classTimeDays = ClassDayRepository.getInstance().getClassDays(courseDAO.getCode(), courseDAO.getClassCode());
+                courses.add(new CourseDTO(courseDAO.getCode(), courseDAO.getClassCode(), courseDAO.getName(), courseDAO.getInstructor(), courseDAO.getUnits(), courseDAO.getType(), classTimeDays, courseDAO.getClassTimeStart(), courseDAO.getClassTimeEnd(), courseDAO.getExamTimeStart(), courseDAO.getExamTimeEnd(), courseDAO.getCapacity(), null, 0));
+            }
+            int maxTerm = GradeRepository.getInstance().getMaxTermById(id);
+            return new ScheduleDTO(courses, maxTerm + 1);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            return null;
+        }
     }
 
     public SelectedCourseDTO getSelectedCourses(String id) throws SQLException {
