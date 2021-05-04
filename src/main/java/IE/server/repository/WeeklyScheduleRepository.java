@@ -129,4 +129,23 @@ public class WeeklyScheduleRepository {
             throw e;
         }
     }
+
+    public void delete(String id, String code, String classCode, int status) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(
+                "DELETE FROM weeklyschedule\n" +
+                        "WHERE id = ? AND code = ? AND classCode = ? AND status = ?;"
+        );
+        st.setString(1, id);
+        st.setString(2, code);
+        st.setString(3, classCode);
+        st.setString(4, String.valueOf(status));
+        try {
+            st.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        st.close();
+        con.close();
+    }
 }

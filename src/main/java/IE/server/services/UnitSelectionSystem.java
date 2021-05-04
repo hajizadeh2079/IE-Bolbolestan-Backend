@@ -221,15 +221,17 @@ public class UnitSelectionSystem {
         }
         return false;
     }
-    /*
+
     public void removeFromWeeklySchedule(String id, String code, String classCode) {
         try {
-            Student student = findStudent(id);
-            Course course = findCourse(code, classCode);
-            student.removeFromWeeklySchedule(course);
-        } catch (Exception ignore) { }
+            WeeklyScheduleRepository.getInstance().delete(id, code, classCode, 3);
+            WeeklyScheduleRepository.getInstance().delete(id, code, classCode, 4);
+            WeeklyScheduleRepository.getInstance().delete(id, code, classCode, 5);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
     }
-*/
+
     public void addToWeeklySchedule(String id, CourseDAO newCourse, int status) throws ClassTimeCollisionError, ExamTimeCollisionError, SQLException {
         ArrayList<CourseDAO> courses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, 3);
         courses.addAll(WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, 4));

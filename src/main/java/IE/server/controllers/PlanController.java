@@ -38,13 +38,14 @@ public class PlanController {
             return null;
         }
     }
+*/
 
     @DeleteMapping("/{id}")
     public ResponseDTO deleteCourse(@PathVariable String id, @RequestBody OfferingDTO OfferingDTO) {
         UnitSelectionSystem.getInstance().removeFromWeeklySchedule(id, OfferingDTO.getCode(), OfferingDTO.getClassCode());
         return new ResponseDTO(true, "Done!");
     }
-*/
+
     @PostMapping("/{id}")
     public ResponseDTO addCourse(@PathVariable String id, @RequestBody OfferingDTO OfferingDTO) {
         try {
