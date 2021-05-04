@@ -178,4 +178,32 @@ public class WeeklyScheduleRepository {
         st.close();
         con.close();
     }
+
+    public void resetPlan(String id) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        Statement st = con.createStatement();
+        st.addBatch(
+                "DELETE FROM weeklyschedule\n" +
+                        "WHERE id = " + id + " AND (status = 3 OR status = 4 OR status = 5);\n"
+        );
+        st.addBatch(
+                "INSERT INTO weeklyschedule (id, code, classCode, status)\n" +
+                        "SELECT id, code, classCode, 3\n" +
+                        "FROM weeklyschedule\n" +
+                        "WHERE id = " + id + " AND status = 1;\n"
+        );
+        st.addBatch(
+                "INSERT INTO weeklyschedule (id, code, classCode, status)\n" +
+                        "SELECT id, code, classCode, 5\n" +
+                        "FROM weeklyschedule\n" +
+                        "WHERE id = " + id + " AND status = 2;"
+        );
+        try {
+            st.executeBatch();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        st.close();
+        con.close();
+    }
 }

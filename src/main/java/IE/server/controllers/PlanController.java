@@ -60,11 +60,10 @@ public class PlanController {
             return new ResponseDTO(false, exception.getMessage());
         }
     }
-/*
+
     @PostMapping("reset/{id}")
     public ResponseDTO resetPlan(@PathVariable String id) {
         UnitSelectionSystem.getInstance().resetPlan(id);
         return new ResponseDTO(true, "Done!");
     }
- */
 }

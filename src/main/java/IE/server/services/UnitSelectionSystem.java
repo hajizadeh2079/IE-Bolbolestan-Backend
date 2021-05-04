@@ -69,13 +69,15 @@ public class UnitSelectionSystem {
             sqlException.printStackTrace();
         }
     }
-/*
+
     public void resetPlan(String id) {
         try {
-            findStudent(id).resetPlan();
-        } catch (Exception ignore) { }
+            WeeklyScheduleRepository.getInstance().resetPlan(id);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
     }
-*/
+
     public ArrayList<CourseDTO> getFilteredCourses(String search, String type) {
         try {
             ArrayList<CourseDAO> courseDAOS = CourseRepository.getInstance().getFilteredCourses(search, type);
@@ -167,26 +169,31 @@ public class UnitSelectionSystem {
         return sum;
     }
 
-    public void submitPlan(String id) throws StudentNotFound, UnitsMinOrMaxError,
-            PrerequisitesError, AlreadyPassedError, SQLException {
-        ArrayList<CourseDAO> finalizedCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.finalized);
-        ArrayList<CourseDAO> nonFinalizedCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.nonFinalized);
-        ArrayList<CourseDAO> waitingCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.waiting);
-        int sumOfUnits = instance.sumOfUnits(finalizedCourses, nonFinalizedCourses, waitingCourses);
-        checkForUnitsLimitError(sumOfUnits);
-        for (CourseDAO course: finalizedCourses) {
-            checkForPrerequisitesError(id, course);
-            checkForAlreadyPassedError(id, course);
+    public void submitPlan(String id) throws UnitsMinOrMaxError,
+            PrerequisitesError, AlreadyPassedError {
+        ArrayList<CourseDAO> finalizedCourses = null;
+        try {
+            finalizedCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.finalized);
+            ArrayList<CourseDAO> nonFinalizedCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.nonFinalized);
+            ArrayList<CourseDAO> waitingCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.waiting);
+            int sumOfUnits = instance.sumOfUnits(finalizedCourses, nonFinalizedCourses, waitingCourses);
+            checkForUnitsLimitError(sumOfUnits);
+            for (CourseDAO course: finalizedCourses) {
+                checkForPrerequisitesError(id, course);
+                checkForAlreadyPassedError(id, course);
+            }
+            for (CourseDAO course: nonFinalizedCourses) {
+                checkForPrerequisitesError(id, course);
+                checkForAlreadyPassedError(id, course);
+            }
+            for (CourseDAO course: waitingCourses) {
+                checkForPrerequisitesError(id, course);
+                checkForAlreadyPassedError(id, course);
+            }
+            WeeklyScheduleRepository.getInstance().submitPlan(id);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
         }
-        for (CourseDAO course: nonFinalizedCourses) {
-            checkForPrerequisitesError(id, course);
-            checkForAlreadyPassedError(id, course);
-        }
-        for (CourseDAO course: waitingCourses) {
-            checkForPrerequisitesError(id, course);
-            checkForAlreadyPassedError(id, course);
-        }
-        WeeklyScheduleRepository.getInstance().submitPlan(id);
     }
 
     public void checkForAlreadyPassedError(String id, CourseDAO course) throws AlreadyPassedError, SQLException {
