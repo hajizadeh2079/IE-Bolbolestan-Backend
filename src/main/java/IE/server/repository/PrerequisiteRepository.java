@@ -71,12 +71,42 @@ public class PrerequisiteRepository {
                 con.close();
                 return new ArrayList<String>();
             }
-            ArrayList<String> classDays = new ArrayList<String>();
+            ArrayList<String> prerequisitesNames = new ArrayList<String>();
             while (rs.next())
-                classDays.add(rs.getString(1));
+                prerequisitesNames.add(rs.getString(1));
             st.close();
             con.close();
-            return classDays;
+            return prerequisitesNames;
+        } catch (Exception e) {
+            st.close();
+            con.close();
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public ArrayList<String> getPrerequisites(String code, String classCode) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(
+                "SELECT p.prerequisite\n" +
+                        "FROM prerequisite p\n" +
+                        "WHERE p.code = ? and p.classCode = ?;\n"
+        );
+        st.setString(1, code);
+        st.setString(2, classCode);
+        try {
+            ResultSet rs = st.executeQuery();
+            if (rs == null) {
+                st.close();
+                con.close();
+                return new ArrayList<String>();
+            }
+            ArrayList<String> prerequisites = new ArrayList<String>();
+            while (rs.next())
+                prerequisites.add(rs.getString(1));
+            st.close();
+            con.close();
+            return prerequisites;
         } catch (Exception e) {
             st.close();
             con.close();

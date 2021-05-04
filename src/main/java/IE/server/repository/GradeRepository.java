@@ -214,4 +214,37 @@ public class GradeRepository {
             throw e;
         }
     }
+
+    public int getLastGrade(String id, String code) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(
+                "SELECT g.grade\n" +
+                        "FROM grade g\n" +
+                        "WHERE g.id = ? AND g.code = ? AND\n" +
+                        "      g.code NOT IN (SELECT g2.code\n" +
+                        "                    FROM grade g2\n" +
+                        "                    WHERE g2.id = g.id AND g2.code = g.code AND g2.term > g.term);"
+        );
+        st.setString(1, id);
+        st.setString(2, code);
+        try {
+            ResultSet rs = st.executeQuery();
+            if (rs == null) {
+                st.close();
+                con.close();
+                return 0;
+            }
+            int grade = 0;
+            while (rs.next())
+                grade = Integer.parseInt(rs.getString(1));
+            st.close();
+            con.close();
+            return grade;
+        } catch (Exception e) {
+            st.close();
+            con.close();
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

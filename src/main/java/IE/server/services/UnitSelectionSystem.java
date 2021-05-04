@@ -174,7 +174,6 @@ public class UnitSelectionSystem {
         ArrayList<CourseDAO> waitingCourses = WeeklyScheduleRepository.getInstance().getWeeklyScheduleById(id, Status.waiting);
         int sumOfUnits = instance.sumOfUnits(finalizedCourses, nonFinalizedCourses, waitingCourses);
         checkForUnitsLimitError(sumOfUnits);
-        /*
         for (CourseDAO course: finalizedCourses) {
             checkForPrerequisitesError(id, course);
             checkForAlreadyPassedError(id, course);
@@ -187,15 +186,14 @@ public class UnitSelectionSystem {
             checkForPrerequisitesError(id, course);
             checkForAlreadyPassedError(id, course);
         }
-        */
         WeeklyScheduleRepository.getInstance().submitPlan(id);
     }
-/*
-    public void checkForAlreadyPassedError(Student student, Course course) throws AlreadyPassedError {
-        if (student.getReportCard().doesPassCourse(course.getCode()))
+
+    public void checkForAlreadyPassedError(String id, CourseDAO course) throws AlreadyPassedError, SQLException {
+        if (GradeRepository.getInstance().getLastGrade(id, course.getCode()) >= 10)
             throw new AlreadyPassedError(course.getCode());
     }
-*/
+
     public void checkForUnitsLimitError(int sumOfUnits) throws UnitsMinOrMaxError {
         if (sumOfUnits > 20)
             throw new UnitsMinOrMaxError("Max");
@@ -262,13 +260,13 @@ public class UnitSelectionSystem {
         checkForExamTimeCollisionError(courses, newCourse);
         WeeklyScheduleRepository.getInstance().insert(new WeeklyScheduleDAO(id, newCourse.getCode(), newCourse.getClassCode(), status));
     }
-/*
-    public void checkForPrerequisitesError(Student student, Course newCourse) throws PrerequisitesError {
-        for(String prerequisite : newCourse.getPrerequisitesArray())
-            if(!student.getReportCard().doesPassCourse(prerequisite))
+
+    public void checkForPrerequisitesError(String id, CourseDAO newCourse) throws PrerequisitesError, SQLException {
+        for(String prerequisite : PrerequisiteRepository.getInstance().getPrerequisites(newCourse.getCode(), newCourse.getClassCode()))
+            if(GradeRepository.getInstance().getLastGrade(id, prerequisite) < 10)
                 throw new PrerequisitesError(prerequisite, newCourse.getCode());
     }
-*/
+
     public void addOfferings(JSONArray jsonArray) {
         for (Object o : jsonArray) {
             addOffering((JSONObject) o);
