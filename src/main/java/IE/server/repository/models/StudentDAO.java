@@ -70,4 +70,48 @@ public class StudentDAO {
     public String getImg() {
         return img;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 }

@@ -29,6 +29,18 @@ public class UnitSelectionSystem {
         return reportsDTO;
     }
 
+    public boolean signupStudent(StudentDAO studentDAO) {
+        try {
+            if(!StudentRepository.getInstance().doesAlreadyExist(studentDAO.getId(), studentDAO.getEmail())) {
+                StudentRepository.getInstance().insert(studentDAO);
+                return true;
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return false;
+    }
+
     public void addCourse(String id, String code, String classCode) throws OfferingNotFound,
             ExamTimeCollisionError, ClassTimeCollisionError {
         try {
@@ -80,13 +92,13 @@ public class UnitSelectionSystem {
 
     public void prepareData() {
         JSONArray jsonArray;
-        jsonArray = ioHandler.getData("http://138.197.181.131:5100/api/courses");
+        jsonArray = ioHandler.getData("http://138.197.181.131:5200/api/courses");
         instance.addOfferings(jsonArray);
         instance.setPrerequisites(jsonArray);
-        jsonArray = ioHandler.getData("http://138.197.181.131:5100/api/students");
+        jsonArray = ioHandler.getData("http://138.197.181.131:5200/api/students");
         instance.addStudents(jsonArray);
         for (String id: instance.getStudentsId()) {
-            jsonArray = ioHandler.getData("http://138.197.181.131:5100/api/grades/" + id);
+            jsonArray = ioHandler.getData("http://138.197.181.131:5200/api/grades/" + id);
             instance.setGrades(id, jsonArray);
         }
     }

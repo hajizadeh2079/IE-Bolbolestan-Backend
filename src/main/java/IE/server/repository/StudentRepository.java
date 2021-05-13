@@ -138,4 +138,32 @@ public class StudentRepository {
             throw e;
         }
     }
+
+    public boolean doesAlreadyExist(String id, String email) throws SQLException, StudentNotFound {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(
+                "SELECT * FROM Student S WHERE S.id = ? OR S.email = ?;"
+        );
+        st.setString(1, id);
+        st.setString(2, email);
+        try {
+            ResultSet rs = st.executeQuery();
+            if (rs == null) {
+                st.close();
+                con.close();
+                throw new StudentNotFound();
+            }
+            boolean result = false;
+            if (rs.next())
+                result = true;
+            st.close();
+            con.close();
+            return result;
+        } catch (Exception e) {
+            st.close();
+            con.close();
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
