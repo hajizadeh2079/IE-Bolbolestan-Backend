@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "plans")
 public class PlanController {
 
-    @GetMapping("/{id}")
-    public SelectedCourseDTO getCoursesData(@PathVariable String id) {
+    @GetMapping
+    public SelectedCourseDTO getCoursesData(@RequestAttribute("id") String id) {
         try {
             return UnitSelectionSystem.getInstance().getSelectedCourses(id);
         } catch (Exception exception) {
@@ -20,8 +20,8 @@ public class PlanController {
         }
     }
 
-    @GetMapping("finalized/{id}")
-    public ScheduleDTO getPlanData(@PathVariable String id) {
+    @GetMapping("finalized")
+    public ScheduleDTO getPlanData(@RequestAttribute("id") String id) {
         try {
             return UnitSelectionSystem.getInstance().getPlan(id);
         } catch (Exception exception) {
@@ -29,14 +29,14 @@ public class PlanController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseDTO deleteCourse(@PathVariable String id, @RequestBody OfferingDTO OfferingDTO) {
+    @DeleteMapping
+    public ResponseDTO deleteCourse(@RequestAttribute("id") String id, @RequestBody OfferingDTO OfferingDTO) {
         UnitSelectionSystem.getInstance().removeFromWeeklySchedule(id, OfferingDTO.getCode(), OfferingDTO.getClassCode());
         return new ResponseDTO(true, "Done!");
     }
 
-    @PostMapping("/{id}")
-    public ResponseDTO addCourse(@PathVariable String id, @RequestBody OfferingDTO OfferingDTO) {
+    @PostMapping
+    public ResponseDTO addCourse(@RequestAttribute("id") String id, @RequestBody OfferingDTO OfferingDTO) {
         try {
             UnitSelectionSystem.getInstance().addCourse(id, OfferingDTO.getCode(), OfferingDTO.getClassCode());
             return new ResponseDTO(true, "Done!");
@@ -45,8 +45,8 @@ public class PlanController {
         }
     }
 
-    @PostMapping("submit/{id}")
-    public ResponseDTO submitPlan(@PathVariable String id) {
+    @PostMapping("submit")
+    public ResponseDTO submitPlan(@RequestAttribute("id") String id) {
         try {
             UnitSelectionSystem.getInstance().submitPlan(id);
             return new ResponseDTO(true, "Done!");
@@ -55,8 +55,8 @@ public class PlanController {
         }
     }
 
-    @PostMapping("reset/{id}")
-    public ResponseDTO resetPlan(@PathVariable String id) {
+    @PostMapping("reset")
+    public ResponseDTO resetPlan(@RequestAttribute("id") String id) {
         UnitSelectionSystem.getInstance().resetPlan(id);
         return new ResponseDTO(true, "Done!");
     }

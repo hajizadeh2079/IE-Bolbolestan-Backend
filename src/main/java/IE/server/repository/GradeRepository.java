@@ -109,8 +109,11 @@ public class GradeRepository {
                 return 0;
             }
             int tpu = 0;
-            if (rs.next())
-                tpu = Integer.parseInt(rs.getString(1));
+            if (rs.next()) {
+                try {
+                    tpu = Integer.parseInt(rs.getString(1));
+                } catch (Exception ignored) { }
+            }
             st.close();
             con.close();
             return tpu;
@@ -136,8 +139,11 @@ public class GradeRepository {
                 return 0;
             }
             int maxTerm = 0;
-            if (rs.next())
-                maxTerm = Integer.parseInt(rs.getString(1));
+            if (rs.next()) {
+                try {
+                    maxTerm = Integer.parseInt(rs.getString(1));
+                } catch (Exception ignored) { }
+            }
             st.close();
             con.close();
             return maxTerm;
