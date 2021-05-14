@@ -6,11 +6,14 @@ import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 import IE.server.controllers.models.*;
 import IE.server.exceptions.*;
 import IE.server.repository.*;
 import IE.server.repository.models.*;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -99,7 +102,8 @@ public class UnitSelectionSystem {
         instance.addStudents(jsonArray);
         for (String id: instance.getStudentsId()) {
             jsonArray = ioHandler.getData("http://138.197.181.131:5200/api/grades/" + id);
-            instance.setGrades(id, jsonArray);
+            if(jsonArray != null)
+                instance.setGrades(id, jsonArray);
         }
     }
 
@@ -382,6 +386,26 @@ public class UnitSelectionSystem {
             sqlException.printStackTrace();
             return new ArrayList<String>();
         }
+    }
+
+    public String createToken(String email, String password) {
+        try {
+            String id = StudentRepository.getInstance().findByEmailPassword(email, password);
+            if(id != null) {
+                byte[] signature = new byte[256];
+                System.arraycopy("bolbolestan".getBytes(), 0, signature, 256 - "bolbolestan".length(), "bolbolestan".length());
+                return Jwts.builder()
+                        .setIssuer("bolbolAdmin")
+                        .setSubject(id)
+                        .setIssuedAt(new Date())
+                        .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                        .signWith(SignatureAlgorithm.HS256, signature)
+                        .compact();
+            }
+        } catch (SQLException | StudentNotFound sqlException) {
+            sqlException.printStackTrace();
+        }
+        return null;
     }
 
     public StudentDAO findStudent(String id) throws StudentNotFound, SQLException {
