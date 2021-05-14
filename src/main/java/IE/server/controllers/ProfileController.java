@@ -11,8 +11,8 @@ import java.text.DecimalFormat;
 @RequestMapping(value = "profiles")
 public class ProfileController {
 
-    @GetMapping("/{id}")
-    public ProfileDTO getProfileData(@PathVariable String id) {
+    @GetMapping
+    public ProfileDTO getProfileData(@RequestAttribute("id") String id) {
         try {
             StudentDAO studentDAO = UnitSelectionSystem.getInstance().findStudent(id);
             String name = studentDAO.getName();

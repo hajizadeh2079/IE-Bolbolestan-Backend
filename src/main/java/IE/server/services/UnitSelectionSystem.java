@@ -392,14 +392,12 @@ public class UnitSelectionSystem {
         try {
             String id = StudentRepository.getInstance().findByEmailPassword(email, password);
             if(id != null) {
-                byte[] signature = new byte[256];
-                System.arraycopy("bolbolestan".getBytes(), 0, signature, 256 - "bolbolestan".length(), "bolbolestan".length());
                 return Jwts.builder()
                         .setIssuer("bolbolAdmin")
                         .setSubject(id)
                         .setIssuedAt(new Date())
                         .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-                        .signWith(SignatureAlgorithm.HS256, signature)
+                        .signWith(SignatureAlgorithm.HS256, Signature.getSignature("bolbolestan"))
                         .compact();
             }
         } catch (SQLException | StudentNotFound sqlException) {
