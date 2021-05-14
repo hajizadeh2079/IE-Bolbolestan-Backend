@@ -2,6 +2,7 @@ package IE.server.repository;
 
 import IE.server.exceptions.StudentNotFound;
 import IE.server.repository.models.StudentDAO;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -167,13 +168,12 @@ public class StudentRepository {
         }
     }
 
-    public String findByEmailPassword(String email, String password) throws SQLException, StudentNotFound {
+    public String findByEmailPassword(String email, String rawPassword) throws SQLException, StudentNotFound {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(
-                "SELECT S.id FROM Student S WHERE S.email = ? AND S.password = ?;"
+                "SELECT S.id, S.password FROM Student S WHERE S.email = ?;"
         );
         st.setString(1, email);
-        st.setString(2, password);
         try {
             ResultSet rs = st.executeQuery();
             if (rs == null) {
@@ -182,8 +182,11 @@ public class StudentRepository {
                 throw new StudentNotFound();
             }
             String id = null;
-            if (rs.next())
-                id = rs.getString(1);
+            if (rs.next()) {
+                String password = rs.getString(2);
+                if(new BCryptPasswordEncoder().matches(rawPassword, password))
+                    id = rs.getString(1);
+            }
             st.close();
             con.close();
             return id;

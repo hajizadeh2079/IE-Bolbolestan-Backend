@@ -16,6 +16,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class UnitSelectionSystem {
     private static UnitSelectionSystem instance;
@@ -35,6 +36,7 @@ public class UnitSelectionSystem {
     public boolean signupStudent(StudentDAO studentDAO) {
         try {
             if(!StudentRepository.getInstance().doesAlreadyExist(studentDAO.getId(), studentDAO.getEmail())) {
+                studentDAO.setPassword(new BCryptPasswordEncoder().encode(studentDAO.getPassword()));
                 StudentRepository.getInstance().insert(studentDAO);
                 return true;
             }
@@ -365,6 +367,7 @@ public class UnitSelectionSystem {
         String secondName = (String)jo.get("secondName");
         String email = (String)jo.get("email");
         String password = (String)jo.get("password");
+        password = new BCryptPasswordEncoder().encode(password);
         String birthDate = (String)jo.get("birthDate");
         String field = (String)jo.get("field");
         String faculty = (String)jo.get("faculty");

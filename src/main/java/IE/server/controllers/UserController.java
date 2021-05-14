@@ -23,7 +23,7 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseDTO signup(@RequestBody StudentDAO studentDAO) {
         boolean success = UnitSelectionSystem.getInstance().signupStudent(studentDAO);
         return new ResponseDTO(success, "Done!");
