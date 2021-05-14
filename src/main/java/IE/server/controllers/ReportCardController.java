@@ -10,8 +10,8 @@ import java.util.ArrayList;
 @RequestMapping(value = "reports")
 public class ReportCardController {
 
-    @GetMapping("/{id}")
-    public ArrayList<ReportDTO> getReportsData(@PathVariable String id) {
+    @GetMapping
+    public ArrayList<ReportDTO> getReportsData(@RequestAttribute("id") String id) {
         try {
             return UnitSelectionSystem.getInstance().getGradesHistory(id);
         } catch (Exception ignored) { }

@@ -2,6 +2,7 @@ package IE.server.controllers;
 
 import IE.server.controllers.models.LoginDTO;
 import IE.server.controllers.models.ResponseDTO;
+import IE.server.controllers.models.TokenDTO;
 import IE.server.services.UnitSelectionSystem;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,16 +11,15 @@ import IE.server.repository.models.StudentDAO;
 
 import java.io.UnsupportedEncodingException;
 
-
 @RestController
 @RequestMapping(value = "students")
 public class UserController {
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) throws UnsupportedEncodingException {
+    public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO) throws UnsupportedEncodingException {
         String jwt = UnitSelectionSystem.getInstance().createToken(loginDTO.getEmail(), loginDTO.getPassword());
         if(jwt != null)
-            return new ResponseEntity<>(jwt, HttpStatus.OK);
+            return new ResponseEntity<>(new TokenDTO(jwt), HttpStatus.OK);
         return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
     }
 

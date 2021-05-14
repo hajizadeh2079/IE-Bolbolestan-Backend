@@ -41,7 +41,6 @@ public class AuthorizationFilter implements Filter {
                 resp.setStatus(401);
             }
         }
-
     }
 
     @Override
