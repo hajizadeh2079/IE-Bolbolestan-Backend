@@ -25,14 +25,35 @@ public class AuthorizationFilter implements Filter {
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
-        if(req.getServletPath().contains("/students"))
+        if(req.getServletPath().contains("/students") && !req.getServletPath().contains("/password/reset"))
             chain.doFilter(request, response);
+
+        else if(req.getServletPath().contains("/students/password/reset")) {
+            String jws = req.getHeader("Token");
+            try {
+                String id =  Jwts.parser().setSigningKey(Signature.getSignature("bolbolestan")).parseClaimsJws(jws).getBody().getSubject();
+                id = id.replace("forgetPassword", "");
+                request.setAttribute("id", id);
+                chain.doFilter(request, response);
+            }
+            catch (JwtException e) {
+                resp.setStatus(403);
+            }
+            catch (IllegalArgumentException e) {
+                resp.setStatus(401);
+            }
+        }
+
         else {
             String jws = req.getHeader("Token");
             try {
                 String id =  Jwts.parser().setSigningKey(Signature.getSignature("bolbolestan")).parseClaimsJws(jws).getBody().getSubject();
-                request.setAttribute("id", id);
-                chain.doFilter(request, response);
+                if(id.contains("forgetPassword"))
+                    resp.setStatus(403);
+                else {
+                    request.setAttribute("id", id);
+                    chain.doFilter(request, response);
+                }
             }
             catch (JwtException e) {
                 resp.setStatus(403);

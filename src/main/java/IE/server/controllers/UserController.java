@@ -4,6 +4,7 @@ import IE.server.controllers.models.LoginDTO;
 import IE.server.controllers.models.ResponseDTO;
 import IE.server.controllers.models.TokenDTO;
 import IE.server.services.UnitSelectionSystem;
+import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,13 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseDTO signup(@RequestBody StudentDAO studentDAO) {
         boolean success = UnitSelectionSystem.getInstance().signupStudent(studentDAO);
+        return new ResponseDTO(success, "Done!");
+    }
+
+    @PostMapping("/password/forget")
+    public ResponseDTO forgetPassword(@RequestBody JSONObject jsonObject) {
+        String email = (String) jsonObject.get("email");
+        boolean success = UnitSelectionSystem.getInstance().forgetPassword(email);
         return new ResponseDTO(success, "Done!");
     }
 }

@@ -197,4 +197,31 @@ public class StudentRepository {
             throw e;
         }
     }
+
+    public String findByEmail(String email) throws SQLException, StudentNotFound {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(
+                "SELECT S.id FROM Student S WHERE S.email = ?;"
+        );
+        st.setString(1, email);
+        try {
+            ResultSet rs = st.executeQuery();
+            if (rs == null) {
+                st.close();
+                con.close();
+                throw new StudentNotFound();
+            }
+            String id = null;
+            if (rs.next())
+                id = rs.getString(1);
+            st.close();
+            con.close();
+            return id;
+        } catch (Exception e) {
+            st.close();
+            con.close();
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
