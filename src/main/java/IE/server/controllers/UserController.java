@@ -36,4 +36,11 @@ public class UserController {
         boolean success = UnitSelectionSystem.getInstance().forgetPassword(email);
         return new ResponseDTO(success, "Done!");
     }
+
+    @PostMapping("/password/reset")
+    public ResponseDTO resetPassword(@RequestBody JSONObject jsonObject, @RequestAttribute("id") String id) {
+        String password = (String) jsonObject.get("password");
+        UnitSelectionSystem.getInstance().resetPassword(id, password);
+        return new ResponseDTO(true, "Done!");
+    }
 }

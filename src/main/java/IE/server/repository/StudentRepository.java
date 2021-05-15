@@ -4,10 +4,7 @@ import IE.server.exceptions.StudentNotFound;
 import IE.server.repository.models.StudentDAO;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class StudentRepository {
@@ -217,6 +214,27 @@ public class StudentRepository {
             st.close();
             con.close();
             return id;
+        } catch (Exception e) {
+            st.close();
+            con.close();
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public void resetPassword(String id, String password) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(
+                "UPDATE student " +
+                        "SET password = ? " +
+                        "WHERE id = ?;"
+        );
+        st.setString(1, password);
+        st.setString(2, id);
+        try {
+            st.execute();
+            st.close();
+            con.close();
         } catch (Exception e) {
             st.close();
             con.close();

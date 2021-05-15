@@ -453,4 +453,14 @@ public class UnitSelectionSystem {
         }
         return false;
     }
+
+    public void resetPassword(String id, String password) {
+        try {
+            password = new BCryptPasswordEncoder().encode(password);
+            StudentRepository.getInstance().resetPassword(id, password);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+    }
+
 }
