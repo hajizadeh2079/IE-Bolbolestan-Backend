@@ -1,11 +1,5 @@
 package IE.server.services;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -430,22 +424,8 @@ public class UnitSelectionSystem {
                         .setExpiration(new Date(System.currentTimeMillis() + 600_000))
                         .signWith(SignatureAlgorithm.HS256, Signature.getSignature("bolbolestan"))
                         .compact();
-                String _url = "http://localhost:3000/password/reset/" + jws;
-                URL url = new URL("http://138.197.181.131:5200/api/send_mail");
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                con.setRequestMethod("POST");
-                con.setRequestProperty("Content-Type", "application/json; utf-8");
-                con.setRequestProperty("Accept", "application/json");
-                con.setDoOutput(true);
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("email", email);
-                jsonObject.put("url", _url);
-                try(OutputStream os = con.getOutputStream()) {
-                    byte[] input = jsonObject.toString().getBytes(StandardCharsets.UTF_8);
-                    os.write(input, 0, input.length);
-                }
-                con.getInputStream();
-                con.disconnect();
+                String url = "http://localhost:3000/password/reset/" + jws;
+                instance.ioHandler.sendEmail(email, url);
                 return true;
             }
         } catch (Exception exception) {

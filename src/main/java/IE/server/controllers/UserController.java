@@ -10,14 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import IE.server.repository.models.StudentDAO;
 
-import java.io.UnsupportedEncodingException;
-
 @RestController
 @RequestMapping(value = "students")
 public class UserController {
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO) throws UnsupportedEncodingException {
+    public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO) {
         String jwt = UnitSelectionSystem.getInstance().createToken(loginDTO.getEmail(), loginDTO.getPassword());
         if(jwt != null)
             return new ResponseEntity<>(new TokenDTO(jwt), HttpStatus.OK);
