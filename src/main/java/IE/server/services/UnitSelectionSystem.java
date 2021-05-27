@@ -424,7 +424,7 @@ public class UnitSelectionSystem {
                         .setExpiration(new Date(System.currentTimeMillis() + 600_000))
                         .signWith(SignatureAlgorithm.HS256, Signature.getSignature("bolbolestan"))
                         .compact();
-                String url = "http://localhost:3000/password/reset/" + jws;
+                String url = "http://localhost:80/password/reset/" + jws;
                 instance.ioHandler.sendEmail(email, url);
                 return true;
             }
