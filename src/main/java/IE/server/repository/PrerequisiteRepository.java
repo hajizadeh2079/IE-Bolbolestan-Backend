@@ -19,8 +19,8 @@ public class PrerequisiteRepository {
                         "classCode varchar(255)," +
                         "prerequisite varchar(255)," +
                         "PRIMARY KEY (code, classCode, prerequisite)," +
-                        "FOREIGN KEY (code, classCode) REFERENCES COURSE(code, classCode) ON DELETE CASCADE," +
-                        "FOREIGN KEY (prerequisite) REFERENCES COURSE(code) ON DELETE CASCADE);"
+                        "FOREIGN KEY (code, classCode) REFERENCES Course(code, classCode) ON DELETE CASCADE," +
+                        "FOREIGN KEY (prerequisite) REFERENCES Course(code) ON DELETE CASCADE) ENGINE=INNODB;"
         );
         createTableStatement.executeUpdate();
         createTableStatement.close();
@@ -59,7 +59,7 @@ public class PrerequisiteRepository {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(
                 "SELECT c.name\n" +
-                        "FROM prerequisite p join course c on p.prerequisite = c.code\n" +
+                        "FROM Prerequisite p join Course c on p.prerequisite = c.code\n" +
                         "WHERE p.code = ? and p.classCode = ?;"
         );
         st.setString(1, code);
@@ -89,7 +89,7 @@ public class PrerequisiteRepository {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(
                 "SELECT p.prerequisite\n" +
-                        "FROM prerequisite p\n" +
+                        "FROM Prerequisite p\n" +
                         "WHERE p.code = ? and p.classCode = ?;\n"
         );
         st.setString(1, code);

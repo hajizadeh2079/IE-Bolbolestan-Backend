@@ -27,7 +27,7 @@ public class CourseRepository {
                         "classTimeEnd varchar(255)," +
                         "examTimeStart varchar(255)," +
                         "examTimeEnd varchar(255)," +
-                        "PRIMARY KEY (code, classCode));"
+                        "PRIMARY KEY (code, classCode)) ENGINE=INNODB;"
         );
         createTableStatement.executeUpdate();
         createTableStatement.close();
@@ -124,7 +124,7 @@ public class CourseRepository {
         PreparedStatement st;
         st = con.prepareStatement(
                 "SELECT *\n" +
-                        "FROM course\n" +
+                        "FROM Course\n" +
                         "WHERE code = ? AND classCode = ?;"
         );
         st.setString(1, code);

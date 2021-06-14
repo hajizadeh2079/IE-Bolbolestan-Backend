@@ -15,7 +15,7 @@ spec:
         app: db
     spec:
       containers:
-      - image: quay.io/aminrf/mysql:5.7.16
+      - image: quay.io/sina/mysql:8.0
         name: db
         env:
         - name: MYSQL_ROOT_PASSWORD

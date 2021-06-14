@@ -19,7 +19,7 @@ public class ClassDayRepository {
                         "classCode varchar(255)," +
                         "`day` varchar(255)," +
                         "PRIMARY KEY (code, classCode, `day`)," +
-                        "FOREIGN KEY (code, classCode) REFERENCES COURSE(code, classCode) ON DELETE CASCADE);"
+                        "FOREIGN KEY (code, classCode) REFERENCES Course(code, classCode) ON DELETE CASCADE) ENGINE=INNODB;"
         );
         createTableStatement.executeUpdate();
         createTableStatement.close();

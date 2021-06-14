@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ie-backend-deployment
+  namespace: armin-ali-ns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - image: quay.io/arminaf/ie_server:new
+        name: backend
+        imagePullPolicy: Always
+        env:
+        - name: "DB_USERNAME"
+          value: "root"
+        - name: "DB_PASSWORD"
+          value: "123456"
+        ports:
+          - containerPort: 8080
+        resources:
+          limits:
+            cpu: "300m"
+            memory: "333Mi"
+          requests:
+            cpu: "300m"
+            memory: "333Mi"

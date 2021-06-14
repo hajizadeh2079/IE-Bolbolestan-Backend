@@ -25,7 +25,7 @@ public class StudentRepository {
                         "`level` varchar(255)," +
                         "status varchar(255)," +
                         "img varchar(255)," +
-                        "PRIMARY KEY (id));"
+                        "PRIMARY KEY (id)) ENGINE=INNODB;"
         );
         createTableStatement.executeUpdate();
         createTableStatement.close();
@@ -225,7 +225,7 @@ public class StudentRepository {
     public void resetPassword(String id, String password) throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(
-                "UPDATE student " +
+                "UPDATE Student " +
                         "SET password = ? " +
                         "WHERE id = ?;"
         );

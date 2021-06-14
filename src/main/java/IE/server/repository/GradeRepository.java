@@ -22,8 +22,8 @@ public class GradeRepository {
                         "term int," +
                         "grade int," +
                         "PRIMARY KEY (id, code, term)," +
-                        "FOREIGN KEY (code) REFERENCES COURSE(code) ON DELETE CASCADE," +
-                        "FOREIGN KEY (id) REFERENCES STUDENT(id) ON DELETE CASCADE);"
+                        "FOREIGN KEY (code) REFERENCES Course(code) ON DELETE CASCADE," +
+                        "FOREIGN KEY (id) REFERENCES Student(id) ON DELETE CASCADE) ENGINE=INNODB;"
         );
         createTableStatement.executeUpdate();
         createTableStatement.close();
@@ -63,9 +63,9 @@ public class GradeRepository {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(
                 "SELECT g.grade, c.units\n" +
-                        "FROM grade g join course c on c.code = g.code\n" +
+                        "FROM Grade g join Course c on c.code = g.code\n" +
                         "WHERE g.id = ? AND g.code NOT IN (SELECT g2.code\n" +
-                        "                                          FROM grade g2\n" +
+                        "                                          FROM Grade g2\n" +
                         "                                          WHERE g2.id = g.id AND g2.code = g.code AND g2.term > g.term);"
         );
         st.setString(1, id);
@@ -97,7 +97,7 @@ public class GradeRepository {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(
                 "SELECT SUM(units) AS TPU\n" +
-                    "FROM grade g join course c on c.code = g.code\n" +
+                    "FROM Grade g join Course c on c.code = g.code\n" +
                     "WHERE g.id = ? AND g.grade >= 10;"
         );
         st.setString(1, id);
@@ -128,7 +128,7 @@ public class GradeRepository {
     public int getMaxTermById(String id) throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(
-                "SELECT MAX(term) FROM grade WHERE id = ?;"
+                "SELECT MAX(term) FROM Grade WHERE id = ?;"
         );
         st.setString(1, id);
         try {
@@ -159,7 +159,7 @@ public class GradeRepository {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(
                 "SELECT g.code, c.name, c.units, g.grade\n" +
-                    "FROM grade g join course c on c.code = g.code\n" +
+                    "FROM Grade g join Course c on c.code = g.code\n" +
                     "WHERE g.term = ? AND g.id = ?;\n"
         );
         st.setString(1, String.valueOf(term));
@@ -194,7 +194,7 @@ public class GradeRepository {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(
                 "SELECT g.grade, c.units\n" +
-                        "FROM grade g join course c on c.code = g.code\n" +
+                        "FROM Grade g join Course c on c.code = g.code\n" +
                         "WHERE g.id = ? AND g.term = ?;"
         );
         st.setString(1, id);
@@ -227,10 +227,10 @@ public class GradeRepository {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(
                 "SELECT g.grade\n" +
-                        "FROM grade g\n" +
+                        "FROM Grade g\n" +
                         "WHERE g.id = ? AND g.code = ? AND\n" +
                         "      g.code NOT IN (SELECT g2.code\n" +
-                        "                    FROM grade g2\n" +
+                        "                    FROM Grade g2\n" +
                         "                    WHERE g2.id = g.id AND g2.code = g.code AND g2.term > g.term);"
         );
         st.setString(1, id);

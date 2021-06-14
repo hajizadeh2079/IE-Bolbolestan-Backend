@@ -8,9 +8,7 @@ import java.sql.Statement;
 
 public class ConnectionPool {
     private static BasicDataSource ds = new BasicDataSource();
-    private final static String dbURL = "jdbc:mysql://localhost:3306/BolbolestanDB";
-    private final static String dbUserName = "bolbol";
-    private final static String dbPassword = "123456";
+    private final static String dbURL = "jdbc:mysql://db-svc.armin-ali-ns:3306/BolbolestanDB?useUnicode=yes&characterEncoding=UTF-8";
 
     static {
         try {
@@ -18,30 +16,15 @@ public class ConnectionPool {
         } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
-        ds.setUsername(dbUserName);
-        ds.setPassword(dbPassword);
+        ds.setUsername(System.getenv("DB_USERNAME"));
+        ds.setPassword(System.getenv("DB_PASSWORD"));
         ds.setUrl(dbURL);
         ds.setMinIdle(5);
         ds.setMaxIdle(10);
         ds.setMaxOpenPreparedStatements(100);
-        setEncoding();
     }
 
     public static Connection getConnection() throws SQLException {
         return ds.getConnection();
-    }
-
-    public static void setEncoding(){
-        try {
-            Connection connection = getConnection();
-            Statement statement = connection.createStatement();
-            statement.execute("ALTER DATABASE BolbolestanDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
-            connection.close();
-            statement.close();
-        }
-        catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-        }
     }
 }

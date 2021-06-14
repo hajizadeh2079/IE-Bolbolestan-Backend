@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
-@Order(2)
+@Order(3)
 @ WebFilter(asyncSupported = true, urlPatterns = { "/*" })
 public class AuthorizationFilter implements Filter {
 

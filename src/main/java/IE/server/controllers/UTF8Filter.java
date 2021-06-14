@@ -7,7 +7,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 
 @Component
-@Order(3)
+@Order(2)
 @WebFilter(asyncSupported = true, urlPatterns = { "/*" })
 public class UTF8Filter implements Filter {
 

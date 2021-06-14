@@ -18,8 +18,8 @@ public class WeeklyScheduleRepository {
                         "classCode varchar(255)," +
                         "status int," +
                         "PRIMARY KEY (id, code, status)," +
-                        "FOREIGN KEY (code, classCode) REFERENCES COURSE(code, classCode) ON DELETE CASCADE," +
-                        "FOREIGN KEY (id) REFERENCES STUDENT(id) ON DELETE CASCADE);"
+                        "FOREIGN KEY (code, classCode) REFERENCES Course(code, classCode) ON DELETE CASCADE," +
+                        "FOREIGN KEY (id) REFERENCES Student(id) ON DELETE CASCADE) ENGINE=INNODB;"
         );
         createTableStatement.executeUpdate();
         createTableStatement.close();
@@ -90,7 +90,7 @@ public class WeeklyScheduleRepository {
         PreparedStatement st;
         st = con.prepareStatement(
                 "SELECT c.*\n" +
-                        "FROM weeklyschedule w join course c on c.code = w.code and c.classCode = w.classCode\n" +
+                        "FROM WeeklySchedule w join Course c on c.code = w.code and c.classCode = w.classCode\n" +
                         "WHERE w.id = ? AND w.status = ?;"
         );
         st.setString(1, id);
@@ -131,7 +131,7 @@ public class WeeklyScheduleRepository {
     public void delete(String id, String code, String classCode, int status) throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(
-                "DELETE FROM weeklyschedule\n" +
+                "DELETE FROM WeeklySchedule\n" +
                         "WHERE id = ? AND code = ? AND classCode = ? AND status = ?;"
         );
         st.setString(1, id);
@@ -151,24 +151,24 @@ public class WeeklyScheduleRepository {
         Connection con = ConnectionPool.getConnection();
         Statement st = con.createStatement();
         st.addBatch(
-                "DELETE FROM weeklyschedule\n" +
+                "DELETE FROM WeeklySchedule\n" +
                         "WHERE id = " + id + " AND (status = 1 OR status = 2);\n"
         );
         st.addBatch(
-                "UPDATE weeklyschedule\n" +
+                "UPDATE WeeklySchedule\n" +
                         "SET status = 3\n" +
                         "WHERE id = " + id + " AND status = 4;\n"
         );
         st.addBatch(
-                "INSERT INTO weeklyschedule (id, code, classCode, status)\n" +
+                "INSERT INTO WeeklySchedule (id, code, classCode, status)\n" +
                         "SELECT id, code, classCode, 1\n" +
-                        "FROM weeklyschedule\n" +
+                        "FROM WeeklySchedule\n" +
                         "WHERE id = " + id + " AND status = 3;\n"
         );
         st.addBatch(
-                "INSERT INTO weeklyschedule (id, code, classCode, status)\n" +
+                "INSERT INTO WeeklySchedule (id, code, classCode, status)\n" +
                         "SELECT id, code, classCode, 2\n" +
-                        "FROM weeklyschedule\n" +
+                        "FROM WeeklySchedule\n" +
                         "WHERE id = " + id + " AND status = 5;"
         );
         try {
@@ -184,19 +184,19 @@ public class WeeklyScheduleRepository {
         Connection con = ConnectionPool.getConnection();
         Statement st = con.createStatement();
         st.addBatch(
-                "DELETE FROM weeklyschedule\n" +
+                "DELETE FROM WeeklySchedule\n" +
                         "WHERE id = " + id + " AND (status = 3 OR status = 4 OR status = 5);\n"
         );
         st.addBatch(
-                "INSERT INTO weeklyschedule (id, code, classCode, status)\n" +
+                "INSERT INTO WeeklySchedule (id, code, classCode, status)\n" +
                         "SELECT id, code, classCode, 3\n" +
-                        "FROM weeklyschedule\n" +
+                        "FROM WeeklySchedule\n" +
                         "WHERE id = " + id + " AND status = 1;\n"
         );
         st.addBatch(
-                "INSERT INTO weeklyschedule (id, code, classCode, status)\n" +
+                "INSERT INTO WeeklySchedule (id, code, classCode, status)\n" +
                         "SELECT id, code, classCode, 5\n" +
-                        "FROM weeklyschedule\n" +
+                        "FROM WeeklySchedule\n" +
                         "WHERE id = " + id + " AND status = 2;"
         );
         try {
@@ -212,9 +212,9 @@ public class WeeklyScheduleRepository {
         Connection con = ConnectionPool.getConnection();
         Statement st = con.createStatement();
         st.addBatch(
-                "UPDATE course c\n" +
+                "UPDATE Course c\n" +
                         "SET capacity = capacity + (SELECT COUNT(*)\n" +
-                        "                            FROM weeklyschedule w\n" +
+                        "                            FROM WeeklySchedule w\n" +
                         "                            WHERE c.code = w.code AND c.classCode = w.classCode AND w.status = 2)"
         );
         st.addBatch(
@@ -223,23 +223,23 @@ public class WeeklyScheduleRepository {
                         "    code varchar(255),\n" +
                         "    classCode varchar(255),\n" +
                         "    PRIMARY KEY (id, code),\n" +
-                        "    FOREIGN KEY (code, classCode) REFERENCES COURSE(code, classCode) ON DELETE CASCADE,\n" +
-                        "    FOREIGN KEY (id) REFERENCES STUDENT(id) ON DELETE CASCADE);\n"
+                        "    FOREIGN KEY (code, classCode) REFERENCES Course(code, classCode) ON DELETE CASCADE,\n" +
+                        "    FOREIGN KEY (id) REFERENCES Student(id) ON DELETE CASCADE) ENGINE=INNODB;\n"
         );
         st.addBatch(
                 "INSERT INTO Temp\n" +
                         "SELECT id, code, classCode\n" +
-                        "FROM weeklyschedule\n" +
+                        "FROM WeeklySchedule\n" +
                         "WHERE status = 2;\n"
         );
         st.addBatch(
-                "UPDATE weeklyschedule\n" +
+                "UPDATE WeeklySchedule\n" +
                         "SET status = 3\n" +
                         "WHERE status = 5 AND (id, code, classCode) IN (SELECT * FROM Temp);\n"
         );
         st.addBatch("DROP TABLE Temp;");
         st.addBatch(
-                "UPDATE weeklyschedule\n" +
+                "UPDATE WeeklySchedule\n" +
                         "SET status = 1\n" +
                         "WHERE status = 2;\n"
         );

@@ -20,7 +20,7 @@ public class IOHandler {
             con.setRequestMethod("GET");
             con.connect();
             StringBuilder inline = new StringBuilder();
-            Scanner sc = new Scanner(url.openStream());
+            Scanner sc = new Scanner(url.openStream(), StandardCharsets.UTF_8);
             while(sc.hasNext()) {
                 inline.append(sc.nextLine());
             }
